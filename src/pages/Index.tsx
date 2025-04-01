@@ -151,6 +151,7 @@ const Index = () => {
             <TeamMember 
               name="Juan Pablo Tellez" 
               title="Fundador en Podcast MundoBNB"
+              image="/public/lovable-uploads/737ea7d2-1447-49a6-85e5-65fafce1de9d.png"
               linkedIn="https://www.linkedin.com/in/jptellezg/"
             />
           </div>
