@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ContactForm from '@/components/ContactForm';
-import { Mail, MapPin, Phone, Instagram, Linkedin } from 'lucide-react';
+import { Mail, MapPin, Phone, Instagram, Linkedin, MessageSquare } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -43,6 +43,18 @@ const Contact = () => {
                   <div>
                     <h3 className="text-lg font-bold text-navy mb-1">Ubicación</h3>
                     <p className="text-gray-600">Riviera Maya, México</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="h-10 w-10 bg-teal-light rounded-full flex items-center justify-center mr-4">
+                    <MessageSquare className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-navy mb-1">Comunidad WhatsApp</h3>
+                    <a href="https://chat.whatsapp.com/JWT0uzy8k5V4auRfWE40T1" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal transition-colors">
+                      Unirse al grupo de la comunidad
+                    </a>
                   </div>
                 </div>
                 

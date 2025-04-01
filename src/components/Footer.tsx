@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail, MessageSquare } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -65,6 +65,9 @@ const Footer = () => {
               </a>
               <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
+              </a>
+              <a href="https://chat.whatsapp.com/JWT0uzy8k5V4auRfWE40T1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Community">
+                <MessageSquare className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
               </a>
               <a href="mailto:info@clubrentavacacional.mx" aria-label="Email">
                 <Mail className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
