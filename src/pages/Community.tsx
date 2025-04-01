@@ -1,9 +1,8 @@
-
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import CommunityGroup from '@/components/CommunityGroup';
-import { Users, MessageSquare, Star } from 'lucide-react';
+import { Users, MessageSquare, Star, ShoppingBag } from 'lucide-react';
 
 const Community = () => {
   return (
