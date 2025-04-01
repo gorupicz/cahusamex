@@ -83,26 +83,6 @@ const Activities = () => {
                   date="Todo el año"
                   url="https://lu.ma/elclub"
                 />
-                
-                <ActivityCard 
-                  title="Mesas Redondas"
-                  description="Discusiones moderadas sobre temas relevantes para la industria, donde compartimos experiencias y mejores prácticas entre profesionales del sector."
-                  image="lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
-                  type="Presencial"
-                  location="Riviera Maya"
-                  date="Trimestral"
-                  url="https://lu.ma/elclub"
-                />
-                
-                <ActivityCard 
-                  title="Visitas a Propiedades"
-                  description="Recorridos organizados a propiedades destacadas para conocer de primera mano casos de éxito y aprender de las mejores prácticas en el diseño y gestión."
-                  image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
-                  type="Presencial"
-                  location="Varias ciudades"
-                  date="Bimestral"
-                  url="https://lu.ma/elclub"
-                />
               </div>
             </TabsContent>
             
@@ -191,26 +171,6 @@ const Activities = () => {
                   location="Cancún, Playa del Carmen y más"
                   date="Programación 2025"
                   url="https://lu.ma/desayunos"
-                />
-                
-                <ActivityCard 
-                  title="Mesas Redondas"
-                  description="Discusiones moderadas sobre temas relevantes para la industria, donde compartimos experiencias y mejores prácticas entre profesionales del sector."
-                  image="lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
-                  type="Presencial"
-                  location="Riviera Maya"
-                  date="Trimestral"
-                  url="https://lu.ma/elclub"
-                />
-                
-                <ActivityCard 
-                  title="Visitas a Propiedades"
-                  description="Recorridos organizados a propiedades destacadas para conocer de primera mano casos de éxito y aprender de las mejores prácticas en el diseño y gestión."
-                  image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
-                  type="Presencial"
-                  location="Varias ciudades"
-                  date="Bimestral"
-                  url="https://lu.ma/elclub"
                 />
               </div>
             </TabsContent>

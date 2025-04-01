@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Hero from '@/components/Hero';
 import FeatureCard from '@/components/FeatureCard';
@@ -111,7 +110,7 @@ const Index = () => {
             </div>
           </div>
         </section>
-
+        
         {/* Activities Preview */}
         <section className="bg-sand-light py-16">
           <div className="container mx-auto px-4">
