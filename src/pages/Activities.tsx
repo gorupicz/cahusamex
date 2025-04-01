@@ -53,7 +53,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Charlas After Check-in"
                   description="Un tipo diferente de webinar con líderes de opinión de la industria de renta vacacional para tratar temas específicos: impuestos, optimización, pricing, channel management, etc."
-                  image="/public/lovable-uploads/17417649-66f8-462e-8d40-f554ede6af35.png"
+                  image="/public/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                   type="Online"
                   location="Virtual"
                   date="Programación 2025"
@@ -141,7 +141,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Charlas After Check-in"
                   description="Un tipo diferente de webinar con líderes de opinión de la industria de renta vacacional para tratar temas específicos: impuestos, optimización, pricing, channel management, etc."
-                  image="/public/lovable-uploads/17417649-66f8-462e-8d40-f554ede6af35.png"
+                  image="/public/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                   type="Online"
                   location="Virtual"
                   date="Programación 2025"

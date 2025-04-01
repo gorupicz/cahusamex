@@ -94,7 +94,7 @@ const Index = () => {
               <ActivityCard 
                 title="Charlas After Check-in"
                 description="Webinars con líderes de opinión sobre temas específicos: impuestos, optimización, pricing, etc."
-                image="/public/lovable-uploads/17417649-66f8-462e-8d40-f554ede6af35.png"
+                image="/public/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                 type="Virtual"
                 location="Online"
                 url="https://lu.ma/charlas"
