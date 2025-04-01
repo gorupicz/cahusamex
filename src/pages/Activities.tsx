@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ActivityCard from '@/components/ActivityCard';
+import DinnerSeriesTable from '@/components/DinnerSeriesTable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingBag } from 'lucide-react';
 
@@ -21,6 +22,7 @@ const Activities = () => {
             <div className="flex justify-center mb-8">
               <TabsList className="bg-sand-light">
                 <TabsTrigger value="all">Todas</TabsTrigger>
+                <TabsTrigger value="dinner-series">Cenas 2025-2026</TabsTrigger>
                 <TabsTrigger value="in-person">Presenciales</TabsTrigger>
                 <TabsTrigger value="online">Online</TabsTrigger>
                 <TabsTrigger value="purchases">Compras Colectivas</TabsTrigger>
@@ -28,6 +30,19 @@ const Activities = () => {
             </div>
             
             <TabsContent value="all">
+              <div className="mb-10">
+                <div className="bg-navy text-white p-6 rounded-xl mb-8">
+                  <h3 className="text-2xl font-bold mb-2">Serie de Cenas 2025-2026</h3>
+                  <p className="mb-4">
+                    Nuestra serie de cenas recorrerá 24 ciudades por todo México, desde abril 2025 hasta marzo 2026. 
+                    ¡Una oportunidad única para conectar con los mejores property managers!
+                  </p>
+                  <a href="#dinner-series" className="bg-white text-navy px-4 py-2 rounded inline-block hover:bg-gray-100 transition-colors">
+                    Ver todas las ciudades
+                  </a>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <ActivityCard 
                   title="Cenas de Networking"
@@ -35,7 +50,7 @@ const Activities = () => {
                   image="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                   type="Presencial"
                   location="Múltiples ciudades"
-                  date="Programación 2025"
+                  date="Programación 2025-2026"
                   url="https://lu.ma/elclub"
                 />
                 
@@ -91,6 +106,51 @@ const Activities = () => {
               </div>
             </TabsContent>
             
+            <TabsContent value="dinner-series" id="dinner-series">
+              <DinnerSeriesTable />
+              
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                  <img 
+                    src="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png" 
+                    alt="Cenas de Networking" 
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-navy mb-2">Experiencia Culinaria Única</h3>
+                    <p className="text-gray-600">
+                      Nuestras cenas son experiencias culinarias seleccionadas y oportunidades para conectar con los principales property managers en un ambiente muy relajado, donde las conversaciones fluyen naturalmente.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                  <img 
+                    src="lovable-uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png" 
+                    alt="Property Managers" 
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-navy mb-2">Conexiones Valiosas</h3>
+                    <p className="text-gray-600">
+                      Según AirDNA, estas 24 ciudades representan 121,500 propiedades en plataformas de renta vacacional. Esperamos tener a los administradores del 10% de estas propiedades participando en nuestros eventos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-10 text-center">
+                <a 
+                  href="https://lu.ma/elclub" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn-primary inline-block"
+                >
+                  Regístrate para las próximas cenas
+                </a>
+              </div>
+            </TabsContent>
+            
             <TabsContent value="in-person">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <ActivityCard 
@@ -99,7 +159,7 @@ const Activities = () => {
                   image="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                   type="Presencial"
                   location="Múltiples ciudades"
-                  date="Programación 2025"
+                  date="Programación 2025-2026"
                   url="https://lu.ma/elclub"
                 />
                 
