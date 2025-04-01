@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img 
-            src="/public/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
+            src="/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
             alt="Club de Renta Vacacional Logo" 
             className="h-14"
           />

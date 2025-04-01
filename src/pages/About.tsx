@@ -1,3 +1,4 @@
+
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -11,7 +12,7 @@ const About = () => {
         <Hero 
           title="Quiénes Somos"
           subtitle="Conoce la historia y el propósito del Club de Renta Vacacional"
-          backgroundImage="/public/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+          backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
         />
         
         <section className="section-container">
@@ -30,7 +31,7 @@ const About = () => {
             </div>
             <div className="rounded-xl overflow-hidden shadow-lg">
               <img 
-                src="/public/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png" 
+                src="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png" 
                 alt="Riviera Maya" 
                 className="w-full h-auto"
               />
@@ -92,18 +93,19 @@ const About = () => {
             <TeamMember 
               name="Esteban Gorupicz" 
               title="Fundador en Bolsa de Casas MX"
-              image="/public/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
+              image="/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
               linkedIn="https://www.linkedin.com/in/gorupicz/"
             />
             <TeamMember 
               name="Daniel García" 
               title="Fundador en Mi Casa Es Tu Casa"
-              image="/public/lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
+              image="/lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
               linkedIn="https://www.linkedin.com/in/daniel-garc%C3%ADa-16770b38/"
             />
             <TeamMember 
               name="Juan Pablo Tellez" 
               title="Fundador en Podcast MundoBNB"
+              image="/lovable-uploads/737ea7d2-1447-49a6-85e5-65fafce1de9d.png"
               linkedIn="https://www.linkedin.com/in/jptellezg/"
             />
           </div>

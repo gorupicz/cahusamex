@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="flex flex-col">
             <div className="flex items-center mb-4">
               <img 
-                src="/public/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
+                src="/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
                 alt="Club de Renta Vacacional Logo" 
                 className="h-20 bg-white rounded-full p-1"
               />
@@ -25,11 +25,6 @@ const Footer = () => {
             <h4 className="text-xl font-heading font-medium mb-4">Enlaces</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-light transition-colors">
-                  Inicio
-                </Link>
-              </li>
-              <li>
                 <Link to="/about" className="text-gray-300 hover:text-teal-light transition-colors">
                   Quiénes Somos
                 </Link>
@@ -42,11 +37,6 @@ const Footer = () => {
               <li>
                 <Link to="/community" className="text-gray-300 hover:text-teal-light transition-colors">
                   Comunidad
-                </Link>
-              </li>
-              <li>
-                <Link to="/activities#dinner-series" className="text-gray-300 hover:text-teal-light transition-colors">
-                  Cenas 2025-2026
                 </Link>
               </li>
               <li>
