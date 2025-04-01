@@ -32,7 +32,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-navy mb-1">Correo Electrónico</h3>
-                    <p className="text-gray-600">info@clubrentavacacional.mx</p>
+                    <p className="text-gray-600">info@clubrenta.mx</p>
                   </div>
                 </div>
                 
