@@ -16,7 +16,7 @@ const Index = () => {
         <Hero 
           title="Club de Renta Vacacional México"
           subtitle="Reuniendo a los mejores Property Managers y Anfitriones de Renta Vacacional en México"
-          backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+          backgroundImage="lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
           showButton={true}
         />
 
@@ -76,7 +76,7 @@ const Index = () => {
               <ActivityCard 
                 title="Cenas de Networking"
                 description="Cenas para networking y Cotorreo en 24 ciudades con 20-40 asistentes por evento."
-                image="/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
+                image="lovable-uploads/80006b32-928d-4927-8eb4-4b85d1aca591.png"
                 type="Presencial"
                 location="Múltiples ciudades"
                 url="https://lu.ma/elclub"
@@ -85,7 +85,7 @@ const Index = () => {
               <ActivityCard 
                 title="Desayunos de Trabajo"
                 description="Desayunos con expertos destacados para aprender e inspirar en formato reducido."
-                image="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                 type="Presencial"
                 location="Cancún, Playa del Carmen y más"
                 url="https://lu.ma/desayunos"
@@ -94,7 +94,7 @@ const Index = () => {
               <ActivityCard 
                 title="Charlas After Check-in"
                 description="Webinars con líderes de opinión sobre temas específicos: impuestos, optimización, pricing, etc."
-                image="/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
+                image="lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                 type="Virtual"
                 location="Online"
                 url="https://lu.ma/charlas"
@@ -139,19 +139,19 @@ const Index = () => {
             <TeamMember 
               name="Esteban Gorupicz" 
               title="Fundador en Bolsa de Casas MX"
-              image="/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
+              image="lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
               linkedIn="https://www.linkedin.com/in/gorupicz/"
             />
             <TeamMember 
               name="Daniel García" 
               title="Fundador en Mi Casa Es Tu Casa"
-              image="/lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
+              image="lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
               linkedIn="https://www.linkedin.com/in/daniel-garc%C3%ADa-16770b38/"
             />
             <TeamMember 
               name="Juan Pablo Tellez" 
               title="Fundador en Podcast MundoBNB"
-              image="/lovable-uploads/737ea7d2-1447-49a6-85e5-65fafce1de9d.png"
+              image="lovable-uploads/737ea7d2-1447-49a6-85e5-65fafce1de9d.png"
               linkedIn="https://www.linkedin.com/in/jptellezg/"
             />
           </div>
