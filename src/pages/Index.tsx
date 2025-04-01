@@ -76,7 +76,7 @@ const Index = () => {
               <ActivityCard 
                 title="Cenas de Networking"
                 description="Cenas para networking y Cotorreo en 24 ciudades con 20-40 asistentes por evento."
-                image="lovable-uploads/80006b32-928d-4927-8eb4-4b85d1aca591.png"
+                image="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                 type="Presencial"
                 location="Múltiples ciudades"
                 url="https://lu.ma/elclub"

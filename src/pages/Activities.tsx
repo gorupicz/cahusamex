@@ -33,7 +33,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Cenas de Networking"
                   description="Cenas para networking y Cotorreo! Organizamos eventos en 24 ciudades con 20-40 asistentes que representan aproximadamente 1,000 propiedades por evento."
-                  image="lovable-uploads/80006b32-928d-4927-8eb4-4b85d1aca591.png"
+                  image="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                   type="Presencial"
                   location="Múltiples ciudades"
                   date="Programación 2025"
@@ -63,7 +63,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Compras Colectivas"
                   description="Aprovechando nuestra comunidad de 550 anfitriones que administran 6,000 propiedades, organizamos compras colectivas para aumentar el valor entregado para todas las partes involucradas."
-                  image="lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                  image="lovable-uploads/1ec469d1-77a7-4d24-9ce3-f48d4886d860.png"
                   type="Iniciativa"
                   location="Nacional"
                   date="Todo el año"
@@ -97,7 +97,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Cenas de Networking"
                   description="Cenas para networking y Cotorreo! Organizamos eventos en 24 ciudades con 20-40 asistentes que representan aproximadamente 1,000 propiedades por evento."
-                  image="lovable-uploads/e96fecf4-d016-4ce1-95d2-5df80c44f819.png"
+                  image="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                   type="Presencial"
                   location="Múltiples ciudades"
                   date="Programación 2025"
@@ -107,7 +107,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Cenas en la Riviera Maya"
                   description="Eventos de networking en un ambiente relajado para conectar con otros profesionales del sector y compartir experiencias y oportunidades."
-                  image="lovable-uploads/25f160f5-f060-4251-abbe-03bdd0e54ce0.png"
+                  image="lovable-uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png"
                   type="Presencial"
                   location="Playa del Carmen"
                   date="Mensual"
@@ -117,7 +117,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Encuentros en CDMX"
                   description="Reuniones en la capital para conectar con anfitriones y administradores de propiedades de todo el país que visitan la ciudad."
-                  image="lovable-uploads/afdbb38f-0832-42dd-97cf-4725a0a804b9.png"
+                  image="lovable-uploads/9ae40046-2d5c-4b5f-bf59-fe77e190ca98.png"
                   type="Presencial"
                   location="Ciudad de México"
                   date="Bimestral"
