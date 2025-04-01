@@ -13,7 +13,7 @@ const Contact = () => {
         <Hero 
           title="Contáctanos"
           subtitle="¿Tienes preguntas o quieres formar parte de nuestra comunidad? ¡Estamos aquí para ayudarte!"
-          backgroundImage="/public/lovable-uploads/17417649-66f8-462e-8d40-f554ede6af35.png"
+          backgroundImage="/lovable-uploads/17417649-66f8-462e-8d40-f554ede6af35.png"
         />
         
         <section className="section-container">
