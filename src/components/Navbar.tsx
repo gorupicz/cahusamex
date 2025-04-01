@@ -27,9 +27,6 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center">
           <div className="flex space-x-8 mr-6">
-            <Link to="/" className="text-navy hover:text-teal transition-colors font-medium">
-              Inicio
-            </Link>
             <Link to="/about" className="text-navy hover:text-teal transition-colors font-medium">
               Quiénes Somos
             </Link>
@@ -68,13 +65,6 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white pt-2 pb-4 px-4">
           <div className="flex flex-col space-y-3">
-            <Link 
-              to="/" 
-              className="text-navy hover:text-teal transition-colors font-medium py-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Inicio
-            </Link>
             <Link 
               to="/about" 
               className="text-navy hover:text-teal transition-colors font-medium py-2"
