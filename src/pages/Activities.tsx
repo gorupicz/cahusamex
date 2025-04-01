@@ -14,7 +14,7 @@ const Activities = () => {
         <Hero 
           title="Nuestras Actividades"
           subtitle="Conoce todos los eventos y actividades que organizamos para nuestra comunidad"
-          backgroundImage="/public/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
+          backgroundImage="/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
         />
         
         <section className="section-container">
@@ -33,7 +33,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Cenas de Networking"
                   description="Cenas para networking y Cotorreo! Organizamos eventos en 24 ciudades con 20-40 asistentes que representan aproximadamente 1,000 propiedades por evento."
-                  image="/public/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
+                  image="/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
                   type="Presencial"
                   location="Múltiples ciudades"
                   date="Programación 2025"
@@ -43,7 +43,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Desayunos de Trabajo"
                   description="Desayunos de trabajo con un experto destacado (un Property Manager top) para aprender e inspirar. Eventos limitados a 10-20 asistentes para mayor interacción."
-                  image="/public/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                   type="Presencial"
                   location="Cancún, Playa del Carmen y más"
                   date="Programación 2025"
@@ -53,7 +53,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Charlas After Check-in"
                   description="Un tipo diferente de webinar con líderes de opinión de la industria de renta vacacional para tratar temas específicos: impuestos, optimización, pricing, channel management, etc."
-                  image="/public/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
+                  image="/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                   type="Online"
                   location="Virtual"
                   date="Programación 2025"
@@ -63,7 +63,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Compras Colectivas"
                   description="Aprovechando nuestra comunidad de 550 anfitriones que administran 6,000 propiedades, organizamos compras colectivas para aumentar el valor entregado para todas las partes involucradas."
-                  image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                  image="/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
                   type="Iniciativa"
                   location="Nacional"
                   date="Todo el año"
@@ -73,7 +73,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Mesas Redondas"
                   description="Discusiones moderadas sobre temas relevantes para la industria, donde compartimos experiencias y mejores prácticas entre profesionales del sector."
-                  image="/public/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+                  image="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
                   type="Presencial"
                   location="Riviera Maya"
                   date="Trimestral"
@@ -83,7 +83,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Visitas a Propiedades"
                   description="Recorridos organizados a propiedades destacadas para conocer de primera mano casos de éxito y aprender de las mejores prácticas en el diseño y gestión."
-                  image="/public/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                   type="Presencial"
                   location="Varias ciudades"
                   date="Bimestral"
@@ -97,7 +97,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Cenas de Networking"
                   description="Cenas para networking y Cotorreo! Organizamos eventos en 24 ciudades con 20-40 asistentes que representan aproximadamente 1,000 propiedades por evento."
-                  image="/public/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
+                  image="/lovable-uploads/86e6085a-49e5-4b3c-9d4a-aa679c0ac61c.png"
                   type="Presencial"
                   location="Múltiples ciudades"
                   date="Programación 2025"
@@ -107,7 +107,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Desayunos de Trabajo"
                   description="Desayunos de trabajo con un experto destacado (un Property Manager top) para aprender e inspirar. Eventos limitados a 10-20 asistentes para mayor interacción."
-                  image="/public/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                   type="Presencial"
                   location="Cancún, Playa del Carmen y más"
                   date="Programación 2025"
@@ -117,7 +117,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Mesas Redondas"
                   description="Discusiones moderadas sobre temas relevantes para la industria, donde compartimos experiencias y mejores prácticas entre profesionales del sector."
-                  image="/public/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+                  image="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
                   type="Presencial"
                   location="Riviera Maya"
                   date="Trimestral"
@@ -127,7 +127,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Visitas a Propiedades"
                   description="Recorridos organizados a propiedades destacadas para conocer de primera mano casos de éxito y aprender de las mejores prácticas en el diseño y gestión."
-                  image="/public/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                   type="Presencial"
                   location="Varias ciudades"
                   date="Bimestral"
@@ -141,7 +141,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Charlas After Check-in"
                   description="Un tipo diferente de webinar con líderes de opinión de la industria de renta vacacional para tratar temas específicos: impuestos, optimización, pricing, channel management, etc."
-                  image="/public/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
+                  image="/lovable-uploads/9caceabd-d08d-4c0f-a7ae-667dda588eaf.png"
                   type="Online"
                   location="Virtual"
                   date="Programación 2025"
@@ -151,7 +151,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Seminarios Web"
                   description="Sesiones educativas sobre tendencias del mercado, novedades tecnológicas y aspectos legales relevantes para los Property Managers y anfitriones."
-                  image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                  image="/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
                   type="Online"
                   location="Virtual"
                   date="Mensual"
@@ -180,7 +180,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Insumos de Limpieza"
                     description="Compras colectivas de productos de limpieza de alta calidad a precios especiales para miembros de nuestra comunidad."
-                    image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Trimestral"
@@ -190,7 +190,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Amenidades"
                     description="Amenidades personalizadas con el branding de cada Property Manager a precios competitivos gracias al volumen de compra."
-                    image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Bimestral"
@@ -200,7 +200,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Servicios Tecnológicos"
                     description="Acceso a software y herramientas tecnológicas con condiciones especiales para miembros del club."
-                    image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Permanente"
