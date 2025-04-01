@@ -1,3 +1,4 @@
+
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -77,7 +78,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Compras Colectivas"
                   description="Aprovechando nuestra comunidad de 550 anfitriones que administran 6,000 propiedades, organizamos compras colectivas para aumentar el valor entregado para todas las partes involucradas."
-                  image="lovable-uploads/1ec469d1-77a7-4d24-9ce3-f48d4886d860.png"
+                  image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                   type="Iniciativa"
                   location="Nacional"
                   date="Todo el año"
@@ -219,7 +220,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Insumos de Limpieza"
                     description="Compras colectivas de productos de limpieza de alta calidad a precios especiales para miembros de nuestra comunidad."
-                    image="lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Trimestral"
@@ -229,7 +230,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Amenidades"
                     description="Amenidades personalizadas con el branding de cada Property Manager a precios competitivos gracias al volumen de compra."
-                    image="lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Bimestral"
@@ -239,7 +240,7 @@ const Activities = () => {
                   <ActivityCard 
                     title="Servicios Tecnológicos"
                     description="Acceso a software y herramientas tecnológicas con condiciones especiales para miembros del club."
-                    image="lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                    image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
                     type="Compra Colectiva"
                     location="Nacional"
                     date="Permanente"
