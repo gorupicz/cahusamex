@@ -1,4 +1,3 @@
-
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -93,7 +92,7 @@ const About = () => {
               <TeamMember 
                 name="Esteban Gorupicz" 
                 title="Fundador en Bolsa de Casas MX"
-                image="/public/lovable-uploads/40eab1c4-247b-49be-b5f4-085658d5a3af.png"
+                image="/public/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
                 linkedIn="https://www.linkedin.com/in/gorupicz/"
               />
               <TeamMember 
