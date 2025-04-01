@@ -85,7 +85,7 @@ const Index = () => {
               <ActivityCard 
                 title="Desayunos de Trabajo"
                 description="Desayunos con expertos destacados para aprender e inspirar en formato reducido."
-                image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                image="lovable-uploads/a2d4fc30-7dc1-48d2-b56d-1597688f999f.png"
                 type="Presencial"
                 location="Cancún, Playa del Carmen y más"
                 url="https://lu.ma/desayunos"

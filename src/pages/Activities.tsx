@@ -1,4 +1,3 @@
-
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -43,7 +42,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Desayunos de Trabajo"
                   description="Desayunos de trabajo con un experto destacado (un Property Manager top) para aprender e inspirar. Eventos limitados a 10-20 asistentes para mayor interacción."
-                  image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="lovable-uploads/a2d4fc30-7dc1-48d2-b56d-1597688f999f.png"
                   type="Presencial"
                   location="Cancún, Playa del Carmen y más"
                   date="Programación 2025"
@@ -127,7 +126,7 @@ const Activities = () => {
                 <ActivityCard 
                   title="Desayunos de Trabajo"
                   description="Desayunos de trabajo con un experto destacado (un Property Manager top) para aprender e inspirar. Eventos limitados a 10-20 asistentes para mayor interacción."
-                  image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+                  image="lovable-uploads/a2d4fc30-7dc1-48d2-b56d-1597688f999f.png"
                   type="Presencial"
                   location="Cancún, Playa del Carmen y más"
                   date="Programación 2025"
