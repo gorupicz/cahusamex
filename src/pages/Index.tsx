@@ -145,6 +145,7 @@ const Index = () => {
             <TeamMember 
               name="Daniel García" 
               title="Fundador en Mi Casa Es Tu Casa"
+              image="/public/lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
               linkedIn="https://www.linkedin.com/in/daniel-garc%C3%ADa-16770b38/"
             />
             <TeamMember 

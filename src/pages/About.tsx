@@ -82,37 +82,38 @@ const About = () => {
             </div>
           </div>
           
-          <div>
-            <h2 className="text-navy mb-6 text-center">Nuestros Fundadores</h2>
-            <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
-              Nuestros Miembros Fundadores tienen la misión de liderar la industria de Renta Vacacional en México
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <TeamMember 
-                name="Esteban Gorupicz" 
-                title="Fundador en Bolsa de Casas MX"
-                image="/public/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
-                linkedIn="https://www.linkedin.com/in/gorupicz/"
-              />
-              <TeamMember 
-                name="Daniel García" 
-                title="Fundador en Mi Casa Es Tu Casa"
-                linkedIn="https://www.linkedin.com/in/daniel-garc%C3%ADa-16770b38/"
-              />
-              <TeamMember 
-                name="Juan Pablo Tellez" 
-                title="Fundador en Podcast MundoBNB"
-                linkedIn="https://www.linkedin.com/in/jptellezg/"
-              />
-            </div>
-            
-            <div className="mt-12 bg-sand-light p-6 rounded-xl">
-              <p className="text-center text-navy text-lg font-medium italic">
-                "Nuestros Miembros Fundadores están en una misión para liderar la industria de Renta Vacacional en México."
-              </p>
-            </div>
+        <div>
+          <h2 className="text-navy mb-6 text-center">Nuestros Fundadores</h2>
+          <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
+            Nuestros Miembros Fundadores tienen la misión de liderar la industria de Renta Vacacional en México
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <TeamMember 
+              name="Esteban Gorupicz" 
+              title="Fundador en Bolsa de Casas MX"
+              image="/public/lovable-uploads/62baccbb-2b06-41a9-94ef-25000732b6cf.png"
+              linkedIn="https://www.linkedin.com/in/gorupicz/"
+            />
+            <TeamMember 
+              name="Daniel García" 
+              title="Fundador en Mi Casa Es Tu Casa"
+              image="/public/lovable-uploads/c2c3d78d-0003-4eb3-ab66-fcf7d91313bb.png"
+              linkedIn="https://www.linkedin.com/in/daniel-garc%C3%ADa-16770b38/"
+            />
+            <TeamMember 
+              name="Juan Pablo Tellez" 
+              title="Fundador en Podcast MundoBNB"
+              linkedIn="https://www.linkedin.com/in/jptellezg/"
+            />
           </div>
+          
+          <div className="mt-12 bg-sand-light p-6 rounded-xl">
+            <p className="text-center text-navy text-lg font-medium italic">
+              "Nuestros Miembros Fundadores están en una misión para liderar la industria de Renta Vacacional en México."
+            </p>
+          </div>
+        </div>
         </section>
       </main>
       <Footer />
