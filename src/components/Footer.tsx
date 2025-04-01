@@ -66,11 +66,11 @@ const Footer = () => {
               <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
               </a>
-              <a href="mailto:info@clubderentavacacional.mx" aria-label="Email">
+              <a href="mailto:info@clubrentavacacional.mx" aria-label="Email">
                 <Mail className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
               </a>
             </div>
-            <p className="text-gray-300">info@clubderentavacacional.mx</p>
+            <p className="text-gray-300">info@clubrentavacacional.mx</p>
             <p className="text-gray-300 mt-4">Riviera Maya, México</p>
           </div>
         </div>
