@@ -6,8 +6,19 @@ import ActivityCard from '@/components/ActivityCard';
 import DinnerSeriesTable from '@/components/DinnerSeriesTable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingBag } from 'lucide-react';
+import { useState } from 'react';
 
 const Activities = () => {
+  const [activeTab, setActiveTab] = useState("all");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  const openDinnerSeriesTab = () => {
+    setActiveTab("dinner-series");
+  };
+
   return (
     <>
       <Navbar />
@@ -19,7 +30,7 @@ const Activities = () => {
         />
         
         <section className="section-container">
-          <Tabs defaultValue="all" className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} defaultValue="all" className="w-full">
             <div className="flex justify-center mb-8">
               <TabsList className="bg-sand-light">
                 <TabsTrigger value="all">Todas</TabsTrigger>
@@ -38,9 +49,12 @@ const Activities = () => {
                     Nuestra serie de cenas recorrerá 24 ciudades por todo México, desde abril 2025 hasta marzo 2026. 
                     ¡Una oportunidad única para conectar con los mejores property managers!
                   </p>
-                  <a href="#dinner-series" className="bg-white text-navy px-4 py-2 rounded inline-block hover:bg-gray-100 transition-colors">
+                  <button 
+                    onClick={openDinnerSeriesTab}
+                    className="bg-white text-navy px-4 py-2 rounded inline-block hover:bg-gray-100 transition-colors"
+                  >
                     Ver todas las ciudades
-                  </a>
+                  </button>
                 </div>
               </div>
               
