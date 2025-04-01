@@ -36,9 +36,6 @@ const Navbar = () => {
             <Link to="/activities" className="text-navy hover:text-teal transition-colors font-medium">
               Actividades
             </Link>
-            <Link to="/activities#dinner-series" className="text-navy hover:text-teal transition-colors font-medium">
-              Cenas 2025-2026
-            </Link>
             <Link to="/community" className="text-navy hover:text-teal transition-colors font-medium">
               Comunidad
             </Link>
@@ -91,13 +88,6 @@ const Navbar = () => {
               onClick={() => setIsOpen(false)}
             >
               Actividades
-            </Link>
-            <Link 
-              to="/activities#dinner-series" 
-              className="text-navy hover:text-teal transition-colors font-medium py-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Cenas 2025-2026
             </Link>
             <Link 
               to="/community" 
