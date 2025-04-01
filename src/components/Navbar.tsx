@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Instagram, Linkedin } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,22 +25,33 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8">
-          <Link to="/" className="text-navy hover:text-teal transition-colors font-medium">
-            Inicio
-          </Link>
-          <Link to="/about" className="text-navy hover:text-teal transition-colors font-medium">
-            Quiénes Somos
-          </Link>
-          <Link to="/activities" className="text-navy hover:text-teal transition-colors font-medium">
-            Actividades
-          </Link>
-          <Link to="/community" className="text-navy hover:text-teal transition-colors font-medium">
-            Comunidad
-          </Link>
-          <Link to="/contact" className="text-navy hover:text-teal transition-colors font-medium">
-            Contacto
-          </Link>
+        <div className="hidden md:flex items-center">
+          <div className="flex space-x-8 mr-6">
+            <Link to="/" className="text-navy hover:text-teal transition-colors font-medium">
+              Inicio
+            </Link>
+            <Link to="/about" className="text-navy hover:text-teal transition-colors font-medium">
+              Quiénes Somos
+            </Link>
+            <Link to="/activities" className="text-navy hover:text-teal transition-colors font-medium">
+              Actividades
+            </Link>
+            <Link to="/community" className="text-navy hover:text-teal transition-colors font-medium">
+              Comunidad
+            </Link>
+            <Link to="/contact" className="text-navy hover:text-teal transition-colors font-medium">
+              Contacto
+            </Link>
+          </div>
+          
+          <div className="flex space-x-4">
+            <a href="https://www.instagram.com/clubrenta_vacacional/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-navy hover:text-teal transition-colors">
+              <Instagram size={20} />
+            </a>
+            <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-navy hover:text-teal transition-colors">
+              <Linkedin size={20} />
+            </a>
+          </div>
         </div>
 
         {/* Mobile menu button */}
@@ -92,6 +103,15 @@ const Navbar = () => {
             >
               Contacto
             </Link>
+            
+            <div className="flex space-x-4 pt-2">
+              <a href="https://www.instagram.com/clubrenta_vacacional/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-navy hover:text-teal transition-colors">
+                <Instagram size={20} />
+              </a>
+              <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-navy hover:text-teal transition-colors">
+                <Linkedin size={20} />
+              </a>
+            </div>
           </div>
         </div>
       )}

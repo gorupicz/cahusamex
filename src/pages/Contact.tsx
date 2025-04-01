@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ContactForm from '@/components/ContactForm';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, Instagram, Linkedin } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -53,6 +53,30 @@ const Contact = () => {
                   <div>
                     <h3 className="text-lg font-bold text-navy mb-1">WhatsApp</h3>
                     <p className="text-gray-600">Solicita el enlace a nuestros grupos a través del formulario</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="h-10 w-10 bg-teal-light rounded-full flex items-center justify-center mr-4">
+                    <Instagram className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-navy mb-1">Instagram</h3>
+                    <a href="https://www.instagram.com/clubrenta_vacacional/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal transition-colors">
+                      @clubrenta_vacacional
+                    </a>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="h-10 w-10 bg-teal-light rounded-full flex items-center justify-center mr-4">
+                    <Linkedin className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-navy mb-1">LinkedIn</h3>
+                    <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal transition-colors">
+                      Club de Renta Vacacional
+                    </a>
                   </div>
                 </div>
               </div>

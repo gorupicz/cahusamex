@@ -55,13 +55,10 @@ const Footer = () => {
           <div>
             <h4 className="text-xl font-heading font-medium mb-4">Contáctanos</h4>
             <div className="flex space-x-4 mb-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <Facebook className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/clubrenta_vacacional/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <Instagram className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-6 w-6 text-gray-300 hover:text-teal-light transition-colors" />
               </a>
               <a href="mailto:info@clubderentavacacional.mx" aria-label="Email">
