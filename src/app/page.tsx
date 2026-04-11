@@ -4,7 +4,7 @@ import AboutSection from '@/components/home/about-section';
 import DinnerHighlight from '@/components/home/dinner-highlight';
 import ActivitiesPreview from '@/components/home/activities-preview';
 import CommunityStats from '@/components/home/community-stats';
-import FoundersSection from '@/components/home/founders-section';
+
 import CtaSection from '@/components/home/cta-section';
 import { siteConfig } from '@/data/site-config';
 
@@ -26,7 +26,6 @@ export default function HomePage() {
       <ActivitiesPreview />
       <section className="section-container">
         <CommunityStats />
-        <FoundersSection />
       </section>
       <CtaSection />
     </>

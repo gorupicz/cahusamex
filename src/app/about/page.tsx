@@ -3,7 +3,7 @@ import Hero from '@/components/Hero';
 import HistorySection from '@/components/about/history-section';
 import PurposeBanner from '@/components/about/purpose-banner';
 import WhatWeDo from '@/components/about/what-we-do';
-import FoundersSection from '@/components/home/founders-section';
+
 import { siteConfig } from '@/data/site-config';
 
 export const metadata: Metadata = {
@@ -23,12 +23,6 @@ export default function AboutPage() {
         <HistorySection />
         <PurposeBanner />
         <WhatWeDo />
-        <FoundersSection />
-        <div className="mt-12 bg-sand-light p-6 rounded-xl">
-          <p className="text-center text-navy text-lg font-medium italic">
-            &ldquo;Nuestros Miembros Fundadores están en una misión para promover la competitividad y excelencia en la industria de renta vacacional en México y USA.&rdquo;
-          </p>
-        </div>
       </section>
     </>
   );
