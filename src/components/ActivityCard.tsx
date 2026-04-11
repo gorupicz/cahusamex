@@ -1,6 +1,4 @@
-
-import { Calendar, Clock, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Calendar, MapPin } from 'lucide-react';
 
 interface ActivityCardProps {
   title: string;
@@ -44,10 +42,10 @@ const ActivityCard = ({
             </div>
           )}
         </div>
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
           className="btn-outline block text-center"
         >
           Inscríbete

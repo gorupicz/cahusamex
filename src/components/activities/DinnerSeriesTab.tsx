@@ -1,16 +1,16 @@
-
 import DinnerSeriesTable from '@/components/DinnerSeriesTable';
+import { siteConfig } from '@/data/site-config';
 
 const DinnerSeriesTab = () => {
   return (
     <>
       <DinnerSeriesTable />
-      
+
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <img 
-            src="lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png" 
-            alt="Cenas de Networking" 
+          <img
+            src="/lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
+            alt="Cenas de Networking"
             className="w-full h-64 object-cover"
           />
           <div className="p-6">
@@ -20,11 +20,11 @@ const DinnerSeriesTab = () => {
             </p>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <img 
-            src="lovable-uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png" 
-            alt="Property Managers" 
+          <img
+            src="/lovable-uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png"
+            alt="Property Managers"
             className="w-full h-64 object-cover"
           />
           <div className="p-6">
@@ -35,12 +35,12 @@ const DinnerSeriesTab = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-10 text-center">
-        <a 
-          href="https://lu.ma/elclub" 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href={siteConfig.events.dinners}
+          target="_blank"
+          rel="noopener noreferrer"
           className="btn-primary inline-block"
         >
           Regístrate para las próximas cenas

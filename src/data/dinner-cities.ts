@@ -1,0 +1,31 @@
+export const dinnerCities = [
+  "Cancun",
+  "Playa del Carmen",
+  "Tulum",
+  "Guadalajara",
+  "Puerto Vallarta",
+  "CDMX",
+  "Puebla",
+  "Los Cabos",
+  "La Paz",
+  "San Miguel de Allende",
+  "Querétaro",
+  "Valle de Guadalupe",
+  "Ensenada",
+  "Tijuana",
+  "Oaxaca",
+  "Mérida",
+  "Monterrey",
+  "Puerto Escondido",
+  "Huatulco",
+  "Ixtapa",
+  "San Carlos (Guaymas)",
+  "Hermosillo",
+];
+
+export const dinnerSeriesInfo = {
+  totalCities: 24,
+  dateRange: "De abril 2025 a marzo 2026",
+  propertiesRepresented: "121,500",
+  sponsorshipSlots: 3,
+};

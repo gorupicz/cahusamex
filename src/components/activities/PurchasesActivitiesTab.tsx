@@ -1,5 +1,5 @@
-
 import ActivityCard from '@/components/ActivityCard';
+import { purchaseActivities } from '@/data/activities';
 import { ShoppingBag } from 'lucide-react';
 
 const PurchasesActivitiesTab = () => {
@@ -18,37 +18,11 @@ const PurchasesActivitiesTab = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ActivityCard 
-          title="Insumos de Limpieza"
-          description="Compras colectivas de productos de limpieza de alta calidad a precios especiales para miembros de nuestra comunidad."
-          image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
-          type="Compra Colectiva"
-          location="Nacional"
-          date="Trimestral"
-          url="https://lu.ma/elclub"
-        />
-        
-        <ActivityCard 
-          title="Amenidades"
-          description="Amenidades personalizadas con el branding de cada Property Manager a precios competitivos gracias al volumen de compra."
-          image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
-          type="Compra Colectiva"
-          location="Nacional"
-          date="Bimestral"
-          url="https://lu.ma/elclub"
-        />
-        
-        <ActivityCard 
-          title="Servicios Tecnológicos"
-          description="Acceso a software y herramientas tecnológicas con condiciones especiales para miembros del club."
-          image="lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
-          type="Compra Colectiva"
-          location="Nacional"
-          date="Permanente"
-          url="https://lu.ma/elclub"
-        />
+        {purchaseActivities.map((activity) => (
+          <ActivityCard key={activity.title} {...activity} />
+        ))}
       </div>
     </div>
   );

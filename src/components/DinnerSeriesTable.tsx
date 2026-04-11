@@ -1,37 +1,11 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Calendar, MapPin, Users } from 'lucide-react';
-
-const cities = [
-  "Cancun",
-  "Playa del Carmen",
-  "Tulum",
-  "Guadalajara",
-  "Puerto Vallarta",
-  "CDMX",
-  "Puebla",
-  "Los Cabos",
-  "La Paz",
-  "San Miguel de Allende",
-  "Querétaro",
-  "Valle de Guadalupe",
-  "Ensenada",
-  "Tijuana",
-  "Oaxaca",
-  "Mérida",
-  "Monterrey",
-  "Puerto Escondido",
-  "Huatulco",
-  "Ixtapa",
-  "San Carlos (Guaymas)",
-  "Hermosillo"
-];
+import { dinnerCities, dinnerSeriesInfo } from '@/data/dinner-cities';
 
 const DinnerSeriesTable = () => {
-  // Group cities in rows of 3 for better display
   const cityRows = [];
-  for (let i = 0; i < cities.length; i += 3) {
-    cityRows.push(cities.slice(i, i + 3));
+  for (let i = 0; i < dinnerCities.length; i += 3) {
+    cityRows.push(dinnerCities.slice(i, i + 3));
   }
 
   return (
@@ -41,23 +15,23 @@ const DinnerSeriesTable = () => {
         <p className="text-gray-600 mb-4">
           De abril 2025 a marzo 2026, vamos a realizar 24 cenas de networking en las siguientes ciudades de México. Nuestras cenas son experiencias culinarias únicas y oportunidades para conectar con property managers top en un ambiente muy relajado.
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="flex items-center">
             <MapPin className="h-5 w-5 mr-2 text-teal" />
-            <span>24 ciudades en todo México</span>
+            <span>{dinnerSeriesInfo.totalCities} ciudades en todo México</span>
           </div>
           <div className="flex items-center">
             <Users className="h-5 w-5 mr-2 text-teal" />
-            <span>121,500 propiedades representadas</span>
+            <span>{dinnerSeriesInfo.propertiesRepresented} propiedades representadas</span>
           </div>
           <div className="flex items-center">
             <Calendar className="h-5 w-5 mr-2 text-teal" />
-            <span>De abril 2025 a marzo 2026</span>
+            <span>{dinnerSeriesInfo.dateRange}</span>
           </div>
         </div>
       </div>
-      
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -72,7 +46,6 @@ const DinnerSeriesTable = () => {
                   <span className="font-medium">{city}</span>
                 </TableCell>
               ))}
-              {/* Fill empty cells if row doesn't have 3 cities */}
               {row.length < 3 && Array(3 - row.length).fill(0).map((_, i) => (
                 <TableCell key={`empty-${i}`}></TableCell>
               ))}
@@ -80,10 +53,10 @@ const DinnerSeriesTable = () => {
           ))}
         </TableBody>
       </Table>
-      
+
       <div className="mt-6 p-4 bg-teal-light/10 border border-teal-light rounded-lg">
         <p className="text-navy font-medium">
-          Solo hay 3 espacios de patrocinio disponibles por cena. Si estás interesado en participar como patrocinador, contáctanos para más información.
+          Solo hay {dinnerSeriesInfo.sponsorshipSlots} espacios de patrocinio disponibles por cena. Si estás interesado en participar como patrocinador, contáctanos para más información.
         </p>
       </div>
     </div>

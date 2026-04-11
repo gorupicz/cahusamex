@@ -1,5 +1,4 @@
-
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface HeroProps {
   title: string;
@@ -19,7 +18,7 @@ const Hero = ({
   buttonLink = "/about"
 }: HeroProps) => {
   return (
-    <div 
+    <div
       className="relative bg-cover bg-center h-[70vh] flex items-center"
       style={{ backgroundImage: `linear-gradient(rgba(26, 58, 84, 0.7), rgba(26, 58, 84, 0.7)), url(${backgroundImage})` }}
     >
@@ -32,7 +31,7 @@ const Hero = ({
         )}
         {showButton && (
           <div className="animate-slide-up opacity-0" style={{animationDelay: '0.6s'}}>
-            <Link to={buttonLink} className="btn-primary">
+            <Link href={buttonLink!} className="btn-primary">
               {buttonText}
             </Link>
           </div>
