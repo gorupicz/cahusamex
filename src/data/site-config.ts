@@ -6,7 +6,7 @@ export const siteConfig = {
   email: "info@clubrenta.mx",
   location: "Riviera Maya, México",
   logo: "/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png",
-  description: "Comunidad de Property Managers y Anfitriones de Renta Vacacional en México",
+  description: "Promovemos la competitividad en la industria del bien raíz de renta vacacional en México y USA",
   social: {
     instagram: {
       url: "https://www.instagram.com/clubrenta_vacacional/",

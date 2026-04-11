@@ -3,8 +3,8 @@ const WhatWeDo = () => {
     <div className="mb-16">
       <h2 className="text-navy mb-6 text-center">Lo Que Hacemos</h2>
       <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
-        Organizamos cenas para networking, workshops para aprender e inspirar, charlas online,
-        y compras colectivas, entre otras iniciativas.
+        Agrupamos a los principales operadores, desarrollamos planes de capacitación y vinculación,
+        y creamos estándares de excelencia con impacto social y ambiental.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

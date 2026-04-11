@@ -17,7 +17,7 @@ export default function HomePage() {
     <>
       <Hero
         title={`${siteConfig.name}`}
-        subtitle="Reuniendo a los mejores Property Managers y Anfitriones de Renta Vacacional en México"
+        subtitle="Promovemos la competitividad en la industria del bien raíz de renta vacacional en México y USA"
         backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
         showButton={true}
       />

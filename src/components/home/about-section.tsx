@@ -9,7 +9,7 @@ const AboutSection = () => {
       <div className="text-center mb-12">
         <h2 className="text-navy mb-4">¿Quiénes Somos?</h2>
         <p className="max-w-3xl mx-auto text-lg text-gray-600">
-          La {siteConfig.name} reúne a los mejores Property Managers y Anfitriones de México.
+          La {siteConfig.name} promueve la competitividad en la industria del bien raíz de renta vacacional en México y USA.
           Nacimos en la Riviera Maya, el mercado turístico más grande de América Latina.
         </p>
       </div>
@@ -17,24 +17,24 @@ const AboutSection = () => {
       <div className="bg-navy-light text-white p-8 rounded-xl mb-16">
         <h3 className="text-2xl md:text-3xl font-bold text-center mb-4">NUESTRO PROPÓSITO</h3>
         <p className="text-xl md:text-2xl text-center">
-          Apoyar a los Anfitriones a Convertirse en Líderes
+          Promover la competitividad y la excelencia en la industria de renta vacacional
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <FeatureCard
-          title="Networking"
-          description="Organizamos cenas para networking y eventos que conectan a los profesionales de la industria."
+          title="Principales Operadores"
+          description="Agrupamos a los principales operadores de renta vacacional en México y USA."
           icon={Users}
         />
         <FeatureCard
-          title="Aprendizaje"
-          description="Workshops para aprender e inspirar con expertos en el mercado de renta vacacional."
+          title="Capacitación y Vinculación"
+          description="Desarrollamos planes de capacitación y vinculación para impulsar el crecimiento de la industria."
           icon={Book}
         />
         <FeatureCard
-          title="Comunidad"
-          description="Grupos de WhatsApp para anfitriones por ciudad y Property Managers por región."
+          title="Estándares de Excelencia"
+          description="Creamos estándares de excelencia tomando en cuenta el impacto social y ambiental."
           icon={Calendar}
         />
       </div>

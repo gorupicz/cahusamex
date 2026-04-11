@@ -26,7 +26,7 @@ export default function AboutPage() {
         <FoundersSection />
         <div className="mt-12 bg-sand-light p-6 rounded-xl">
           <p className="text-center text-navy text-lg font-medium italic">
-            &ldquo;Nuestros Miembros Fundadores están en una misión para liderar la industria de Renta Vacacional en México.&rdquo;
+            &ldquo;Nuestros Miembros Fundadores están en una misión para promover la competitividad y excelencia en la industria de renta vacacional en México y USA.&rdquo;
           </p>
         </div>
       </section>

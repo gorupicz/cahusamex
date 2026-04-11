@@ -6,13 +6,13 @@ const HistorySection = () => {
       <div>
         <h2 className="text-navy mb-6">Nuestra Historia</h2>
         <p className="text-gray-600">
-          La {siteConfig.name} reúne a los mejores Property Managers y Anfitriones de México.
+          La {siteConfig.name} promueve la competitividad en la industria del bien raíz de renta vacacional en México y USA.
           Nacimos en la Riviera Maya, el mercado turístico más grande de América Latina, con la visión
-          de crear una comunidad colaborativa que impulse el crecimiento y la profesionalización del sector.
+          de agrupar a los principales operadores e impulsar la profesionalización del sector.
         </p>
         <p className="text-gray-600">
-          Desde nuestros inicios, hemos estado comprometidos con la creación de espacios para el intercambio
-          de conocimientos, experiencias y recursos que beneficien a todos los integrantes de nuestra comunidad.
+          Desde nuestros inicios, desarrollamos planes de capacitación y vinculación, y creamos estándares
+          de excelencia tomando en cuenta el impacto social y ambiental de nuestra industria.
         </p>
       </div>
       <div className="rounded-xl overflow-hidden shadow-lg">

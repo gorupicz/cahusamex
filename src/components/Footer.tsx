@@ -18,7 +18,7 @@ const Footer = () => {
               <h3 className="ml-3 text-lg font-heading font-medium">{siteConfig.name}</h3>
             </div>
             <p className="my-2 text-gray-300">
-              Reuniendo a los mejores Property Managers y Anfitriones de Renta Vacacional en México
+              Promovemos la competitividad en la industria del bien raíz de renta vacacional en México y USA
             </p>
           </div>
 

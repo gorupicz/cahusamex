@@ -7,7 +7,7 @@ const FoundersSection = () => {
       <div className="text-center mb-12">
         <h2 className="text-navy mb-4">Miembros Fundadores</h2>
         <p className="max-w-3xl mx-auto text-lg text-gray-600">
-          Nuestros Miembros Fundadores tienen la misión de liderar la industria de Renta Vacacional en México
+          Nuestros Miembros Fundadores tienen la misión de promover la competitividad y excelencia en la industria de renta vacacional
         </p>
       </div>
 

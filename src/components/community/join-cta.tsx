@@ -3,9 +3,9 @@ import Link from 'next/link';
 const JoinCta = () => {
   return (
     <div className="text-center">
-      <h2 className="text-navy mb-6">¿Quieres unirte a nuestra comunidad?</h2>
+      <h2 className="text-navy mb-6">¿Quieres ser parte de la Cámara?</h2>
       <p className="text-gray-600 max-w-3xl mx-auto mb-8">
-        Si eres Property Manager o Anfitrión y quieres formar parte de la comunidad de renta vacacional más importante de México, contáctanos.
+        Si eres operador de renta vacacional y quieres impulsar la competitividad de tu negocio en México y USA, contáctanos.
       </p>
       <Link href="/contact" className="btn-primary">Contáctanos</Link>
     </div>

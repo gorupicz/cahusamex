@@ -6,8 +6,8 @@ const ContactInfo = () => {
     <div>
       <h2 className="text-navy mb-6">Estamos Cerca</h2>
       <p className="text-gray-600 mb-8">
-        Queremos conocerte y ayudarte a crecer en la industria de renta vacacional.
-        No dudes en ponerte en contacto con nosotros para cualquier consulta, sugerencia o para formar parte de nuestra comunidad.
+        Queremos conocerte y ayudarte a impulsar la competitividad de tu negocio.
+        No dudes en ponerte en contacto con nosotros para cualquier consulta, sugerencia o para ser parte de la Cámara.
       </p>
 
       <div className="space-y-6 mb-8">
