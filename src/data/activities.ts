@@ -38,7 +38,7 @@ export const allActivities: ActivityData[] = [
   },
   {
     title: "Compras Colectivas",
-    description: "Aprovechando nuestra comunidad de 550 anfitriones que administran 6,000 propiedades, organizamos compras colectivas para aumentar el valor entregado para todas las partes involucradas.",
+    description: "Aprovechando nuestra comunidad de 1,550 miembros que administran 16,000 propiedades, organizamos compras colectivas para aumentar el valor entregado para todas las partes involucradas.",
     image: "/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png",
     type: "Iniciativa",
     location: "Nacional",

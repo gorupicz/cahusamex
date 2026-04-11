@@ -13,7 +13,7 @@ const PurchasesActivitiesTab = () => {
           <div>
             <h3 className="text-2xl font-bold text-navy mb-2">Compras Colectivas</h3>
             <p className="text-gray-600">
-              Aprovechando nuestra comunidad de 550 anfitriones que administran 6,000 propiedades, organizamos compras colectivas. El beneficio es aumentar el valor entregado para todas las partes involucradas. Buscamos acuerdos Win-Win, no solo descuentos al por mayor.
+              Aprovechando nuestra comunidad de 1,550 miembros que administran 16,000 propiedades, organizamos compras colectivas. El beneficio es aumentar el valor entregado para todas las partes involucradas. Buscamos acuerdos Win-Win, no solo descuentos al por mayor.
             </p>
           </div>
         </div>

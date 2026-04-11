@@ -9,15 +9,14 @@ const WhatWeDo = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-          <h3 className="text-xl font-bold text-navy mb-4">Comunidad de WhatsApp</h3>
+          <h3 className="text-xl font-bold text-navy mb-4">Comunidad</h3>
           <p className="text-gray-600 mb-4">
-            Nuestra comunidad cuenta con 550 miembros que administran más de 6,000 propiedades
-            (representando el 3% del mercado mexicano).
+            Nuestra comunidad cuenta con 1,550 miembros administrando más de 16,000 propiedades
+            de renta vacacional.
           </p>
           <ul className="list-disc pl-5 text-gray-600 space-y-2">
-            <li>Grupos curados para anfitriones por ciudad</li>
-            <li>Grupos curados para Property Managers por región</li>
-            <li>El grupo VIP Club para los Top-50 Property Managers</li>
+            <li>Grupos curados para propietarios e inversionistas por ciudad</li>
+            <li>Grupos curados para Operadores por región</li>
             <li>Todos los grupos son gratuitos para permitir un compromiso genuino</li>
           </ul>
         </div>
