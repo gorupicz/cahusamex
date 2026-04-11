@@ -11,7 +11,7 @@ const About = () => {
       <main>
         <Hero 
           title="Quiénes Somos"
-          subtitle="Conoce la historia y el propósito del Club de Renta Vacacional"
+          subtitle="Conoce la historia y el propósito del Cámara Empresarial de la Hospitalidad USA - México"
           backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
         />
         
@@ -20,7 +20,7 @@ const About = () => {
             <div>
               <h2 className="text-navy mb-6">Nuestra Historia</h2>
               <p className="text-gray-600">
-                El Club de Renta Vacacional reúne a los mejores Property Managers y Anfitriones de México. 
+                El Cámara Empresarial de la Hospitalidad USA - México reúne a los mejores Property Managers y Anfitriones de México. 
                 Nacimos en la Riviera Maya, el mercado turístico más grande de América Latina, con la visión
                 de crear una comunidad colaborativa que impulse el crecimiento y la profesionalización del sector.
               </p>

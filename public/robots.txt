@@ -14,4 +14,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://clubrentavacacional.mx/sitemap.xml
+Sitemap: https://cahusa.mx/sitemap.xml

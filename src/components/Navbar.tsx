@@ -16,11 +16,11 @@ const Navbar = () => {
         <Link to="/" className="flex items-center">
           <img 
             src="/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
-            alt="Club de Renta Vacacional Logo" 
+            alt="Cámara Empresarial de la Hospitalidad USA - México Logo" 
             className="h-14"
           />
           <span className="ml-2 text-navy font-heading font-semibold hidden md:block">
-            Club de Renta Vacacional
+            Cámara Empresarial de la Hospitalidad USA - México
           </span>
         </Link>
 

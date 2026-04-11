@@ -87,7 +87,7 @@ const Contact = () => {
                   <div>
                     <h3 className="text-lg font-bold text-navy mb-1">LinkedIn</h3>
                     <a href="https://www.linkedin.com/company/club-de-renta-vacacional" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal transition-colors">
-                      Club de Renta Vacacional
+                      Cámara Empresarial de la Hospitalidad USA - México
                     </a>
                   </div>
                 </div>

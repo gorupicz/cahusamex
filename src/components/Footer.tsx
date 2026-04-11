@@ -11,10 +11,10 @@ const Footer = () => {
             <div className="flex items-center mb-4">
               <img 
                 src="/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png" 
-                alt="Club de Renta Vacacional Logo" 
+                alt="Cámara Empresarial de la Hospitalidad USA - México Logo" 
                 className="h-20 bg-white rounded-full p-1"
               />
-              <h3 className="ml-3 text-lg font-heading font-medium">Club de Renta Vacacional</h3>
+              <h3 className="ml-3 text-lg font-heading font-medium">Cámara Empresarial de la Hospitalidad USA - México</h3>
             </div>
             <p className="my-2 text-gray-300">
               Reuniendo a los mejores Property Managers y Anfitriones de Renta Vacacional en México
@@ -69,7 +69,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Club de Renta Vacacional. Todos los derechos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Cámara Empresarial de la Hospitalidad USA - México. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

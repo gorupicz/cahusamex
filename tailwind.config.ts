@@ -63,7 +63,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for Club de Renta Vacacional
+				// Custom colors for Cámara Empresarial de la Hospitalidad USA - México
 				teal: {
 					light: '#5ECBAA',
 					DEFAULT: '#4DB69A',
