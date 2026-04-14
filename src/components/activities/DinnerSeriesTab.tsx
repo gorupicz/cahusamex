@@ -38,7 +38,7 @@ const DinnerSeriesTab = () => {
 
       <div className="mt-10 text-center">
         <a
-          href={siteConfig.events.dinners}
+          href={siteConfig.events.luma}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary inline-block"

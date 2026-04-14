@@ -26,5 +26,10 @@ export const siteConfig = {
     dinners: "https://lu.ma/rentasvacacionales",
     breakfasts: "https://lu.ma/rentasvacacionales",
     talks: "https://lu.ma/rentasvacacionales",
+    luma: "https://lu.ma/rentasvacacionales",
+  },
+  whatsapp: {
+    channel: "https://whatsapp.com/channel/0029VazYprG77qVT23AHij2W",
+    bolsadereservas: "https://chat.whatsapp.com/GT7HQh1r5FWKxcCf1VJOvf",
   },
 };

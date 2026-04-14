@@ -9,28 +9,28 @@ const ChannelsCard = () => {
       </p>
       <div className="space-y-2">
         <a
-          href={siteConfig.events.dinners}
+          href={siteConfig.events.luma}
           target="_blank"
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Cenas de Networking: lu.ma/rentasvacacionales
+          Actividades en línea y presenciales
         </a>
         <a
-          href={siteConfig.events.breakfasts}
+          href={siteConfig.whatsapp.channel}
           target="_blank"
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Desayunos de Trabajo: lu.ma/rentasvacacionales
+          Canal de Anuncios
         </a>
         <a
-          href={siteConfig.events.talks}
+          href={siteConfig.whatsapp.bolsadereservas}
           target="_blank"
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Charlas After Check-in: lu.ma/rentasvacacionales
+          Bolsa de Reservas
         </a>
       </div>
     </div>
