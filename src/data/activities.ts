@@ -16,7 +16,7 @@ export const allActivities: ActivityData[] = [
     type: "Presencial",
     location: "Múltiples ciudades",
     date: "Programación 2025-2026",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Desayunos de Trabajo",
@@ -25,7 +25,7 @@ export const allActivities: ActivityData[] = [
     type: "Presencial",
     location: "Cancún, Playa del Carmen y más",
     date: "Programación 2025",
-    url: "https://lu.ma/desayunos",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Charlas After Check-in",
@@ -43,7 +43,7 @@ export const allActivities: ActivityData[] = [
     type: "Iniciativa",
     location: "Nacional",
     date: "Todo el año",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
 ];
 
@@ -55,7 +55,7 @@ export const inPersonActivities: ActivityData[] = [
     type: "Presencial",
     location: "Múltiples ciudades",
     date: "Programación 2025-2026",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Cenas en la Riviera Maya",
@@ -64,7 +64,7 @@ export const inPersonActivities: ActivityData[] = [
     type: "Presencial",
     location: "Playa del Carmen",
     date: "Mensual",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Encuentros en CDMX",
@@ -73,7 +73,7 @@ export const inPersonActivities: ActivityData[] = [
     type: "Presencial",
     location: "Ciudad de México",
     date: "Bimestral",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Desayunos de Trabajo",
@@ -82,7 +82,7 @@ export const inPersonActivities: ActivityData[] = [
     type: "Presencial",
     location: "Cancún, Playa del Carmen y más",
     date: "Programación 2025",
-    url: "https://lu.ma/desayunos",
+    url: "https://lu.ma/rentasvacacionales",
   },
 ];
 
@@ -115,7 +115,7 @@ export const purchaseActivities: ActivityData[] = [
     type: "Compra Colectiva",
     location: "Nacional",
     date: "Trimestral",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Amenidades",
@@ -124,7 +124,7 @@ export const purchaseActivities: ActivityData[] = [
     type: "Compra Colectiva",
     location: "Nacional",
     date: "Bimestral",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Servicios Tecnológicos",
@@ -133,7 +133,7 @@ export const purchaseActivities: ActivityData[] = [
     type: "Compra Colectiva",
     location: "Nacional",
     date: "Permanente",
-    url: "https://lu.ma/elclub",
+    url: "https://lu.ma/rentasvacacionales",
   },
 ];
 

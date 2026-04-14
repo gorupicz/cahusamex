@@ -23,8 +23,8 @@ export const siteConfig = {
     },
   },
   events: {
-    dinners: "https://lu.ma/elclub",
-    breakfasts: "https://lu.ma/desayunos",
+    dinners: "https://lu.ma/rentasvacacionales",
+    breakfasts: "https://lu.ma/rentasvacacionales",
     talks: "https://lu.ma/charlas",
   },
 };

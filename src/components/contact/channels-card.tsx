@@ -14,7 +14,7 @@ const ChannelsCard = () => {
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Cenas de Networking: lu.ma/elclub
+          Cenas de Networking: lu.ma/rentasvacacionales
         </a>
         <a
           href={siteConfig.events.breakfasts}
@@ -22,7 +22,7 @@ const ChannelsCard = () => {
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Desayunos de Trabajo: lu.ma/desayunos
+          Desayunos de Trabajo: lu.ma/rentasvacacionales
         </a>
         <a
           href={siteConfig.events.talks}
