@@ -30,7 +30,7 @@ const ChannelsCard = () => {
           rel="noopener noreferrer"
           className="block bg-white/10 hover:bg-white/20 transition-colors p-3 rounded-md"
         >
-          Charlas After Check-in: lu.ma/charlas
+          Charlas After Check-in: lu.ma/rentasvacacionales
         </a>
       </div>
     </div>

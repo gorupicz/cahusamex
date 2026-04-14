@@ -34,7 +34,7 @@ export const allActivities: ActivityData[] = [
     type: "Online",
     location: "Virtual",
     date: "Programación 2025",
-    url: "https://lu.ma/charlas",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Compras Colectivas",
@@ -94,7 +94,7 @@ export const onlineActivities: ActivityData[] = [
     type: "Online",
     location: "Virtual",
     date: "Programación 2025",
-    url: "https://lu.ma/charlas",
+    url: "https://lu.ma/rentasvacacionales",
   },
   {
     title: "Seminarios Web",
@@ -103,7 +103,7 @@ export const onlineActivities: ActivityData[] = [
     type: "Online",
     location: "Virtual",
     date: "Mensual",
-    url: "https://lu.ma/charlas",
+    url: "https://lu.ma/rentasvacacionales",
   },
 ];
 

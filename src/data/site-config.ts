@@ -25,6 +25,6 @@ export const siteConfig = {
   events: {
     dinners: "https://lu.ma/rentasvacacionales",
     breakfasts: "https://lu.ma/rentasvacacionales",
-    talks: "https://lu.ma/charlas",
+    talks: "https://lu.ma/rentasvacacionales",
   },
 };
