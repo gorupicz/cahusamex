@@ -60,6 +60,14 @@ const featuredProviders: FeaturedProvider[] = [
     description:
       'Self-care club en Puerto Cancún: workouts faciales, nail bar con manicure y pedicure, y un snack & collagen bar con bebidas funcionales y opciones wellness. Comisión del 10% por cada cliente referido, con workouts faciales desde $850 y manicure desde $180.',
   },
+  {
+    name: 'Cancún Sailing',
+    category: 'Tours en catamarán · Isla Mujeres',
+    logo: '/uploads/providers/cancun-sailing.svg',
+    tile: 'bg-white',
+    description:
+      'Operador de tours en velero y catamarán a Isla Mujeres desde Cancún: navegación, snorkel en arrecife y día de playa con servicio a bordo. Para afiliados, hasta 45% de comisión en todos los tours.',
+  },
 ];
 
 const ProvidersCarousel = () => {
