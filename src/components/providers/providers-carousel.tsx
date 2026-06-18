@@ -76,6 +76,14 @@ const featuredProviders: FeaturedProvider[] = [
     description:
       'Restaurante de cocina mexicana contemporánea del chef Jonatán Gómez Luna (estrella Michelin), en Plaza ESPACIO, Puerto Cancún. Un homenaje a las heroínas anónimas de la gastronomía tradicional mexicana, reinterpretada con técnica y creatividad. De día restaurante; de noche, La Cantina de Onora.',
   },
+  {
+    name: 'Grupo RosaNegra',
+    category: 'Restaurantes de lujo · Entertainment',
+    logo: '/uploads/providers/rosanegra.png',
+    tile: 'bg-[#0a0a0a]',
+    description:
+      'Grupo de ultra high-end entertainment restaurants fundado por Eduardo Beaven. Reúne más de 10 conceptos —RosaNegra, Tora, Parole, Chambao, entre otros— que fusionan alta cocina con shows, música y un ambiente de celebración. Con presencia en Cancún, Tulum, CDMX, Los Cabos, Isla Mujeres, Madrid y Miami.',
+  },
 ];
 
 const ProvidersCarousel = () => {
