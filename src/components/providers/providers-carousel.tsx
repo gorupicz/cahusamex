@@ -100,7 +100,7 @@ const ProvidersCarousel = () => {
 
   return (
     <div
-      className="relative max-w-6xl mx-auto px-12"
+      className="relative max-w-7xl mx-auto px-12"
       onMouseEnter={() => {
         paused.current = true;
       }}
@@ -111,7 +111,7 @@ const ProvidersCarousel = () => {
       <Carousel setApi={setApi} opts={{ align: 'start', loop: true }}>
         <CarouselContent>
           {featuredProviders.map((provider) => (
-            <CarouselItem key={provider.name} className="basis-full sm:basis-1/2 lg:basis-1/3">
+            <CarouselItem key={provider.name} className="basis-full sm:basis-1/2 lg:basis-1/4">
               <div className="bg-white rounded-xl shadow-md overflow-hidden h-full flex flex-col card-hover">
                 <div className={`${provider.tile} h-40 flex items-center justify-center p-8`}>
                   <img
