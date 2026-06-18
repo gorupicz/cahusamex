@@ -68,6 +68,14 @@ const featuredProviders: FeaturedProvider[] = [
     description:
       'Operador de tours en velero y catamarán a Isla Mujeres desde Cancún: navegación, snorkel en arrecife y día de playa con servicio a bordo. Para afiliados, hasta 45% de comisión en todos los tours.',
   },
+  {
+    name: 'Onora',
+    category: 'Cocina mexicana · Puerto Cancún',
+    logo: '/uploads/providers/onora.png',
+    tile: 'bg-[#003c1e]',
+    description:
+      'Restaurante de cocina mexicana contemporánea del chef Jonatán Gómez Luna (estrella Michelin), en Plaza ESPACIO, Puerto Cancún. Un homenaje a las heroínas anónimas de la gastronomía tradicional mexicana, reinterpretada con técnica y creatividad. De día restaurante; de noche, La Cantina de Onora.',
+  },
 ];
 
 const ProvidersCarousel = () => {
