@@ -88,7 +88,7 @@ const featuredProviders: FeaturedProvider[] = [
   },
   {
     name: 'Cirque du Soleil JOYÀ & Jungala Aqua',
-    category: 'Show & Aqua Experience · VidantaWorld',
+    category: 'Actividades turísticas',
     logo: '/uploads/providers/cirque-joya.jpg',
     tile: 'bg-black',
     fill: true,
