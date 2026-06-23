@@ -87,8 +87,8 @@ const featuredProviders: FeaturedProvider[] = [
       'Grupo de ultra high-end entertainment restaurants fundado por Eduardo Beaven. Reúne más de 10 conceptos —RosaNegra, Tora, Parole, Chambao, entre otros— que fusionan alta cocina con shows, música y un ambiente de celebración. Con presencia en Cancún, Tulum, CDMX, Los Cabos, Isla Mujeres, Madrid y Miami.',
   },
   {
-    name: 'Cirque du Soleil JOYÀ & Jungala Aqua',
-    category: 'Actividades turísticas',
+    name: 'JOYÀ & JUNGALA',
+    category: 'Actividades extraordinarias',
     logo: '/uploads/providers/cirque-joya.jpg',
     tile: 'bg-black',
     fill: true,
