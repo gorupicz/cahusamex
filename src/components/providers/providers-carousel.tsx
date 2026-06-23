@@ -17,6 +17,8 @@ interface FeaturedProvider {
   /** Tailwind background for the logo tile, matched to each brand. */
   tile: string;
   description: string;
+  /** When true, the image fills the whole tile (object-cover, no padding). */
+  fill?: boolean;
 }
 
 const featuredProviders: FeaturedProvider[] = [
@@ -84,6 +86,15 @@ const featuredProviders: FeaturedProvider[] = [
     description:
       'Grupo de ultra high-end entertainment restaurants fundado por Eduardo Beaven. Reúne más de 10 conceptos —RosaNegra, Tora, Parole, Chambao, entre otros— que fusionan alta cocina con shows, música y un ambiente de celebración. Con presencia en Cancún, Tulum, CDMX, Los Cabos, Isla Mujeres, Madrid y Miami.',
   },
+  {
+    name: 'Cirque du Soleil JOYÀ & Jungala Aqua',
+    category: 'Show & Aqua Experience · VidantaWorld',
+    logo: '/uploads/providers/cirque-joya.jpg',
+    tile: 'bg-black',
+    fill: true,
+    description:
+      'Ubicadas en el complejo VidantaWorld Riviera Maya, Cirque du Soleil JOYÀ ofrece una experiencia culinaria tan creativa como el mismo espectáculo que se desarrolla en el escenario. En medio de la selva se encuentra Jungala Aqua Experience, un oasis de lujo y la experiencia acuática más exclusiva. Comisiones atractivas para afiliados.',
+  },
 ];
 
 const ProvidersCarousel = () => {
@@ -113,11 +124,17 @@ const ProvidersCarousel = () => {
           {featuredProviders.map((provider) => (
             <CarouselItem key={provider.name} className="basis-full sm:basis-1/2 lg:basis-1/4">
               <div className="bg-white rounded-xl shadow-md overflow-hidden h-full flex flex-col card-hover">
-                <div className={`${provider.tile} h-40 flex items-center justify-center p-8`}>
+                <div
+                  className={`h-40 flex items-center justify-center overflow-hidden ${
+                    provider.fill ? '' : `${provider.tile} p-8`
+                  }`}
+                >
                   <img
                     src={provider.logo}
                     alt={`Logo de ${provider.name}`}
-                    className="max-h-full max-w-full object-contain"
+                    className={
+                      provider.fill ? 'w-full h-full object-cover' : 'max-h-full max-w-full object-contain'
+                    }
                   />
                 </div>
                 <div className="p-6 flex flex-col flex-1">
