@@ -51,11 +51,11 @@ export default function AnahuacPage() {
               className="h-14 w-auto rounded-lg bg-white/95 p-2"
             />
             <span className="text-2xl font-light text-white/50">×</span>
-            {/* 801×80 lockup — sized by width, or h-14 would make it 560px wide. */}
+            {/* Square badge that carries its own orange field — no white chip. */}
             <img
               src={anahuacProgram.logo}
               alt={anahuacProgram.institution}
-              className="w-64 max-w-full rounded-lg bg-white/95 px-4 py-3 sm:w-72"
+              className="h-14 w-14 rounded-lg"
             />
           </div>
 

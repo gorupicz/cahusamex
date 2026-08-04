@@ -13,10 +13,10 @@ export const anahuacProgram = {
     "Aprende a usar el stack profesional de inteligencia artificial para trabajar de forma más eficiente, ahorrar tiempo y mejorar tus resultados profesionales.",
 
   /**
-   * Brand assets. Replace `logo` with the official Universidad Anáhuac artwork
-   * (same path, or point this constant at the new file).
+   * Official Universidad Anáhuac Cancún badge, supplied by the university.
+   * Square, with its own orange field — it needs no plate behind it.
    */
-  logo: "/uploads/anahuac-logo.svg",
+  logo: "/uploads/anahuac-logo.png",
 
   /** Stripe payment link the form redirects to after the lead is captured. */
   checkoutUrl: "https://buy.stripe.com/14AaEW95m0xAdWS5fUb3q0c",
