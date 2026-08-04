@@ -45,7 +45,7 @@ export const anahuacProgram = {
   instagramVideoSrc: "",
 
   facts: {
-    modality: "Híbrida",
+    modality: "Semipresencial",
     duration: "10 semanas",
     start: "Octubre 2026",
   },
