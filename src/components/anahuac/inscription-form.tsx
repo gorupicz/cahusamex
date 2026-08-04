@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useCallback, useRef, useState, type FormEvent } from 'react';
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import {
   anahuacProgram,
@@ -41,15 +41,32 @@ const InscriptionForm = () => {
     ? birthDate.split('-').map((part) => String(Number(part)))
     : ['', '', ''];
 
+  const submitted = useRef(false);
+  const settled = useRef(false);
+  const fallback = useRef<number | undefined>(undefined);
+
+  /**
+   * Runs once the POST has landed — either because the sink iframe loaded
+   * Google's response, or because we gave up waiting. Redirecting to Stripe
+   * before that risks cancelling the in-flight request and losing the lead.
+   */
+  const finish = useCallback(() => {
+    if (settled.current) return;
+    settled.current = true;
+    window.clearTimeout(fallback.current);
+
+    setStatus('sent');
+    if (anahuacProgram.checkoutUrl) {
+      window.location.href = anahuacProgram.checkoutUrl;
+    }
+  }, []);
+
   const handleSubmit = (_event: FormEvent<HTMLFormElement>) => {
     // The browser performs the POST into the hidden iframe; we only drive the UI.
     setStatus('sending');
-    window.setTimeout(() => {
-      setStatus('sent');
-      if (anahuacProgram.checkoutUrl) {
-        window.location.href = anahuacProgram.checkoutUrl;
-      }
-    }, 1200);
+    submitted.current = true;
+    // Don't strand anyone if the iframe never reports back.
+    fallback.current = window.setTimeout(finish, 6000);
   };
 
   if (status === 'sent') {
@@ -144,8 +161,21 @@ const InscriptionForm = () => {
         </div>
       </form>
 
-      {/* Receives Google's response so the page itself never navigates away. */}
-      <iframe name={SINK} title="" className="hidden" aria-hidden="true" />
+      {/*
+        Receives Google's response so the page itself never navigates away.
+        Its load event is our only signal that the POST completed — the response
+        is opaque, so it tells us the request finished, not that Google stored
+        it. The first load is the initial about:blank, hence the guard.
+      */}
+      <iframe
+        name={SINK}
+        title=""
+        className="hidden"
+        aria-hidden="true"
+        onLoad={() => {
+          if (submitted.current) finish();
+        }}
+      />
     </>
   );
 };

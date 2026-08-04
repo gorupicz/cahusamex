@@ -18,8 +18,8 @@ export const anahuacProgram = {
    */
   logo: "/uploads/anahuac-logo.svg",
 
-  /** Stripe Checkout link for "RESERVAR INSCRIPCIÓN". */
-  checkoutUrl: "",
+  /** Stripe payment link the form redirects to after the lead is captured. */
+  checkoutUrl: "https://buy.stripe.com/14AaEW95m0xAdWS5fUb3q0c",
 
   /**
    * Google Form owned by La Bolsa MX (goru@g14t.com) — NOT the Anáhuac one.
