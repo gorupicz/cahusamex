@@ -152,19 +152,20 @@ export default {
 					dark: '#7F6719'
 				},
 				// Universidad Anáhuac orange — co-branded landing (/anahuac) only.
+				// 500 is #FF5900, taken from their official logo SVG.
 				anahuac: {
-					DEFAULT: '#F26C0F',
+					DEFAULT: '#FF5900',
 					foreground: '#FFFFFF',
-					50:  '#FFF4EA',
-					100: '#FFE2C8',
-					200: '#FDC48E',
-					300: '#FBA657',
-					400: '#F98A2E',
-					500: '#F26C0F',
-					600: '#D75908',
-					700: '#AC4606',
-					800: '#7E3305',
-					900: '#4F2003'
+					50:  '#FFF1E8',
+					100: '#FFDCC7',
+					200: '#FFB88F',
+					300: '#FF9457',
+					400: '#FF7629',
+					500: '#FF5900',
+					600: '#D94A00',
+					700: '#A83A00',
+					800: '#7A2A00',
+					900: '#4D1B00'
 				}
 			},
 			borderRadius: {

@@ -37,7 +37,7 @@ export default function AnahuacPage() {
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 80% 15%, rgba(242,108,15,0.55) 0%, transparent 45%), radial-gradient(circle at 10% 90%, rgba(42,125,176,0.5) 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 15%, rgba(255,89,0,0.5) 0%, transparent 45%), radial-gradient(circle at 10% 90%, rgba(42,125,176,0.5) 0%, transparent 50%)',
           }}
           aria-hidden="true"
         />
@@ -51,10 +51,11 @@ export default function AnahuacPage() {
               className="h-14 w-auto rounded-lg bg-white/95 p-2"
             />
             <span className="text-2xl font-light text-white/50">×</span>
+            {/* 801×80 lockup — sized by width, or h-14 would make it 560px wide. */}
             <img
               src={anahuacProgram.logo}
               alt={anahuacProgram.institution}
-              className="h-14 w-auto rounded-lg bg-white/95 px-3 py-2"
+              className="w-64 max-w-full rounded-lg bg-white/95 px-4 py-3 sm:w-72"
             />
           </div>
 
