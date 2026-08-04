@@ -154,9 +154,19 @@ const InscriptionForm = () => {
             )}
           </button>
 
-          <p className="mt-4 text-sm text-muted-foreground">
-            Total promocional {formatMXN(beca.total)} · Beca vigente hasta el{' '}
-            {beca.deadline}
+          {/*
+            This sits directly above the payment step, so it states what the
+            card is actually charged — the enrollment fee, not the program
+            total. Quoting the total here reads as the amount due.
+          */}
+          <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground">
+            Pagas la inscripción de{' '}
+            <strong className="text-navy">{formatMXN(beca.enrollment)}</strong>{' '}
+            para apartar tu lugar. El programa ({formatMXN(beca.tuition)} con
+            beca) se paga por separado.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Beca vigente hasta el {beca.deadline}
           </p>
         </div>
       </form>
