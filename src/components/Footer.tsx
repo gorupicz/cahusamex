@@ -69,6 +69,11 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
           <p>&copy; {new Date().getFullYear()} {siteConfig.name}. Todos los derechos reservados.</p>
+          <p className="mt-2">
+            <Link href="/privacidad" className="hover:text-teal-light transition-colors">
+              Aviso de privacidad
+            </Link>
+          </p>
         </div>
       </div>
     </footer>
