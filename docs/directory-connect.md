@@ -207,6 +207,7 @@ Only `directory_profiles` (published rows, public columns) and `directory_public
 | `ANTHROPIC_API_KEY` | Matching | For Connect search (secret) |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Billing | For paid plans (secret) |
 | `STRIPE_PRICE_BUSINESS`, `STRIPE_PRICE_BUSINESS_PLUS` | Billing | For paid plans |
+| `STRIPE_PORTAL_CONFIGURATION` | The Connect billing portal configuration (`bpc_…`). Without it Stripe uses the account's default portal, which the Club account doesn't have yet. | For **Administrar suscripción** |
 | `SITE_URL` | Stripe return URLs (default `https://cahusa.mx`) | No |
 | `DIRECTORY_MAIL_FROM` | Code sender (default `CAHUSA MX <directorio@cahusa.mx>`) | No |
 | `CONNECT_INTRO_FROM`, `CONNECT_INTRO_BCC` | Intro sender (default `Esteban Gorupicz <goru@cahusa.mx>`) | No |
@@ -220,7 +221,7 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 1. **Supabase:** create the Cahusamex project (region close to Vercel's). Apply `supabase/migrations/20261113120000_directory_connect.sql` (SQL editor or `supabase db push`). Check the `directory-photos` bucket exists.
 2. **Resend:** add `cahusa.mx` as a domain and add its DKIM/SPF records in **Cloudflare** (the zone is there, not in Vercel; the local Cloudflare token is read-only, so the owner adds them). The existing Email Routing for `goru@cahusa.mx` stays as is, so the Bcc and replies still reach the owner.
 3. **Anthropic:** create an API key for Cahusamex Connect.
-4. **Stripe (LA BOLSA MX - Club):** ~~create the two products and monthly MXN prices~~ (done 2026-11-13, ids above). Still to do: the webhook destination above (copy its signing secret) and the billing portal (cancel at period end).
+4. **Stripe (LA BOLSA MX - Club):** ~~create the two products and monthly MXN prices~~ (done 2026-11-13, ids above). Still to do: the webhook destination above (copy its signing secret), and a billing portal configuration for Connect only (switch between the two Connect prices, cancel at period end, invoice history, payment method), whose `bpc_…` id goes in `STRIPE_PORTAL_CONFIGURATION`. The Club account has no portal configuration at all yet; a dedicated one leaves the rest of the account alone.
 5. **Vercel:** set the env vars above for Production (and Preview if wanted) on `labolsamx/cahusamex`. Also check the project's framework preset says Next.js (it still says Vite; `vercel.json` overrides it).
 6. **Merge the PR** and let Vercel deploy.
 7. **Import the pool:** export the guest CSV of each Cahusamex event from Luma and run `scripts/import-luma-directory.mjs` (dry run first, then `--apply`).

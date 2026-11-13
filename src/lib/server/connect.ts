@@ -711,8 +711,17 @@ async function customerOf(profileId: string): Promise<string | null> {
   return row?.stripe_customer_id ?? null;
 }
 
+// The account bills other things too, so Connect uses its own portal configuration when one is set
+// (STRIPE_PORTAL_CONFIGURATION, bpc_...): only the Connect plans to switch between, cancel at period end.
+const PORTAL_CONFIGURATION = process.env.STRIPE_PORTAL_CONFIGURATION ?? '';
+
 async function portalFor(customer: string) {
-  const session = await stripe<{ url: string }>('billing_portal/sessions', { customer, return_url: connectUrl(), locale: 'es' });
+  const session = await stripe<{ url: string }>('billing_portal/sessions', {
+    customer,
+    return_url: connectUrl(),
+    locale: 'es',
+    ...(PORTAL_CONFIGURATION ? { configuration: PORTAL_CONFIGURATION } : {}),
+  });
   return json({ ok: true, url: session.url });
 }
 
