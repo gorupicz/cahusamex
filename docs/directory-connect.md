@@ -10,7 +10,7 @@ They are a port of the same features on Cancún Tech Day (`cancuntechday` repo, 
 |---|---|
 | Who is in the directory and the matching pool | Cahusamex's own pool: guests of Cahusamex events on Luma (imported from CSV exports) plus anyone who creates a profile at `/directorio/editar`. Not shared with Cancún Tech Day. |
 | Backend | A new Supabase project for Cahusamex. |
-| Plans and prices | Same as Cancún Tech Day (table below), in a Stripe account other than Latinx Familia. **Which account is still open.** |
+| Plans and prices | Same as Cancún Tech Day (table below), in the **La Bolsa MX** Stripe account (not Latinx Familia, which bills Cancún Tech Day). |
 | Intros | From Esteban Gorupicz, `goru@cahusa.mx`, sent with Resend. |
 | Languages | Spanish only. |
 
@@ -181,7 +181,7 @@ Only `directory_profiles` (published rows, public columns) and `directory_public
 
 ## Billing (Stripe)
 
-- **Account: still to be decided by the owner** (not Latinx Familia).
+- **Account: La Bolsa MX** (owner's decision, 2026-11-13). Not Latinx Familia, which bills Cancún Tech Day.
 - Two monthly prices in MXN: Business 7,990 and Business Plus 9,590. Their ids go in `STRIPE_PRICE_BUSINESS` and `STRIPE_PRICE_BUSINESS_PLUS`; there are no defaults in the code.
 - Webhook destination `https://cahusa.mx/api/directorio/connect/stripe-webhook` with `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`.
 - Checkout has `allow_promotion_codes` on, so discount codes created in Stripe work without code changes.
@@ -213,7 +213,7 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 1. **Supabase:** create the Cahusamex project (region close to Vercel's). Apply `supabase/migrations/20261113120000_directory_connect.sql` (SQL editor or `supabase db push`). Check the `directory-photos` bucket exists.
 2. **Resend:** add `cahusa.mx` as a domain and add its DKIM/SPF records in **Cloudflare** (the zone is there, not in Vercel; the local Cloudflare token is read-only, so the owner adds them). The existing Email Routing for `goru@cahusa.mx` stays as is, so the Bcc and replies still reach the owner.
 3. **Anthropic:** create an API key for Cahusamex Connect.
-4. **Stripe (account to be decided):** create the two products and monthly MXN prices, and the webhook destination above; copy the signing secret. Configure the billing portal (cancel at period end).
+4. **Stripe (La Bolsa MX account):** create the two products and monthly MXN prices, and the webhook destination above; copy the signing secret. Configure the billing portal (cancel at period end).
 5. **Vercel:** set the env vars above for Production (and Preview if wanted) on `labolsamx/cahusamex`. Also check the project's framework preset says Next.js (it still says Vite; `vercel.json` overrides it).
 6. **Merge the PR** and let Vercel deploy.
 7. **Import the pool:** export the guest CSV of each Cahusamex event from Luma and run `scripts/import-luma-directory.mjs` (dry run first, then `--apply`).
@@ -277,7 +277,6 @@ Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`
 ## Known gaps
 
 - **Not tested end to end:** no Supabase project, Resend domain, Anthropic key or Stripe account exists for Cahusamex yet. The SQL (limits, grants, import) is tested on a local Postgres; the pages build and render; the API was checked only for its unconfigured answers.
-- **Stripe account** for Cahusamex not decided.
 - **Newsletter logo** for Business Plus is manual, and it is not confirmed that Cahusamex sends a monthly newsletter.
 - **Privacy notice** was adapted from Cancún Tech Day's without a lawyer's review; requests go to `goru@cahusa.mx`.
 - **Opt-out** is a column set by hand; there is no self-service switch.
