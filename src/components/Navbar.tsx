@@ -25,15 +25,27 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center">
           <div className="flex space-x-8 mr-6">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-navy hover:text-teal transition-colors font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navigationLinks.map((link) =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-navy hover:text-teal transition-colors font-medium"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-navy hover:text-teal transition-colors font-medium"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="flex space-x-4">
@@ -58,16 +70,29 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white pt-2 pb-4 px-4">
           <div className="flex flex-col space-y-3">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-navy hover:text-teal transition-colors font-medium py-2"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navigationLinks.map((link) =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-navy hover:text-teal transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-navy hover:text-teal transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <div className="flex space-x-4 pt-2">
               <a href={siteConfig.social.instagram.url} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-navy hover:text-teal transition-colors">
                 <Instagram size={20} />

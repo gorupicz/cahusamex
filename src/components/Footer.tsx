@@ -27,9 +27,20 @@ const Footer = () => {
             <ul className="space-y-2">
               {navigationLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-300 hover:text-teal-light transition-colors">
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 hover:text-teal-light transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="text-gray-300 hover:text-teal-light transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -58,6 +69,11 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
           <p>&copy; {new Date().getFullYear()} {siteConfig.name}. Todos los derechos reservados.</p>
+          <p className="mt-2">
+            <Link href="/privacidad" className="hover:text-teal-light transition-colors">
+              Aviso de privacidad
+            </Link>
+          </p>
         </div>
       </div>
     </footer>
