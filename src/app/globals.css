@@ -5,32 +5,36 @@
 @layer base {
   :root {
     --background: 42 30% 94%;
-    --foreground: 210 64% 16%;
+    --foreground: 219 80% 19%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 64% 16%;
+    --card-foreground: 219 80% 19%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 64% 16%;
+    --popover-foreground: 219 80% 19%;
 
-    --primary: 164 40% 51%;
+    /* CAHUSAMEX primary: USA navy #0A2558 */
+    --primary: 219 80% 19%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 64% 22%;
+    /* Secondary: logo water blue #2A7DB0 for a lighter, supportive accent */
+    --secondary: 203 62% 43%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 210 20% 92%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 42 38% 83%;
-    --accent-foreground: 210 64% 16%;
+    /* Accent: gold #C9A227 from the logo underline / stars */
+    --accent: 46 67% 47%;
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Destructive: MX flag red #CE1126 */
+    --destructive: 353 85% 44%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 164 40% 51%;
+    --ring: 219 80% 19%;
 
     --radius: 0.5rem;
 

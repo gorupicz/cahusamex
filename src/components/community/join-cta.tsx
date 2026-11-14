@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 const JoinCta = () => {
   return (
     <div className="text-center">
@@ -7,7 +5,14 @@ const JoinCta = () => {
       <p className="text-gray-600 max-w-3xl mx-auto mb-8">
         Si eres operador de renta vacacional y quieres impulsar la competitividad de tu negocio en México y USA, contáctanos.
       </p>
-      <Link href="/contact" className="btn-primary">Contáctanos</Link>
+      <a
+        href="https://labolsa.mx/suscripcion#cahusamex"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn-primary"
+      >
+        Hazte miembro
+      </a>
     </div>
   );
 };

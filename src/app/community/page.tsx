@@ -16,7 +16,7 @@ export default function CommunityPage() {
       <Hero
         title="Nuestra Comunidad"
         subtitle="Forma parte de la red de operadores de renta vacacional más importante de México y USA"
-        backgroundImage="/lovable-uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
+        backgroundImage="/uploads/a2c7e34b-612f-4fec-be68-2066ea3ed943.png"
       />
       <section className="section-container">
         <StatsBanner />

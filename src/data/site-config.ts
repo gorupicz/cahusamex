@@ -5,7 +5,8 @@ export const siteConfig = {
   url: "https://cahusa.mx",
   email: "info@clubrenta.mx",
   location: "Riviera Maya, México",
-  logo: "/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png",
+  logo: "/uploads/cahusamex_logo.png",
+  favicon: "/cahusamex_logo.ico",
   description: "Promovemos la competitividad en la industria del bien raíz de renta vacacional en México y USA",
   social: {
     instagram: {
