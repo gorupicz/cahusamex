@@ -13,12 +13,14 @@ They are a port of the same features on Cancún Tech Day (`cancuntechday` repo, 
 | Plans and prices | Same as Cancún Tech Day (table below), in the **LA BOLSA MX - Club** Stripe account (`acct_1QEETiACwbCfcqfc`). |
 | Intros | From Esteban Gorupicz, `goru@cahusa.mx`, sent with Resend. |
 | Languages | Spanish only. |
+| More sources (2026-11-14) | The subscribers of the Luma calendar **México Hospitalidad** (`cal-3KpS8bP7ptEMjBY`) and the users of **La Bolsa MX** (labolsa.mx), imported **already published**, like Crunchbase: the directory should show thousands of people from day one, and each person claims their profile later to complete it. Owner's explicit decision after being told the privacy risk. Event guests stay private drafts. See [Importing the pool](#importing-the-pool). |
 
 ## What it is
 
 **The directory.** Everyone in the community has a profile in `public.directory_profiles`:
 
-- Imported Luma guests land as **private, unclaimed** drafts.
+- Imported Luma event guests land as **private, unclaimed** drafts. Luma calendar subscribers and La Bolsa MX users land **unclaimed but published** (only those with a name of their own); their public page says "¿Eres {nombre}? Reclamar este perfil".
+- The list loads every published profile (paged 1,000 at a time from PostgREST) and sorts the fuller ones first: featured, claimed, then photo, headline, categories, services, company, job title, city. It shows 60 cards and "Ver más perfiles".
 - A person signs in at `/directorio/editar` with their email and a 6-digit code, reviews the draft, completes it and may publish it. Anyone can create a profile there with any email.
 - Published profiles are listed at `/directorio` (Business Plus first, with a "Destacado" badge) and have a page at `/directorio/<slug>`.
 - Public profiles show no LinkedIn or WhatsApp. Contact goes through **Pedir intro**. Business and Business Plus members can opt in to show them.
@@ -37,7 +39,7 @@ Until the intro goes out, a match shows no company, email, phone, LinkedIn or pr
 | Path | What |
 |---|---|
 | `/directorio` | Published profiles with a search box and filters (category, type, city). Buttons to the editor and to Connect. |
-| `/directorio/<slug>` | A public profile. **Pedir intro** opens `/connect?intro=<slug>`; website always; LinkedIn and WhatsApp only for paid members who opted in. |
+| `/directorio/<slug>` | A public profile. **Pedir intro** opens `/connect?intro=<slug>`; website always; LinkedIn and WhatsApp only for paid members who opted in. Unclaimed profiles show **Reclamar este perfil** (to `/directorio/editar`). |
 | `/directorio/editar` | Sign-in (email + code), the profile form, photo/logo upload, **Publicar en el directorio**, **Salir**. With `?next=/connect…` it shows **Continuar a Connect** after saving. |
 | `/connect` | Sign-in, or "Primero crea tu perfil", or the tool: usage line, ICP box with the ICPs used, matches (25 per page, select all, sticky **Pedir intro**), the intro dialog with plans, the contact opt-in for paid plans, **Administrar suscripción**. |
 | `/privacidad` | Privacy notice for the directory and Connect (linked from the footer, the editor and Connect). |
@@ -130,7 +132,8 @@ Differences from Cancún Tech Day:
 |---|---|
 | `supabase/migrations/20261113120000_directory_connect.sql` | All tables, RLS, column grants, the photo bucket, the import function and the Connect limit functions |
 | `supabase/tests/*`, `scripts/test-migrations.sh` | The migration applied to a throwaway local Postgres, with tests of every limit and of what anon can read |
-| `scripts/import-luma-directory.mjs` | Luma CSV export → `directory_events` + `directory_profiles` (dry run by default) |
+| `scripts/import-luma-directory.mjs` | CSV (Luma guests, Luma calendar people, La Bolsa MX users) → `directory_events` + `directory_profiles` (dry run by default) |
+| `supabase/migrations/20261114120000_directory_import_publish.sql` | A published profile needs a slug, not a claim; the import can publish (`"publish": true` per row); `status` readable by anon (for "Reclamar este perfil") |
 | `src/lib/directory/config.ts` | Categories, sizes, paths, shared types |
 | `src/lib/connect/plans.ts` | Plans, prices shown, limits for display |
 | `src/lib/server/core.ts` | Env, Supabase REST, the session cookie, Resend |
@@ -168,7 +171,7 @@ All routes except the webhook need the session cookie. They answer `{ ok: false,
 
 | Table / column | What |
 |---|---|
-| `directory_profiles` | Profiles. Public columns: id, slug, name, kind, company, job_title, headline, description, services, categories, city, website, photo_path, featured, updated_at. Private: email, linkedin_url, whatsapp, company_size, source_events, status, published, plan, show_contact, connect_opt_out. |
+| `directory_profiles` | Profiles. Public columns: id, slug, name, kind, company, job_title, headline, description, services, categories, city, website, photo_path, featured, status, updated_at. Private: email, linkedin_url, whatsapp, company_size, source_events, published, plan, show_contact, connect_opt_out. |
 | `directory_profiles.plan` | `starter` / `business` / `business_plus`. Set only from Stripe (`connect_apply_plan`). `featured` is generated from it. |
 | `directory_events` | `slug`, `name` (as the intro says it), `starts_on` |
 | `directory_email_codes` | Sign-in codes (HMAC), attempts, expiry |
@@ -226,8 +229,40 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 4. **Stripe (LA BOLSA MX - Club):** ~~create the two products and monthly MXN prices~~ (done 2026-11-13, ids above). ~~Billing portal configuration~~ done 2026-11-14: `bpc_1Ubl2FACwbCfcqfcBOoC8HgI` (switch between the two Connect prices with proration, cancel at period end with a reason, invoice history, payment method, email/name/tax id/address), set in `STRIPE_PORTAL_CONFIGURATION`. Being the account's first portal configuration, Stripe made it the **default** for LA BOLSA MX - Club: any other portal session in that account without its own configuration would show these options. ~~Webhook~~ done 2026-11-14 after the deploy: `we_1UbmN3ACwbCfcqfcGgBmXE9J` → `https://www.cahusa.mx/api/directorio/connect/stripe-webhook` (the `www` host: `cahusa.mx` answers 307 to `www`, and Stripe doesn't follow redirects), events `checkout.session.completed` and `customer.subscription.{created,updated,deleted}`, signing secret in `STRIPE_WEBHOOK_SECRET`. A replayed payment-mode checkout event got 200 (signature checked, ignored). The endpoint receives these events for the whole Club account (other products' checkouts too); the handler ignores anything that is not a Connect subscription. The account's other endpoint (`labolsa.mx`) is untouched.
 5. **Vercel:** set the env vars above for Production (and Preview if wanted) on `labolsamx/cahusamex`. Also check the project's framework preset says Next.js (it still says Vite; `vercel.json` overrides it).
 6. **Merge the PR** and let Vercel deploy.
-7. **Import the pool:** export the guest CSV of each Cahusamex event from Luma and run `scripts/import-luma-directory.mjs` (dry run first, then `--apply`).
+7. **Import the pool:** see [Importing the pool](#importing-the-pool) (dry run first, then `--apply`).
 8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal.
+
+## Importing the pool
+
+Three sources, all through `scripts/import-luma-directory.mjs` (dry run unless `--apply`; with the service role key in the env the dry run also says who is already in the directory). Keep every CSV and `--out` file **out of the repo**: they hold emails.
+
+| Source | Event slug | `directory_events.name` (the intro says "Gracias por registrarte a …") | Date | Published |
+|---|---|---|---|---|
+| Luma event guests (Manage event → Guests → Download CSV) | one per event, e.g. `cena-cancun-2026` | the event's name | the event's date | No |
+| Luma calendar **México Hospitalidad** people (Calendar → Personas → Descargar como CSV; Luma asks the owner to confirm with a passkey or an emailed code). Rows with `subscription_status = unsubscribed` are skipped. | `luma-mexico-hospitalidad` | `la comunidad México Hospitalidad` | `2026-11-14` (the export date, so a later dated event wins) | **Yes** (`--publish`) |
+| **La Bolsa MX** users (read-only query below) | `labolsa-mx` | `La Bolsa MX` | `2025-04-22` (its first user) | **Yes** (`--publish`) |
+
+**La Bolsa MX users** come from its production database (repo `acreditacion`, `.env.production.readonly`, role `analyst_readonly`, SELECT only; never write there): active users not deleted, minus everyone who opted out of marketing email (`whatsapp_system_state` kind `email_marketing_opt_out:<userId>`) and every address with a permanent bounce or spam complaint (`email_events`). Columns: `email`, `name` (profile full name), `company` (their non-personal organization, as owner first), `job_title` derived from activity: `Administrador de rentas vacacionales` (has a Guesty/PMS key or managed properties) or `Vendedor de rentas vacacionales` (accepted seller in `brokers`). La Bolsa MX has no city, LinkedIn or company size. The query used on 2026-11-14 is in the shared session notes (`labolsa-users.sql`); run it with `psql "$DIRECT_URL" -X -q -f labolsa-users.sql > labolsa-users.csv`.
+
+**Always exclude** the owner's own and test addresses and La Bolsa MX's WhatsApp-only placeholders:
+
+```bash
+node scripts/import-luma-directory.mjs \
+  --event luma-mexico-hospitalidad --name "la comunidad México Hospitalidad" --date 2026-11-14 --publish --csv luma-members.csv \
+  --event labolsa-mx --name "La Bolsa MX" --date 2025-04-22 --publish --csv labolsa-users.csv \
+  --exclude-pattern '^goru[+@]' --exclude-pattern '@g14t' --exclude-pattern '\.local$' --exclude-pattern '@(test\.com|example\.com)$' \
+  [--apply]
+```
+
+Re-running is safe: emails are the key, claimed profiles only gain `source_events`, the import never unpublishes anyone and never publishes a claimed profile. Someone who asks to be removed: unpublish them (`published = false`) and set `connect_opt_out = true`; **a later re-run with `--publish` would publish an unclaimed profile again**, so add them to `--exclude` too (or delete the row, with Esteban's OK).
+
+Counts per source after an import:
+
+```sql
+select e as source, count(*) as profiles, count(*) filter (where published) as published,
+       count(*) filter (where status = 'claimed') as claimed
+  from directory_profiles, unnest(source_events) e group by 1 order by 1;
+```
 
 ## Answering members
 
@@ -290,3 +325,5 @@ Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`
 - **Newsletter logo** for Business Plus is manual, and it is not confirmed that Cahusamex sends a monthly newsletter.
 - **Privacy notice** was adapted from Cancún Tech Day's without a lawyer's review; requests go to `goru@cahusa.mx`.
 - **Opt-out** is a column set by hand; there is no self-service switch.
+- **Luma calendar subscribers and La Bolsa MX users are published without their consent** (owner's decision, 2026-11-14). The privacy notice says so, but it was not reviewed by a lawyer, and La Bolsa MX's own notice was not checked for sharing data with CAHUSA MX. Most of those profiles show only a name (and, for La Bolsa MX, an activity line) until claimed.
+- **The directory page** sends every listed profile to the browser (~3,000 short rows, no descriptions). Past ~10,000 it should move to server-side search and paging.

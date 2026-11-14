@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Globe, Linkedin, MessageCircle, Send } from 'lucide-react';
+import { ArrowLeft, Globe, Linkedin, MessageCircle, Send, UserCheck } from 'lucide-react';
 import ProfileAvatar from '@/components/directory/ProfileAvatar';
-import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, KIND_LABELS } from '@/lib/directory/config';
+import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, EDIT_PATH, KIND_LABELS } from '@/lib/directory/config';
 import { getPublished } from '@/lib/server/public';
 
 export const dynamic = 'force-dynamic';
@@ -119,6 +119,20 @@ export default async function ProfilePage({ params }: Props) {
             {!hasContact && ' Este perfil no tiene otros datos de contacto públicos.'}
           </p>
         </div>
+
+        {profile.status === 'unclaimed' && (
+          <div className="mt-8 rounded-xl border border-dashed border-teal/40 bg-primary-50 p-5">
+            <h2 className="font-heading text-lg text-navy">¿Eres {profile.name}?</h2>
+            <p className="mt-1 text-sm text-navy/80">
+              Este perfil se creó con los datos de la comunidad de CAHUSA MX y nadie lo ha reclamado todavía. Reclámalo para
+              completarlo: agrega tu empresa, servicios, foto y descripción, o despublícalo si prefieres no aparecer.
+            </p>
+            <Link href={EDIT_PATH} className="btn-primary mt-4 inline-flex items-center gap-2">
+              <UserCheck className="h-4 w-4" aria-hidden="true" />
+              Reclamar este perfil
+            </Link>
+          </div>
+        )}
 
         <p className="mt-8 text-xs text-muted-foreground">
           Actualizado el {new Date(profile.updated_at).toLocaleDateString('es-MX', { dateStyle: 'long', timeZone: 'America/Cancun' })}

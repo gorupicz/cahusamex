@@ -1,14 +1,20 @@
 // What the public directory pages read. Uses the anon key on purpose: the RLS policy
 // (published = true) and the column grants decide what comes back, not this code. No filter on
 // `published` here: anon cannot even name that column.
-import { SLUG_RE, type PublicProfile } from '@/lib/directory/config';
+import { SLUG_RE, type ListedProfile, type PublicProfile } from '@/lib/directory/config';
 import { env, photoUrl } from './core';
 
 // LinkedIn and WhatsApp are not public columns: a public profile shows them only for paying Connect
 // members who opted in (directory_public_contact).
-const PUBLIC_COLUMNS = 'id,slug,name,kind,company,job_title,headline,description,services,categories,city,website,photo_path,featured,updated_at';
+const PUBLIC_COLUMNS =
+  'id,slug,name,kind,company,job_title,headline,description,services,categories,city,website,photo_path,featured,status,updated_at';
+const LIST_COLUMNS = 'id,slug,name,kind,company,job_title,headline,services,categories,city,photo_path,featured,status';
+// PostgREST on Supabase returns at most 1000 rows per request.
+const PAGE = 1000;
+const MAX_LISTED = 20000;
 
 type Raw = Omit<PublicProfile, 'photo_url'> & { photo_path: string | null };
+type RawListed = Omit<ListedProfile, 'photo_url'> & { photo_path: string | null };
 
 async function publicRest<T>(path: string): Promise<T> {
   if (!env.supabaseUrl || !env.anonKey) throw new Error('directory: SUPABASE_URL or SUPABASE_ANON_KEY is not set');
@@ -24,10 +30,17 @@ async function publicRest<T>(path: string): Promise<T> {
 const toPublic = ({ photo_path, ...rest }: Raw): PublicProfile => ({ ...rest, photo_url: photoUrl(photo_path) });
 
 /** Published profiles, featured first. null when the directory can't be read (the page says so). */
-export async function listPublished(): Promise<PublicProfile[] | null> {
+export async function listPublished(): Promise<ListedProfile[] | null> {
   try {
-    const rows = await publicRest<Raw[]>(`directory_profiles?select=${PUBLIC_COLUMNS}&order=featured.desc,name.asc&limit=1000`);
-    return rows.map(toPublic);
+    const rows: RawListed[] = [];
+    for (let offset = 0; offset < MAX_LISTED; offset += PAGE) {
+      const page = await publicRest<RawListed[]>(
+        `directory_profiles?select=${LIST_COLUMNS}&order=featured.desc,name.asc,id.asc&limit=${PAGE}&offset=${offset}`,
+      );
+      rows.push(...page);
+      if (page.length < PAGE) break;
+    }
+    return rows.map(({ photo_path, ...rest }) => ({ ...rest, photo_url: photoUrl(photo_path) }));
   } catch (err) {
     console.error('directory listing failed', err);
     return null;

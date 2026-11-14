@@ -16,7 +16,7 @@ export default function PrivacyPage() {
   return (
     <section className="container mx-auto max-w-3xl px-4 py-12 md:py-16">
       <h1 className="mb-2 font-heading text-4xl text-navy">Aviso de privacidad</h1>
-      <p className="mb-10 text-sm text-muted-foreground">Directorio y Connect · Última actualización: 13 de noviembre de 2026</p>
+      <p className="mb-10 text-sm text-muted-foreground">Directorio y Connect · Última actualización: 14 de noviembre de 2026</p>
 
       <div className="space-y-8 text-navy/90 [&_h2]:mb-3 [&_h2]:font-heading [&_h2]:text-2xl [&_h2]:text-navy [&_li]:ml-5 [&_li]:list-disc [&_ul]:space-y-2">
         <section>
@@ -42,9 +42,17 @@ export default function PrivacyPage() {
           <h2>Qué datos tenemos y de dónde vienen</h2>
           <ul>
             <li>
-              <strong>Registros a eventos.</strong> Si te registraste a un evento de CAHUSA MX en Luma, tomamos tu nombre, correo,
-              empresa, cargo, ciudad, LinkedIn y, si el evento lo preguntó, el tamaño de tu empresa. Con eso armamos un borrador privado
-              de tu perfil.
+              <strong>Eventos y calendario en Luma.</strong> Si te registraste a un evento de CAHUSA MX en Luma, tomamos tu nombre,
+              correo, empresa, cargo, ciudad, LinkedIn y, si el evento lo preguntó, el tamaño de tu empresa, y armamos un borrador privado
+              de tu perfil. Si te suscribiste al calendario México Hospitalidad de CAHUSA MX en Luma, tomamos tu nombre y correo y
+              publicamos un perfil básico en el directorio con tu nombre. Si cancelaste tu suscripción, no te incluimos.
+            </li>
+            <li>
+              <strong>Usuarios de La Bolsa MX.</strong> Si tienes una cuenta en La Bolsa MX (labolsa.mx), plataforma de rentas
+              vacacionales vinculada a CAHUSA MX, tomamos tu nombre, correo, el nombre de tu organización y tu actividad en la plataforma
+              (por ejemplo, &quot;Administrador de rentas vacacionales&quot; o &quot;Vendedor de rentas vacacionales&quot;), y publicamos un
+              perfil básico en el directorio con tu nombre, organización y actividad. Tu correo no se muestra. No incluimos cuentas
+              borradas ni a quien pidió no recibir correos de La Bolsa MX.
             </li>
             <li>
               <strong>Lo que tú escribes.</strong> Cuando entras a{' '}
@@ -67,7 +75,12 @@ export default function PrivacyPage() {
         <section>
           <h2>El directorio</h2>
           <p>
-            Tu perfil solo es público si tú lo publicas, y puedes despublicarlo cuando quieras. Tu correo nunca se muestra. Tu LinkedIn y
+            Tu perfil es público si tú lo publicas o, si llegaste por el calendario de Luma o por La Bolsa MX, porque lo publicamos como
+            se explica arriba, para que la comunidad te encuentre. Puedes reclamarlo para completarlo, despublicarlo cuando quieras desde{' '}
+            <Link href={EDIT_PATH} className="text-teal underline">
+              tu perfil
+            </Link>{' '}
+            (entras con tu correo) o pedirnos que lo borremos. Tu correo nunca se muestra. Tu LinkedIn y
             tu WhatsApp tampoco, salvo que tengas un plan de pago de Connect y elijas mostrarlos. Quien quiera contactarte pide una
             intro.
           </p>
