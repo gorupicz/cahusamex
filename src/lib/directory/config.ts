@@ -80,11 +80,16 @@ export interface PublicProfile {
   photo_url: string | null;
   /** Business Plus (Connect): listed first with a badge. */
   featured: boolean;
+  /** Imported profiles are public before anyone claims them; the page invites the person to claim it. */
+  status: 'claimed' | 'unclaimed';
   updated_at: string;
   /** Only on the profile page, and only when its owner (Business / Business Plus) shows them. */
   linkedin_url?: string | null;
   whatsapp?: string | null;
 }
+
+/** What the directory list needs of each profile (no long text, so thousands fit on the page). */
+export type ListedProfile = Omit<PublicProfile, 'description' | 'website' | 'updated_at' | 'linkedin_url' | 'whatsapp'>;
 
 /** The signed-in owner's own row, as /api/directorio/profile returns it. */
 export interface OwnerProfile extends Omit<PublicProfile, 'slug' | 'featured'> {

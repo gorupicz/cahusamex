@@ -27,7 +27,7 @@ export default async function DirectoryPage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href={EDIT_PATH} className="btn-primary">
-            Agregar o editar mi perfil
+            Reclamar o editar mi perfil
           </Link>
           <Link href={CONNECT_PATH} className="btn-outline">
             Pedir intros con Connect

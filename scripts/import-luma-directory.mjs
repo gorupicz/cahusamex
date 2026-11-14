@@ -1,21 +1,32 @@
 #!/usr/bin/env node
-// Loads the guests of Cahusamex events on Luma into public.directory_profiles (cahusa.mx/directorio
-// and the Connect matching pool), from Luma guest exports (Manage event > Guests > Download CSV).
+// Loads people into public.directory_profiles (cahusa.mx/directorio and the Connect matching pool)
+// from CSV files: Luma event guest exports (Manage event > Guests > Download CSV), the Luma calendar
+// people export (Calendar > Personas > Descargar como CSV) and any CSV with the same column names
+// (email, name, company, job_title, city, linkedin...), such as the La Bolsa MX users export.
 //
 //   SUPABASE_URL=https://<ref>.supabase.co SUPABASE_SERVICE_ROLE_KEY=... \
 //     node scripts/import-luma-directory.mjs \
-//       --event <slug> --name "<event name for the intro email>" [--date YYYY-MM-DD] --csv <file.csv> \
-//       [--event ... --name ... --csv ...] [--out rows.json] [--apply]
+//       --event <slug> --name "<event name for the intro email>" [--date YYYY-MM-DD] [--publish] --csv <file.csv> \
+//       [--event ... --name ... --csv ...] [--exclude <email>]... [--exclude-pattern <regex>]... [--out rows.json] [--apply]
 //
-// Each --event starts a block; the --name, --date and --csv after it belong to that event. <slug>
-// is lowercase words joined by dashes (e.g. cena-cancun-2026); --name is how the intro email names
-// it ("Gracias por registrarte a <name>."); --date lets the intro pick the most recent event.
+// Each --event starts a block; the --name, --date, --publish and --csv after it belong to that
+// event. <slug> is lowercase words joined by dashes (e.g. cena-cancun-2026); --name is how the
+// intro email names it ("Gracias por registrarte a <name>."); --date lets the intro pick the most
+// recent event (an event without a date loses to any dated one). --publish publishes that source's
+// people who are still unclaimed and come with their own name (owner's decision for La Bolsa MX,
+// 2026-11-14); everyone else stays private. --exclude skips an email and --exclude-pattern every
+// email matching a regular expression (test accounts, placeholder addresses such as @labolsa.local).
+//
+// Guests who never registered or cancelled, and calendar members who unsubscribed, are skipped.
+//
+// With SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY set, the dry run also says how many people are
+// already in the directory (read only).
 //
 // Without --apply it is a dry run: it reads, merges and prints counts, and writes nothing.
 // With --apply it upserts the events into directory_events and sends the people to
 // directory_import_profiles(), which upserts on the email: running it twice changes nothing,
-// unclaimed profiles take the fresh data, claimed ones only gain source events. Imported profiles
-// are never published.
+// unclaimed profiles take the fresh data, claimed ones only gain source events. The import never
+// unpublishes anyone, and never publishes a claimed profile.
 //
 // --out writes the merged rows (emails included) to a local JSON file for review; keep it out of
 // the repo.
@@ -27,7 +38,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Guests who never registered ("Invited") or cancelled are not part of the directory.
-const SKIP_STATUS = new Set(['invited', 'notgoing', 'declined', 'rejected', 'cancelled', 'canceled']);
+const SKIP_STATUS = new Set(['invited', 'notgoing', 'declined', 'rejected', 'cancelled', 'canceled', 'unsubscribed']);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const BATCH = 500;
@@ -40,13 +51,13 @@ function die(msg) {
 }
 
 function parseArgs(argv) {
-  const args = { events: [], apply: false, out: null };
+  const args = { events: [], apply: false, out: null, exclude: new Set(), excludePatterns: [] };
   let current = null;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const value = () => argv[++i] ?? die(`${a} needs a value`);
     if (a === '--event') {
-      current = { slug: value(), name: null, date: null, csv: [] };
+      current = { slug: value(), name: null, date: null, csv: [], publish: false };
       if (!SLUG_RE.test(current.slug) || current.slug.length > 80) die(`bad event slug: ${current.slug}`);
       args.events.push(current);
     } else if (a === '--name' || a === '--date' || a === '--csv') {
@@ -57,7 +68,19 @@ function parseArgs(argv) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) die(`--date expects YYYY-MM-DD, got ${v}`);
         current.date = v;
       } else current.csv.push(v.replace(/^~(?=\/)/, homedir()));
-    } else if (a === '--apply') args.apply = true;
+    } else if (a === '--publish') {
+      if (!current) die('--publish must come after --event');
+      current.publish = true;
+    } else if (a === '--exclude') args.exclude.add(normEmail(value()));
+    else if (a === '--exclude-pattern') {
+      const v = value();
+      try {
+        args.excludePatterns.push(new RegExp(v, 'i'));
+      } catch {
+        die(`bad --exclude-pattern: ${v}`);
+      }
+    }
+    else if (a === '--apply') args.apply = true;
     else if (a === '--out') args.out = value();
     else if (a === '--help' || a === '-h') {
       console.log(readFileSync(new URL(import.meta.url)).toString().split('\n').filter((l) => l.startsWith('//')).map((l) => l.slice(3)).join('\n'));
@@ -153,12 +176,13 @@ const pick = (row, patterns, exclude = /$^/) => {
   return null;
 };
 
-export function rowsFromCsv(text, event) {
+export function rowsFromCsv(text, event, publish = false) {
   return parseCsv(text)
-    .filter((r) => !SKIP_STATUS.has(statusKey(r.approval_status ?? r.status)))
+    .filter((r) => !SKIP_STATUS.has(statusKey(r.approval_status ?? r.subscription_status ?? r.status)))
     .map((r) => ({
       email: normEmail(r.email ?? r.Email),
       event,
+      publish,
       name: clean(r.name) ?? clean([r.first_name, r.last_name].filter(Boolean).join(' ')),
       company: pick(
         r,
@@ -187,12 +211,15 @@ export function merge(rows, order) {
       city: null,
       company_size: null,
       source_events: [],
+      publish: false,
     };
     for (const k of ['name', 'company', 'job_title', 'linkedin_url', 'city', 'company_size']) m[k] ??= r[k] ?? null;
     if (!m.source_events.includes(r.event)) m.source_events.push(r.event);
+    m.publish ||= Boolean(r.publish);
     byEmail.set(r.email, m);
   }
-  return [...byEmail.values()].map((m) => ({ ...m, source_events: m.source_events.sort() }));
+  // Only a person with a name of their own is published (the database checks it too).
+  return [...byEmail.values()].map((m) => ({ ...m, publish: m.publish && Boolean(m.name), source_events: m.source_events.sort() }));
 }
 
 // ---------- Supabase ----------
@@ -209,25 +236,46 @@ async function rest(path, init = {}) {
 
 // ---------- main ----------
 
+const fieldCounts = (rows) =>
+  `company ${rows.filter((m) => m.company).length}, job title ${rows.filter((m) => m.job_title).length}, ` +
+  `LinkedIn ${rows.filter((m) => m.linkedin_url).length}, city ${rows.filter((m) => m.city).length}, ` +
+  `company size ${rows.filter((m) => m.company_size).length}`;
+
+/** Who of these is already in the directory (read only; needs the service role key). */
+async function existing(emails) {
+  const found = new Map();
+  for (let offset = 0; ; offset += 1000) {
+    const page = await rest(`directory_profiles?select=email,status,published&order=email&limit=1000&offset=${offset}`);
+    for (const p of page) found.set(p.email, p);
+    if (page.length < 1000) break;
+  }
+  const mine = emails.map((e) => found.get(e)).filter(Boolean);
+  return {
+    in_directory: mine.length,
+    claimed: mine.filter((p) => p.status === 'claimed').length,
+    published: mine.filter((p) => p.published).length,
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const all = [];
   for (const e of args.events) {
     for (const file of e.csv) {
-      const rows = rowsFromCsv(readFileSync(file, 'utf8'), e.slug);
-      console.log(`csv ${e.slug}: ${rows.length} guests from ${file}`);
-      all.push(...rows);
+      const rows = rowsFromCsv(readFileSync(file, 'utf8'), e.slug, e.publish);
+      const kept = rows.filter((r) => !args.exclude.has(r.email) && !args.excludePatterns.some((re) => re.test(r.email)));
+      console.log(`csv ${e.slug}: ${kept.length} people from ${file}` + (kept.length < rows.length ? ` (${rows.length - kept.length} excluded)` : ''));
+      console.log(`  fields: ${fieldCounts(merge(kept, [e.slug]))}`);
+      all.push(...kept);
     }
   }
 
   const merged = merge(all, args.events.map((e) => e.slug));
   const perEvent = Object.fromEntries(args.events.map((e) => [e.slug, merged.filter((m) => m.source_events.includes(e.slug)).length]));
-  console.log(`merged: ${merged.length} people`, perEvent);
-  console.log(
-    `fields: company ${merged.filter((m) => m.company).length}, job title ${merged.filter((m) => m.job_title).length}, ` +
-      `LinkedIn ${merged.filter((m) => m.linkedin_url).length}, city ${merged.filter((m) => m.city).length}, ` +
-      `company size ${merged.filter((m) => m.company_size).length}`,
-  );
+  console.log(`merged: ${merged.length} people (${all.length - merged.length} duplicate rows merged by email)`, perEvent);
+  console.log(`fields: ${fieldCounts(merged)}`);
+  console.log(`to publish (unless already claimed): ${merged.filter((m) => m.publish).length}`);
+  if (SUPABASE_URL && KEY) console.log('already in the directory:', await existing(merged.map((m) => m.email)));
 
   if (args.out) {
     writeFileSync(args.out, JSON.stringify(merged, null, 2));
@@ -238,15 +286,19 @@ async function main() {
     return;
   }
 
+  if (merged.some((m) => m.publish)) {
+    const [probe] = await rest('rpc/directory_import_profiles', { method: 'POST', body: JSON.stringify({ p_rows: [] }) });
+    if (!('published' in probe)) die('this database cannot publish imports yet: apply supabase/migrations/20261114120000_directory_import_publish.sql first');
+  }
   await rest('directory_events', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates' },
     body: JSON.stringify(args.events.map((e) => ({ slug: e.slug, name: e.name, starts_on: e.date }))),
   });
-  const totals = { inserted: 0, updated: 0, unchanged: 0 };
+  const totals = { inserted: 0, updated: 0, unchanged: 0, published: 0 };
   for (let i = 0; i < merged.length; i += BATCH) {
     const [res] = await rest('rpc/directory_import_profiles', { method: 'POST', body: JSON.stringify({ p_rows: merged.slice(i, i + BATCH) }) });
-    for (const k of Object.keys(totals)) totals[k] += res[k];
+    for (const k of Object.keys(totals)) totals[k] += res[k] ?? 0;
   }
   console.log('applied:', totals);
 }

@@ -1,8 +1,8 @@
 'use client';
 
-// The published profiles with a text search and filters. Everything is already on the page (the
-// directory is small), so filtering happens in the browser.
-import { useMemo, useState } from 'react';
+// The published profiles with a text search and filters. Every profile is already on the page (a
+// few thousand short rows), so filtering happens in the browser; only the cards are paged.
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -10,22 +10,41 @@ import {
   CATEGORY_KEYS,
   CATEGORY_LABELS,
   KIND_LABELS,
+  type ListedProfile,
   type ProfileKind,
-  type PublicProfile,
   profilePath,
 } from '@/lib/directory/config';
 import ProfileAvatar from './ProfileAvatar';
 
 const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
+/** Cards shown at first and added by "Ver más". */
+const PAGE_SIZE = 60;
+
+/** Fuller profiles first: featured, then claimed, then by how much they say about themselves. */
+const richness = (p: ListedProfile) =>
+  (p.featured ? 100 : 0) +
+  (p.status === 'claimed' ? 50 : 0) +
+  (p.photo_url ? 8 : 0) +
+  (p.headline ? 6 : 0) +
+  (p.categories.length ? 4 : 0) +
+  (p.services.length ? 4 : 0) +
+  (p.company ? 3 : 0) +
+  (p.job_title ? 2 : 0) +
+  (p.city ? 1 : 0);
+
 const selectClasses =
   'h-10 rounded-md border border-input bg-white px-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-ring';
 
-export default function DirectoryList({ profiles }: { profiles: PublicProfile[] }) {
+export default function DirectoryList({ profiles: unsorted }: { profiles: ListedProfile[] }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
   const [kind, setKind] = useState('');
   const [city, setCity] = useState('');
+  const [shown, setShown] = useState(PAGE_SIZE);
+
+  // Stable: the server sends them by name, and equal scores keep that order.
+  const profiles = useMemo(() => [...unsorted].sort((a, b) => richness(b) - richness(a)), [unsorted]);
 
   const cities = useMemo(
     () => [...new Set(profiles.map((p) => p.city?.trim()).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b, 'es')),
@@ -45,6 +64,9 @@ export default function DirectoryList({ profiles }: { profiles: PublicProfile[] 
   }, [profiles, query, category, kind, city]);
 
   const filtered = query || category || kind || city;
+
+  // A new search starts from the first page again.
+  useEffect(() => setShown(PAGE_SIZE), [query, category, kind, city]);
 
   return (
     <div>
@@ -87,7 +109,9 @@ export default function DirectoryList({ profiles }: { profiles: PublicProfile[] 
       </div>
 
       <div className="mb-4 flex items-center justify-between text-sm text-muted-foreground">
-        <span aria-live="polite">{visible.length === 1 ? '1 perfil' : `${visible.length} perfiles`}</span>
+        <span aria-live="polite">
+          {visible.length === 1 ? '1 perfil' : `${visible.length.toLocaleString('es-MX')} perfiles`}
+        </span>
         {filtered && (
           <button
             type="button"
@@ -112,7 +136,7 @@ export default function DirectoryList({ profiles }: { profiles: PublicProfile[] 
         <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">Ningún perfil coincide con tu búsqueda.</p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((p) => (
+          {visible.slice(0, shown).map((p) => (
             <li key={p.id}>
               <Link
                 href={profilePath(p.slug)}
@@ -138,6 +162,17 @@ export default function DirectoryList({ profiles }: { profiles: PublicProfile[] 
             </li>
           ))}
         </ul>
+      )}
+
+      {visible.length > shown && (
+        <div className="mt-8 flex flex-col items-center gap-2">
+          <button type="button" className="btn-outline" onClick={() => setShown((n) => n + PAGE_SIZE)}>
+            Ver más perfiles
+          </button>
+          <span className="text-sm text-muted-foreground">
+            Mostrando {shown.toLocaleString('es-MX')} de {visible.length.toLocaleString('es-MX')}
+          </span>
+        </div>
       )}
     </div>
   );
