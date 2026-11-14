@@ -17,7 +17,7 @@ const HistorySection = () => {
       </div>
       <div className="rounded-xl overflow-hidden shadow-lg">
         <img
-          src="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+          src="/uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
           alt="Riviera Maya"
           className="w-full h-auto"
         />

@@ -16,9 +16,15 @@ export default function HomePage() {
   return (
     <>
       <Hero
-        title={`${siteConfig.name}`}
+        title={
+          <>
+            Cámara Empresarial de la Hospitalidad
+            <br />
+            USA - México
+          </>
+        }
         subtitle="Promovemos la competitividad en la industria del bien raíz de renta vacacional en México y USA"
-        backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+        backgroundImage="/uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
         showButton={true}
       />
       <AboutSection />

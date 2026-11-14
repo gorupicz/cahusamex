@@ -36,7 +36,7 @@ const DinnerHighlight = () => {
             </div>
             <div className="w-full md:w-1/3">
               <img
-                src="/lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
+                src="/uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
                 alt="Cenas de Networking"
                 className="rounded-lg w-full h-auto shadow-lg"
               />

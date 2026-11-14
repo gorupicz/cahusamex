@@ -30,15 +30,17 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     type: 'website',
     url: siteConfig.url,
-    images: [`${siteConfig.url}/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png`],
+    images: [`${siteConfig.url}${siteConfig.logo}`],
   },
   twitter: {
     card: 'summary_large_image',
     site: siteConfig.social.twitter.handle,
-    images: [`${siteConfig.url}/lovable-uploads/4deb150c-8c55-4cd1-baf4-560ce2ee0f9a.png`],
+    images: [`${siteConfig.url}${siteConfig.logo}`],
   },
   icons: {
-    icon: siteConfig.logo,
+    icon: siteConfig.favicon,
+    shortcut: siteConfig.favicon,
+    apple: siteConfig.logo,
   },
   alternates: {
     canonical: siteConfig.url,

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Instagram, Linkedin } from 'lucide-react';
-import { navigationLinks } from '@/data/navigation';
+import { headerNavigationLinks } from '@/data/navigation';
 import { siteConfig } from '@/data/site-config';
 
 const Navbar = () => {
@@ -12,27 +12,27 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex shrink-0 items-center">
           <img
             src={siteConfig.logo}
             alt={`${siteConfig.name} Logo`}
             className="h-14"
           />
-          <span className="ml-2 text-navy font-heading font-semibold hidden md:block">
+          <span className="ml-2 max-w-[16rem] text-navy font-heading font-semibold leading-snug hidden xl:block">
             {siteConfig.name}
           </span>
         </Link>
 
         <div className="hidden md:flex items-center">
-          <div className="flex space-x-8 mr-6">
-            {navigationLinks.map((link) =>
+          <div className="flex space-x-5 lg:space-x-8 mr-6">
+            {headerNavigationLinks.map((link) =>
               link.external ? (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-navy hover:text-teal transition-colors font-medium"
+                  className="whitespace-nowrap text-navy hover:text-teal transition-colors font-medium"
                 >
                   {link.label}
                 </a>
@@ -40,7 +40,7 @@ const Navbar = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-navy hover:text-teal transition-colors font-medium"
+                  className="whitespace-nowrap text-navy hover:text-teal transition-colors font-medium"
                 >
                   {link.label}
                 </Link>
@@ -70,7 +70,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white pt-2 pb-4 px-4">
           <div className="flex flex-col space-y-3">
-            {navigationLinks.map((link) =>
+            {headerNavigationLinks.map((link) =>
               link.external ? (
                 <a
                   key={link.href}

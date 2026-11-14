@@ -17,7 +17,7 @@ export default function AboutPage() {
       <Hero
         title="Quiénes Somos"
         subtitle={`Conoce la historia y el propósito de la ${siteConfig.name}`}
-        backgroundImage="/lovable-uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
+        backgroundImage="/uploads/27c70ccd-6775-4d50-84e2-e2cd60f72589.png"
       />
       <section className="section-container">
         <HistorySection />

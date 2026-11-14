@@ -9,7 +9,7 @@ const DinnerSeriesTab = () => {
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <img
-            src="/lovable-uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
+            src="/uploads/944c4e44-f0bf-41d6-8f00-9bd40b07af2b.png"
             alt="Cenas de Networking"
             className="w-full h-64 object-cover"
           />
@@ -23,7 +23,7 @@ const DinnerSeriesTab = () => {
 
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <img
-            src="/lovable-uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png"
+            src="/uploads/d5231b7b-dcfd-4ed8-ae93-69197b4a2bad.png"
             alt="Property Managers"
             className="w-full h-64 object-cover"
           />

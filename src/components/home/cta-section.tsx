@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 const CtaSection = () => {
   return (
     <section className="bg-teal text-white py-16">
@@ -8,9 +6,14 @@ const CtaSection = () => {
         <p className="text-xl max-w-3xl mx-auto mb-8">
           Únete a la Cámara y conecta con los principales operadores de la industria en México y USA
         </p>
-        <Link href="/contact" className="bg-white text-teal px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-          Contáctanos
-        </Link>
+        <a
+          href="https://labolsa.mx/suscripcion#cahusamex"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-white text-teal px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+        >
+          Hazte miembro
+        </a>
       </div>
     </section>
   );

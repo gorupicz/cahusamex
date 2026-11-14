@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 interface HeroProps {
-  title: string;
+  title: ReactNode;
   subtitle?: string;
   backgroundImage: string;
   showButton?: boolean;
@@ -23,7 +24,7 @@ const Hero = ({
       style={{ backgroundImage: `linear-gradient(rgba(26, 58, 84, 0.7), rgba(26, 58, 84, 0.7)), url(${backgroundImage})` }}
     >
       <div className="container mx-auto px-4 text-center text-white">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">{title}</h1>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-[1.25] animate-fade-in">{title}</h1>
         {subtitle && (
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-slide-up opacity-0" style={{animationDelay: '0.3s'}}>
             {subtitle}
