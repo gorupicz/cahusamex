@@ -9,7 +9,7 @@ They are a port of the same features on Cancún Tech Day (`cancuntechday` repo, 
 | Question | Decision |
 |---|---|
 | Who is in the directory and the matching pool | Cahusamex's own pool: guests of Cahusamex events on Luma (imported from CSV exports) plus anyone who creates a profile at `/directorio/editar`. Not shared with Cancún Tech Day. |
-| Backend | A new Supabase project for Cahusamex. |
+| Backend | A new Supabase project for Cahusamex: `cahusamex` (`xfkicfgxznzvuffnufts`, `https://xfkicfgxznzvuffnufts.supabase.co`, us-east-1) in the organization **CAHUSAMEX - Cámara de la Hospitalidad USA - México** (`klokculkvkwxhbqtyumw`, Free plan), created 2026-11-14. |
 | Plans and prices | Same as Cancún Tech Day (table below), in the **LA BOLSA MX - Club** Stripe account (`acct_1QEETiACwbCfcqfc`). |
 | Intros | From Esteban Gorupicz, `goru@cahusa.mx`, sent with Resend. |
 | Languages | Spanish only. |
@@ -164,7 +164,7 @@ All routes except the webhook need the session cookie. They answer `{ ok: false,
 - **The blurred name** Starter members see is filler built from the token (`hiddenName`), never the real name.
 - **Prompt injection:** the prompts tell Claude to treat the ICP and every profile field as data.
 
-### Data (new Supabase project)
+### Data (Supabase project `xfkicfgxznzvuffnufts`)
 
 | Table / column | What |
 |---|---|
@@ -218,7 +218,7 @@ Without the Supabase variables or the session secret every API route answers `un
 
 Nothing below has been done yet. Each production step needs the owner's OK.
 
-1. **Supabase:** create the Cahusamex project (region close to Vercel's). Apply `supabase/migrations/20261113120000_directory_connect.sql` (SQL editor or `supabase db push`). Check the `directory-photos` bucket exists.
+1. **Supabase:** ~~create the Cahusamex project~~ done 2026-11-14 (`xfkicfgxznzvuffnufts`, us-east-1, org CAHUSAMEX on the **Free plan**: Supabase pauses Free projects after a week without activity, so upgrade the organization to Pro before launch). Apply `supabase/migrations/20261113120000_directory_connect.sql` (SQL editor or `supabase db push`). Check the `directory-photos` bucket exists.
 2. **Resend:** add `cahusa.mx` as a domain and add its DKIM/SPF records in **Cloudflare** (the zone is there, not in Vercel; the local Cloudflare token is read-only, so the owner adds them). The existing Email Routing for `goru@cahusa.mx` stays as is, so the Bcc and replies still reach the owner.
 3. **Anthropic:** create an API key for Cahusamex Connect.
 4. **Stripe (LA BOLSA MX - Club):** ~~create the two products and monthly MXN prices~~ (done 2026-11-13, ids above). ~~Billing portal configuration~~ done 2026-11-14: `bpc_1Ubl2FACwbCfcqfcBOoC8HgI` (switch between the two Connect prices with proration, cancel at period end with a reason, invoice history, payment method, email/name/tax id/address), set in `STRIPE_PORTAL_CONFIGURATION`. Being the account's first portal configuration, Stripe made it the **default** for LA BOLSA MX - Club: any other portal session in that account without its own configuration would show these options. Still to do: the webhook destination above (copy its signing secret), after the deploy.
