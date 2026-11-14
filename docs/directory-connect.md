@@ -197,6 +197,8 @@ Only `directory_profiles` (published rows, public columns) and `directory_public
 
 ## Environment variables (Vercel, project `labolsamx/cahusamex`)
 
+**Loaded on 2026-11-14** for Production and all Preview branches: `SUPABASE_URL`, `SUPABASE_ANON_KEY` (the project's *publishable* key, `sb_publishable_…`), `SUPABASE_SERVICE_ROLE_KEY` (its *secret* key, `sb_secret_…`, sensitive), `DIRECTORY_SESSION_SECRET` (generated, sensitive; Production and Preview have different values), `STRIPE_PRICE_BUSINESS`, `STRIPE_PRICE_BUSINESS_PLUS`, `STRIPE_PORTAL_CONFIGURATION`. Still missing: `RESEND_API_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`. The Supabase keys are the new publishable/secret keys, not the legacy JWT `anon`/`service_role` keys (retired in 2027); the code sends them as `apikey` and `Authorization: Bearer`, which the Supabase gateway accepts.
+
 | Variable | Used for | Required |
 |---|---|---|
 | `SUPABASE_URL` | Both | Yes |
