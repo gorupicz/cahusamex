@@ -256,6 +256,15 @@ node scripts/import-luma-directory.mjs \
 
 Re-running is safe: emails are the key, claimed profiles only gain `source_events`, the import never unpublishes anyone and never publishes a claimed profile. Someone who asks to be removed: unpublish them (`published = false`) and set `connect_opt_out = true`; **a later re-run with `--publish` would publish an unclaimed profile again**, so add them to `--exclude` too (or delete the row, with Esteban's OK).
 
+**Photos** (`scripts/import-directory-photos.mjs`, after the people are imported; dry run unless `--apply`, needs the service role key for both). It takes CSVs of `email,photo_url`, the first file winning for an email, and only touches **unclaimed profiles without a photo**. Each image is checked for placeholders (Google's white initial on a flat colour, its grey "no photo" and blue silhouette icons, blank squares: two colours covering 90% of a 48×48 thumbnail, or white marks on a flat background; a few two-colour logos are lost with them), cropped to 400×400 WebP without metadata and uploaded to `directory-photos/<profile id>/<uuid>.webp`. Sources used on 2026-11-14:
+
+- **Luma calendar avatars:** `user.avatar_url` from `https://api.luma.com/calendar/admin/get-members?calendar_api_id=cal-3KpS8bP7ptEMjBY` (run in the browser while signed in to Luma as an admin, paginated with `pagination_cursor`), skipping `avatars-default`. Matched to emails through the CSV's `user_id`. Only 77 of 2,304 had a real photo.
+- **La Bolsa MX Google avatars:** `profiles."socialAvatarUrl"` (public `lh3.googleusercontent.com` URLs; the script asks for the 400 px size). Photos La Bolsa MX users uploaded themselves (`profiles."profilePictureUrl"`, private bucket `user-profile-pictures`) need La Bolsa MX's service key to sign, and were **not** imported.
+
+```bash
+node scripts/import-directory-photos.mjs --csv luma-photos.csv --csv labolsa-google-photos.csv [--apply]
+```
+
 Counts per source after an import:
 
 ```sql

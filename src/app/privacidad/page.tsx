@@ -44,14 +44,15 @@ export default function PrivacyPage() {
             <li>
               <strong>Eventos y calendario en Luma.</strong> Si te registraste a un evento de CAHUSA MX en Luma, tomamos tu nombre,
               correo, empresa, cargo, ciudad, LinkedIn y, si el evento lo preguntó, el tamaño de tu empresa, y armamos un borrador privado
-              de tu perfil. Si te suscribiste al calendario México Hospitalidad de CAHUSA MX en Luma, tomamos tu nombre y correo y
-              publicamos un perfil básico en el directorio con tu nombre. Si cancelaste tu suscripción, no te incluimos.
+              de tu perfil. Si te suscribiste al calendario México Hospitalidad de CAHUSA MX en Luma, tomamos tu nombre, correo y foto de
+              perfil de Luma (si subiste una) y publicamos un perfil básico en el directorio con tu nombre y tu foto. Si cancelaste tu suscripción, no te incluimos.
             </li>
             <li>
               <strong>Usuarios de La Bolsa MX.</strong> Si tienes una cuenta en La Bolsa MX (labolsa.mx), plataforma de rentas
               vacacionales vinculada a CAHUSA MX, tomamos tu nombre, correo, el nombre de tu organización y tu actividad en la plataforma
-              (por ejemplo, &quot;Administrador de rentas vacacionales&quot; o &quot;Vendedor de rentas vacacionales&quot;), y publicamos un
-              perfil básico en el directorio con tu nombre, organización y actividad. Tu correo no se muestra. No incluimos cuentas
+              (por ejemplo, &quot;Administrador de rentas vacacionales&quot; o &quot;Vendedor de rentas vacacionales&quot;) y la foto de tu
+              cuenta de Google con la que entraste, si tiene una, y publicamos un perfil básico en el directorio con tu nombre, foto,
+              organización y actividad. Tu correo no se muestra. No incluimos cuentas
               borradas ni a quien pidió no recibir correos de La Bolsa MX.
             </li>
             <li>
