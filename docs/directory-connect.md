@@ -14,6 +14,7 @@ They are a port of the same features on Cancún Tech Day (`cancuntechday` repo, 
 | Intros | From Esteban Gorupicz, `goru@cahusa.mx`, sent with Resend. |
 | Languages | Spanish only. |
 | More sources (2026-11-14) | The subscribers of the Luma calendar **México Hospitalidad** (`cal-3KpS8bP7ptEMjBY`) and the users of **La Bolsa MX** (labolsa.mx), imported **already published**, like Crunchbase: the directory should show thousands of people from day one, and each person claims their profile later to complete it. Owner's explicit decision after being told the privacy risk. Event guests stay private drafts. See [Importing the pool](#importing-the-pool). |
+| Cancún Tech Day (2026-11-14) | The two directories show each other's published profiles and follow each other's claims, edits and opt-outs, without loops. Same consent model as the imports: published before they claim, "Reclamar este perfil" and opt-out on both sides. Each Connect matching pool stays its own (copies are not matched, but get direct intros). See [Sync with cancuntech.day](#sync-with-cancuntechday). |
 
 ## What it is
 
@@ -216,6 +217,10 @@ Only `directory_profiles` (published rows, public columns) and `directory_public
 | `SITE_URL` | Stripe return URLs (default `https://cahusa.mx`) | No |
 | `DIRECTORY_MAIL_FROM` | Code sender (default `CAHUSA MX <directorio@cahusa.mx>`) | No |
 | `CONNECT_INTRO_FROM`, `CONNECT_INTRO_BCC` | Intro sender (default `Esteban Gorupicz <goru@cahusa.mx>`) | No |
+| `CRON_SECRET` | Vercel sends it to the cron (`/api/directorio/ctd-sync`) | For the cancuntech.day sync (secret) |
+| `CTD_SYNC_TOKEN` | Pushes our profiles to cancuntech.day (it keeps the sha-256, source `cahusamex`) | For the sync (secret) |
+| `CTD_EXPORT_TOKEN` | Reads cancuntech.day's profiles (it keeps the sha-256, source `cahusamex-export`). Without it the cron only pushes. | For the sync (secret) |
+| `CTD_PULL` | `apply` makes the pull write. Any other value (or none): the cron pulls as a dry run and only logs the counts. | For the sync |
 
 Without the Supabase variables or the session secret every API route answers `unavailable` and the directory shows "No pudimos cargar el directorio".
 
@@ -232,14 +237,24 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 7. **Import the pool:** see [Importing the pool](#importing-the-pool) (dry run first, then `--apply`).
 8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal.
 
-## Sync to cancuntech.day
+## Sync with cancuntech.day
 
-The published profiles of this directory also appear in **cancuntech.day/directorio** (owner's request, 2026-11-14). One way: this site pushes, cancuntech.day never writes here.
+The published profiles of this directory appear in **cancuntech.day/directorio**, and theirs appear here (owner's requests, 2026-11-14). Both directions run from **one place**: `src/app/api/directorio/ctd-sync/route.ts`, a Vercel cron every 10 minutes (`vercel.json`), authenticated with `CRON_SECRET`. cancuntech.day runs nothing on a schedule and never writes to this database: it only answers two token-gated calls made with its publishable key.
 
-- **`src/app/api/directorio/ctd-sync/route.ts`**, run by a Vercel cron every 10 minutes (`vercel.json`). Vercel authenticates it with `CRON_SECRET`; it reads every profile with the service role and calls cancuntech.day's `directory_cahusamex_sync` (250 rows per call) and `directory_cahusamex_finish` with its publishable key and **`CTD_SYNC_TOKEN`** (sensitive; cancuntech.day stores only its sha-256 in `directory_sync_sources`).
-- **What travels:** published profiles without `connect_opt_out` (public fields, email, LinkedIn, photo URL); people who left (claimed and unpublished, or `connect_opt_out`) as the sha-256 of their email only; never private drafts or WhatsApp.
-- **On cancuntech.day:** claimed or edited here → the copy follows (unless the person claimed it there, then theirs wins); unpublished, opted out or deleted here → the copy is unpublished. Categories map to cancuntech.day's (vacation rentals, hotels and tourism → Hotelería y turismo; property management → Bienes raíces; maintenance → Operaciones; technology → Software; construction and design → Otra).
-- **Check a run:** `GET /api/directorio/ctd-sync?dry=1` with `Authorization: Bearer $CRON_SECRET` returns the counts without writing. Logs: Vercel → Functions → `ctd sync`. The rules and the queries are in cancuntech.day's `docs/connect.md` ("Profiles from cahusa.mx").
+**1. Push (here → cancuntech.day)**, with **`CTD_SYNC_TOKEN`**: reads every profile with the service role and calls cancuntech.day's `directory_cahusamex_sync` (250 rows per call) and `directory_cahusamex_finish`.
+- **What travels:** published profiles without `connect_opt_out` (public fields, email, LinkedIn, photo URL of our own bucket); people who left (claimed and unpublished, or `connect_opt_out`) as the sha-256 of their email only; never private drafts or WhatsApp.
+- **Never sent back:** an unclaimed copy of one of their profiles (`source_events` exactly `{cancuntechday}`). A profile unpublished here only because it left there (unclaimed, `ctd_status = 'hidden'`) is *held*: counted as seen, nothing else, so their opt-out doesn't bounce back to them as ours.
+- **On cancuntech.day:** claimed or edited here → the copy follows (unless the person claimed it there, then theirs wins); unpublished, opted out or deleted here → the copy is unpublished. Categories map to cancuntech.day's (vacation rentals, hotels and tourism → Hotelería y turismo; property management → Bienes raíces; maintenance → Operaciones; technology → Software; construction and design → Otra). Rules: cancuntech.day `supabase/migrations/20261114220000_directory_cahusamex_sync.sql`, its `docs/connect.md` ("Profiles from cahusa.mx").
+
+**2. Pull (cancuntech.day → here)**, with **`CTD_EXPORT_TOKEN`** (skipped while it is not set; a dry run that only logs its counts until **`CTD_PULL=apply`**): pages through cancuntech.day's `directory_cahusamex_export` (500 per page; its migration `20261115120000_directory_cahusamex_export.sql`) and applies the rows here with `directory_ctd_sync` (500 per call) and `directory_ctd_finish`, service role only (`supabase/migrations/20261115120000_directory_ctd_sync.sql`).
+- **What comes:** only their own profiles (claimed there, or with a source besides `cahusamex`): published ones with their public fields, email, LinkedIn and photo path; people who left there (claimed and unpublished, or `publish_opt_out`) as a sha-256; *held* ones (unpublished there only because they left here) as a sha-256 we ignore. Never their private drafts or WhatsApp, never a copy of ours.
+- **`directory_profiles.ctd_status`** (private): `imported` (published there, unclaimed), `claimed` (published there by its owner), `hidden` (left there), null (not there as a profile of its own).
+- **Precedence:** claimed **here** → the person owns this copy, cancuntech.day changes nothing. Claimed **there** → what they wrote there replaces this copy, and the Luma import no longer overwrites it. Imported there → only fills empty fields (and the name, when ours is only the email's local part).
+- **New emails** become unclaimed, published profiles tagged `source_events` `cancuntechday` (only with a name of their own). **Leaving:** hidden there → unpublished here (unless claimed here) and the import won't publish it again; back there → published again; `connect_opt_out` here keeps it out. **Guard:** `finish` refuses to hide anyone when a run sees under half of the profiles synced before.
+- **Photos** stay in cancuntech.day's public bucket: `photo_path` holds its URL (a check constraint allows only that bucket); `removePhoto` never deletes one. Categories map back (Hotelería → Hoteles; Software, IA y datos, Startups → Tecnología; Marketing → Marketing y ventas; Diseño, Educación, Operaciones → Otra).
+- **Connect:** unclaimed cancuntech.day copies are not in the matching pool (theirs doesn't match ours either), but they get direct intros from their public profile; the intro says "Te escribo porque estás en el directorio de Cancún Tech Day (cancuntech.day)."
+
+**Check a run:** `GET /api/directorio/ctd-sync?dry=1` with `Authorization: Bearer $CRON_SECRET` runs both directions and rolls them back, returning `push` and `pull` counts. Logs: Vercel → Functions → `ctd sync`. Last pull: `select * from directory_sync_state where source = 'ctd'`.
 
 ## Importing the pool
 
@@ -327,6 +342,12 @@ select count(*) as profiles,
        count(*) filter (where status = 'claimed') as claimed,
        count(*) filter (where published) as published
   from directory_profiles where not connect_opt_out;
+
+-- cancuntech.day sync: last pull, and profiles by status
+select last_sync_at, last_result from directory_sync_state where source = 'ctd';
+select ctd_status, count(*), count(*) filter (where published) as published,
+       count(*) filter (where source_events = '{cancuntechday}') as only_from_ctd
+  from directory_profiles where ctd_status is not null group by 1;
 ```
 
 Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`, `resend failed`, `connect webhook` and `connect api failed`.

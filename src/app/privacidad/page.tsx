@@ -16,7 +16,7 @@ export default function PrivacyPage() {
   return (
     <section className="container mx-auto max-w-3xl px-4 py-12 md:py-16">
       <h1 className="mb-2 font-heading text-4xl text-navy">Aviso de privacidad</h1>
-      <p className="mb-10 text-sm text-muted-foreground">Directorio y Connect · Última actualización: 14 de noviembre de 2026</p>
+      <p className="mb-10 text-sm text-muted-foreground">Directorio y Connect · Última actualización: 15 de noviembre de 2026</p>
 
       <div className="space-y-8 text-navy/90 [&_h2]:mb-3 [&_h2]:font-heading [&_h2]:text-2xl [&_h2]:text-navy [&_li]:ml-5 [&_li]:list-disc [&_ul]:space-y-2">
         <section>
@@ -57,6 +57,16 @@ export default function PrivacyPage() {
               borradas ni a quien pidió no recibir correos de La Bolsa MX.
             </li>
             <li>
+              <strong>Directorio de Cancún Tech Day.</strong> Si tienes un perfil publicado en el directorio de Cancún Tech Day
+              (cancuntech.day/directorio, de Latinx Tech Group), por ejemplo porque te registraste en Luma a uno de sus eventos o porque
+              lo creaste allá, también lo mostramos en este directorio: nombre, tipo de perfil, empresa, cargo, frase corta, descripción,
+              servicios, categorías, ciudad, sitio web y foto o logo, tal como aparecen allá. Cancún Tech Day nos envía esos datos, tu
+              correo, para que puedas reclamar tu perfil aquí y recibir intros (no se muestra), y tu LinkedIn (tampoco se muestra). Tu
+              WhatsApp no nos lo envía. Si reclamas o editas tu perfil allá, esta copia se actualiza en minutos; si lo despublicas, pides
+              salir o lo borras allá, deja de mostrarse aquí. Si reclamas tu perfil aquí, lo que escribas aquí es lo que se muestra en
+              cahusa.mx.
+            </li>
+            <li>
               <strong>Lo que tú escribes.</strong> Cuando entras a{' '}
               <Link href={EDIT_PATH} className="text-teal underline">
                 tu perfil
@@ -77,8 +87,8 @@ export default function PrivacyPage() {
         <section>
           <h2>El directorio</h2>
           <p>
-            Tu perfil es público si tú lo publicas o, si llegaste por el calendario de Luma o por La Bolsa MX, porque lo publicamos como
-            se explica arriba, para que la comunidad te encuentre. Puedes reclamarlo para completarlo, despublicarlo cuando quieras desde{' '}
+            Tu perfil es público si tú lo publicas o, si llegaste por el calendario de Luma, por La Bolsa MX o por el directorio de
+            Cancún Tech Day, porque lo publicamos como se explica arriba, para que la comunidad te encuentre. Puedes reclamarlo para completarlo, despublicarlo cuando quieras desde{' '}
             <Link href={EDIT_PATH} className="text-teal underline">
               tu perfil
             </Link>{' '}
@@ -91,7 +101,8 @@ export default function PrivacyPage() {
             que organiza Latinx Tech Group: le enviamos lo que muestra tu perfil (nombre, tipo, empresa, cargo, frase, descripción,
             servicios, categorías, ciudad, sitio web y foto), tu correo, para que puedas reclamar allá tu perfil y recibir intros (no
             se muestra), y tu LinkedIn (tampoco se muestra). Si reclamas, editas o despublicas tu perfil aquí, o nos pides salir, la
-            copia de cancuntech.day se actualiza en minutos. Los borradores que nunca se publicaron no se envían.
+            copia de cancuntech.day se actualiza en minutos. Los borradores que nunca se publicaron no se envían, ni los perfiles que
+            solo están aquí porque vienen de cancuntech.day y no los has reclamado aquí.
           </p>
         </section>
 
@@ -101,7 +112,8 @@ export default function PrivacyPage() {
             <li>
               Para sugerir personas que encajan con el cliente ideal que describe un miembro, usamos los datos de trabajo de los perfiles
               (cargo, empresa, tamaño de empresa, frase, categorías, servicios y parte de la descripción), incluidos los borradores no
-              publicados.
+              publicados. Los perfiles que solo vienen del directorio de Cancún Tech Day no se sugieren, salvo que los reclames aquí; sí
+              pueden recibir una intro que alguien pida desde su perfil público.
             </li>
             <li>
               Ese análisis lo hace Claude, el modelo de inteligencia artificial de Anthropic. Claude recibe esos datos de trabajo, pero
@@ -141,7 +153,10 @@ export default function PrivacyPage() {
             <li>Resend, que envía los códigos de acceso y las intros.</li>
             <li>Anthropic (Claude), para las sugerencias de Connect, en los términos de arriba.</li>
             <li>Stripe, para los pagos.</li>
-            <li>Cancún Tech Day (Latinx Tech Group), que muestra los perfiles publicados en su directorio, como se explica arriba.</li>
+            <li>
+              Cancún Tech Day (Latinx Tech Group), que muestra los perfiles publicados en su directorio y nos envía los publicados en el
+              suyo, como se explica arriba.
+            </li>
           </ul>
           <p className="mt-3">No vendemos tus datos ni los usamos para publicidad.</p>
         </section>

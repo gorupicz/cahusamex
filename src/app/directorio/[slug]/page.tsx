@@ -124,8 +124,9 @@ export default async function ProfilePage({ params }: Props) {
           <div className="mt-8 rounded-xl border border-dashed border-teal/40 bg-primary-50 p-5">
             <h2 className="font-heading text-lg text-navy">¿Eres {profile.name}?</h2>
             <p className="mt-1 text-sm text-navy/80">
-              Este perfil se creó con los datos de la comunidad de CAHUSA MX y nadie lo ha reclamado todavía. Reclámalo para
-              completarlo: agrega tu empresa, servicios, foto y descripción, o despublícalo si prefieres no aparecer.
+              Este perfil se creó con los datos de la comunidad de CAHUSA MX o de tu perfil en el directorio de Cancún Tech Day
+              (cancuntech.day) y nadie lo ha reclamado aquí todavía. Reclámalo con tu correo para completarlo: agrega tu empresa,
+              servicios, foto y descripción, o despublícalo si prefieres no aparecer en este directorio.
             </p>
             <Link href={EDIT_PATH} className="btn-primary mt-4 inline-flex items-center gap-2">
               <UserCheck className="h-4 w-4" aria-hidden="true" />

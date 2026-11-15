@@ -104,8 +104,10 @@ export const isUuid = (v: unknown): v is string =>
   typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 
 export const PHOTO_BUCKET = 'directory-photos';
+// A profile synced from cancuntech.day keeps its photo there: photo_path is then that public URL
+// (the database only accepts that bucket, see 20261115120000_directory_ctd_sync).
 export const photoUrl = (path: string | null | undefined) =>
-  path ? `${env.supabaseUrl}/storage/v1/object/public/${PHOTO_BUCKET}/${path}` : null;
+  !path ? null : path.startsWith('https://') ? path : `${env.supabaseUrl}/storage/v1/object/public/${PHOTO_BUCKET}/${path}`;
 
 const storageAuth = () => ({ apikey: env.serviceKey, Authorization: `Bearer ${env.serviceKey}` });
 
@@ -119,6 +121,8 @@ export async function uploadPhoto(path: string, bytes: ArrayBuffer, contentType:
 }
 
 export async function removePhoto(path: string) {
+  // A cancuntech.day photo is not ours to delete.
+  if (path.startsWith('https://')) return;
   const res = await fetch(`${env.supabaseUrl}/storage/v1/object/${PHOTO_BUCKET}`, {
     method: 'DELETE',
     headers: { ...storageAuth(), 'Content-Type': 'application/json' },

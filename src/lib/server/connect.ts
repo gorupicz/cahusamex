@@ -53,6 +53,9 @@ const INTRO_FROM = process.env.CONNECT_INTRO_FROM || 'Esteban Gorupicz <goru@cah
 const INTRO_BCC = process.env.CONNECT_INTRO_BCC || 'goru@cahusa.mx';
 const SIGNATURE = ['Saludos,', 'Esteban', '', '--', 'Esteban Gorupicz', '(415) 805-2247'];
 const COMMUNITY_LINE = 'Te escribo porque formas parte de la comunidad de CAHUSA MX, la Cámara Empresarial de la Hospitalidad USA - México.';
+// Profiles synced from cancuntech.day (source_events 'cancuntechday', see /api/directorio/ctd-sync).
+const CTD_SOURCE = 'cancuntechday';
+const CTD_LINE = 'Te escribo porque estás en el directorio de Cancún Tech Day (cancuntech.day).';
 
 const PRICES: Record<PaidPlan, string> = { business: env.stripePriceBusiness, business_plus: env.stripePriceBusinessPlus };
 const billingEnabled = () => !!(env.stripeKey && PRICES.business && PRICES.business_plus);
@@ -247,12 +250,18 @@ function candidateLine(i: number, p: Row) {
   return `${i}|${parts.join('|')}`;
 }
 
-/** Everyone who can be matched, in pages (PostgREST caps a response at 1,000 rows on Supabase). */
+/**
+ * Everyone who can be matched, in pages (PostgREST caps a response at 1,000 rows on Supabase).
+ * Unclaimed copies of cancuntech.day profiles are not in the pool (as cahusa.mx's are not in
+ * theirs); they still get direct intros from their public profile.
+ */
+const POOL_FILTER = `connect_opt_out=is.false&or=(status.eq.claimed,source_events.not.eq.%7B${CTD_SOURCE}%7D)`;
+
 async function candidates(): Promise<Row[]> {
   const out: Row[] = [];
   // Ordered by id so the prompt (and its cache) stays the same between searches.
   for (let offset = 0; offset < 20_000; offset += 1000) {
-    const page = await rest<Row[]>(`directory_profiles?select=${MATCH_COLUMNS}&connect_opt_out=is.false&order=id.asc&limit=1000&offset=${offset}`);
+    const page = await rest<Row[]>(`directory_profiles?select=${MATCH_COLUMNS}&${POOL_FILTER}&order=id.asc&limit=1000&offset=${offset}`);
     out.push(...page);
     if (page.length < 1000) break;
   }
@@ -444,10 +453,17 @@ async function eventNameOf(sourceEvents: string[] | null): Promise<string | null
   return rows[0]?.name ?? null;
 }
 
+/** Why we write: the event they registered for, the cancuntech.day directory they are in, or the community. */
+async function introLine(sourceEvents: string[] | null): Promise<string> {
+  const event = await eventNameOf(sourceEvents);
+  if (event) return `Gracias por registrarte a ${event}.`;
+  return sourceEvents?.includes(CTD_SOURCE) ? CTD_LINE : COMMUNITY_LINE;
+}
+
 /** Before the intro goes out the member sees it with the match's name and company masked. */
 const MASK = { name: '[nombre]', company: '[empresa]' };
 
-function buildIntro(requester: Row, match: Row, pitch: string | null, event: string | null, masked = false) {
+function buildIntro(requester: Row, match: Row, pitch: string | null, line: string, masked = false) {
   const company = masked ? (clean(match.company, 120) ? MASK.company : '') : clean(match.company, 120);
   const requesterName = properCase(clean(requester.name, 120));
   const paragraphs = [
@@ -455,7 +471,7 @@ function buildIntro(requester: Row, match: Row, pitch: string | null, event: str
     match.kind === 'company'
       ? `Hola equipo de ${masked ? MASK.name : properCase(clean(match.name, 120))},`
       : `Hola ${masked ? MASK.name : firstName(match.name)},`,
-    event ? `Gracias por registrarte a ${event}.` : COMMUNITY_LINE,
+    line,
     `Te quiero presentar a ${requesterName} (en copia)${requesterClause(requester, pitch)}. Me pareció que te podría interesar.`,
     'Si les queda bien, pueden coordinar una llamada.',
   ];
@@ -470,7 +486,7 @@ function buildIntro(requester: Row, match: Row, pitch: string | null, event: str
 }
 
 async function sendIntro(introId: string, requester: Row, match: Row, pitch: string | null) {
-  const { subject, text, html } = buildIntro(requester, match, pitch, await eventNameOf(match.source_events));
+  const { subject, text, html } = buildIntro(requester, match, pitch, await introLine(match.source_events));
   return sendMail(
     { from: INTRO_FROM, to: [match.email], cc: [requester.email], bcc: [INTRO_BCC], subject, text, html },
     `connect-intro-${introId}`,
@@ -577,7 +593,7 @@ async function preview(req: Request, email: string) {
   const [match] = matchId ? await matchRows([matchId]) : [];
   if (!match) throw new HttpError(404, 'not_found');
   // Same text that goes out, but the match stays anonymous until it is sent.
-  const { subject, text } = buildIntro(p, match, await latestPitch(p.id), await eventNameOf(match.source_events), true);
+  const { subject, text } = buildIntro(p, match, await latestPitch(p.id), await introLine(match.source_events), true);
   return json({ ok: true, subject, text, to: MASK.name, cc: p.email });
 }
 
@@ -640,9 +656,9 @@ async function direct(req: Request, email: string) {
   const p = await requireMe(email);
   const target = await directTarget(body.slug);
   if (target.id === p.id) throw new HttpError(409, 'self_intro');
-  const [introduced, pitch, event] = await Promise.all([introducedIds(p.id), latestPitch(p.id), eventNameOf(target.source_events)]);
+  const [introduced, pitch, line] = await Promise.all([introducedIds(p.id), latestPitch(p.id), introLine(target.source_events)]);
   // The profile is public in the directory, so the preview shows the real name and company.
-  const { subject, text } = buildIntro(p, target, pitch, event);
+  const { subject, text } = buildIntro(p, target, pitch, line);
   return json({
     ok: true,
     target: {
