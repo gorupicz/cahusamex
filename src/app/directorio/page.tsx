@@ -22,8 +22,8 @@ export default async function DirectoryPage() {
         <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-teal">Comunidad · CAHUSA MX</p>
         <h1 className="font-heading text-4xl text-navy md:text-5xl">Directorio</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Empresas y profesionales de la comunidad de la Cámara Empresarial de la Hospitalidad USA - México. Encuentra con quién
-          trabajar y pide una intro.
+          Empresas y profesionales de la comunidad de la Cámara Empresarial de la Hospitalidad USA - México y del directorio de
+          Cancún Tech Day. Encuentra con quién trabajar y pide una intro.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href={EDIT_PATH} className="btn-primary">
