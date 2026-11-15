@@ -232,6 +232,15 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 7. **Import the pool:** see [Importing the pool](#importing-the-pool) (dry run first, then `--apply`).
 8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal.
 
+## Sync to cancuntech.day
+
+The published profiles of this directory also appear in **cancuntech.day/directorio** (owner's request, 2026-11-14). One way: this site pushes, cancuntech.day never writes here.
+
+- **`src/app/api/directorio/ctd-sync/route.ts`**, run by a Vercel cron every 10 minutes (`vercel.json`). Vercel authenticates it with `CRON_SECRET`; it reads every profile with the service role and calls cancuntech.day's `directory_cahusamex_sync` (250 rows per call) and `directory_cahusamex_finish` with its publishable key and **`CTD_SYNC_TOKEN`** (sensitive; cancuntech.day stores only its sha-256 in `directory_sync_sources`).
+- **What travels:** published profiles without `connect_opt_out` (public fields, email, LinkedIn, photo URL); people who left (claimed and unpublished, or `connect_opt_out`) as the sha-256 of their email only; never private drafts or WhatsApp.
+- **On cancuntech.day:** claimed or edited here → the copy follows (unless the person claimed it there, then theirs wins); unpublished, opted out or deleted here → the copy is unpublished. Categories map to cancuntech.day's (vacation rentals, hotels and tourism → Hotelería y turismo; property management → Bienes raíces; maintenance → Operaciones; technology → Software; construction and design → Otra).
+- **Check a run:** `GET /api/directorio/ctd-sync?dry=1` with `Authorization: Bearer $CRON_SECRET` returns the counts without writing. Logs: Vercel → Functions → `ctd sync`. The rules and the queries are in cancuntech.day's `docs/connect.md` ("Profiles from cahusa.mx").
+
 ## Importing the pool
 
 Three sources, all through `scripts/import-luma-directory.mjs` (dry run unless `--apply`; with the service role key in the env the dry run also says who is already in the directory). Keep every CSV and `--out` file **out of the repo**: they hold emails.
