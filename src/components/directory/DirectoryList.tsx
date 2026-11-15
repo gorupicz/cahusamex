@@ -10,6 +10,8 @@ import {
   CATEGORY_KEYS,
   CATEGORY_LABELS,
   KIND_LABELS,
+  OTHER_CITIES,
+  placeLine,
   type ListedProfile,
   type ProfileKind,
   profilePath,
@@ -17,6 +19,8 @@ import {
 import ProfileAvatar from './ProfileAvatar';
 
 const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+
+const otherCitiesOf = (p: ListedProfile) => p.cities_other ?? (p.cities === undefined && p.city?.trim() ? [p.city.trim()] : []);
 
 /** Cards shown at first and added by "Ver más". */
 const PAGE_SIZE = 60;
@@ -46,19 +50,29 @@ export default function DirectoryList({ profiles: unsorted }: { profiles: Listed
   // Stable: the server sends them by name, and equal scores keep that order.
   const profiles = useMemo(() => [...unsorted].sort((a, b) => richness(b) - richness(a)), [unsorted]);
 
-  const cities = useMemo(
-    () => [...new Set(profiles.map((p) => p.city?.trim()).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b, 'es')),
-    [profiles],
-  );
+  // The canonical cities in use, most profiles first, then "Otras" (a city that maps to none).
+  // Before the migration a profile only has the free text, so it counts as "Otras".
+  const { cities, otherCount } = useMemo(() => {
+    const counts = new Map<string, number>();
+    let other = 0;
+    for (const p of profiles) {
+      for (const c of p.cities ?? []) counts.set(c, (counts.get(c) ?? 0) + 1);
+      if (otherCitiesOf(p).length) other++;
+    }
+    return {
+      cities: [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'es')),
+      otherCount: other,
+    };
+  }, [profiles]);
 
   const visible = useMemo(() => {
     const q = fold(query.trim());
     return profiles.filter((p) => {
       if (category && !p.categories.includes(category as never)) return false;
       if (kind && p.kind !== kind) return false;
-      if (city && p.city?.trim() !== city) return false;
+      if (city && !(city === OTHER_CITIES ? otherCitiesOf(p).length > 0 : p.cities?.includes(city))) return false;
       if (!q) return true;
-      const haystack = fold([p.name, p.company, p.job_title, p.headline, p.city, ...p.services].filter(Boolean).join(' '));
+      const haystack = fold([p.name, p.company, p.job_title, p.headline, p.city, ...(p.cities ?? []), ...p.services].filter(Boolean).join(' '));
       return haystack.includes(q);
     });
   }, [profiles, query, category, kind, city]);
@@ -100,11 +114,12 @@ export default function DirectoryList({ profiles: unsorted }: { profiles: Listed
         </select>
         <select aria-label="Ciudad" className={selectClasses} value={city} onChange={(e) => setCity(e.target.value)}>
           <option value="">Todas las ciudades</option>
-          {cities.map((c) => (
+          {cities.map(([c, n]) => (
             <option key={c} value={c}>
-              {c}
+              {`${c} (${n.toLocaleString('es-MX')})`}
             </option>
           ))}
+          {otherCount > 0 && <option value={OTHER_CITIES}>{`Otras (${otherCount.toLocaleString('es-MX')})`}</option>}
         </select>
       </div>
 
@@ -155,7 +170,7 @@ export default function DirectoryList({ profiles: unsorted }: { profiles: Listed
                   )}
                   {p.headline && <span className="mt-2 block text-sm text-navy">{p.headline}</span>}
                   <span className="mt-2 block text-xs text-muted-foreground">
-                    {[KIND_LABELS[p.kind], p.city, ...p.categories.map((c) => CATEGORY_LABELS[c])].filter(Boolean).join(' · ')}
+                    {[KIND_LABELS[p.kind], placeLine(p), ...p.categories.map((c) => CATEGORY_LABELS[c])].filter(Boolean).join(' · ')}
                   </span>
                 </span>
               </Link>

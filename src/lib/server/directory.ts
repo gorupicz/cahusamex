@@ -9,7 +9,7 @@
 //   POST   photo (multipart "photo") -> replaces the photo in the public directory-photos bucket
 //   DELETE photo                  -> removes it
 import { randomInt, randomUUID } from 'node:crypto';
-import { CATEGORY_KEYS, EMAIL_RE, MAX_CATEGORIES, MAX_SERVICES } from '@/lib/directory/config';
+import { CATEGORY_KEYS, CITY_OPTIONS, EMAIL_RE, MAX_CATEGORIES, MAX_CITIES, MAX_SERVICES } from '@/lib/directory/config';
 import {
   HttpError,
   type Row,
@@ -44,7 +44,20 @@ const MAX_CODES_PER_HOUR = 300;
 
 // Public columns, plus what only the owner sees in their own editor.
 const PUBLIC_COLUMNS = 'id,slug,name,kind,company,job_title,headline,description,services,categories,city,website,photo_path,updated_at';
-const OWNER_COLUMNS = `${PUBLIC_COLUMNS},linkedin_url,whatsapp,email,status,published,source_events,claimed_at`;
+const OWNER_BASE = `${PUBLIC_COLUMNS},linkedin_url,whatsapp,email,status,published,source_events,claimed_at`;
+// The canonical cities the database parsed from city. Before 20261116120000_directory_cities the
+// columns don't exist (42703): the first read that fails drops them for this instance.
+let ownerColumns = `${OWNER_BASE},cities,cities_other`;
+
+async function withOwnerColumns<T>(read: (columns: string) => Promise<T>): Promise<T> {
+  try {
+    return await read(ownerColumns);
+  } catch (err) {
+    if (!(err instanceof SupabaseError && err.code === '42703') || ownerColumns === OWNER_BASE) throw err;
+    ownerColumns = OWNER_BASE;
+    return read(ownerColumns);
+  }
+}
 
 // ---------- codes ----------
 
@@ -165,6 +178,18 @@ function normalizeWhatsapp(v: unknown): string | null | false {
   return /^[0-9]{8,15}$/.test(digits) ? digits : false;
 }
 
+/**
+ * The city text: the cities picked from the list plus "Otra ciudad", e.g. "Cancún, Tulum, Bacalar".
+ * The database parses it into cities / cities_other. A request that only sends `city` still works.
+ */
+function cityText(body: Row): string | null | false {
+  if (!Array.isArray(body.cities)) return line(body.city, 200);
+  const picked = [...new Set(body.cities.filter((c: unknown): c is string => typeof c === 'string'))];
+  if (picked.length > MAX_CITIES || picked.some((c) => !(CITY_OPTIONS as readonly string[]).includes(c))) return false;
+  const other = line(body.city_other, 80);
+  return [...picked, other].filter(Boolean).join(', ').slice(0, 200) || null;
+}
+
 function validateProfile(body: Row): { ok: true; value: Row } | { ok: false; fields: string[] } {
   const fields: string[] = [];
   const name = line(body.name, 120);
@@ -188,6 +213,8 @@ function validateProfile(body: Row): { ok: true; value: Row } | { ok: false; fie
   if (linkedin_url === false) fields.push('linkedin_url');
   const whatsapp = normalizeWhatsapp(body.whatsapp);
   if (whatsapp === false) fields.push('whatsapp');
+  const city = cityText(body);
+  if (city === false) fields.push('cities');
 
   if (fields.length) return { ok: false, fields };
   return {
@@ -201,7 +228,7 @@ function validateProfile(body: Row): { ok: true; value: Row } | { ok: false; fie
       description: text(body.description, 2000),
       services,
       categories,
-      city: line(body.city, 80),
+      city: city || null,
       website: website || null,
       linkedin_url: linkedin_url || null,
       whatsapp: whatsapp || null,
@@ -213,7 +240,9 @@ function validateProfile(body: Row): { ok: true; value: Row } | { ok: false; fie
 // ---------- the owner's row ----------
 
 async function row(email: string): Promise<Row | null> {
-  const [found] = await rest<Row[]>(`directory_profiles?email=eq.${encodeURIComponent(email)}&select=${OWNER_COLUMNS}`);
+  const [found] = await withOwnerColumns((columns) =>
+    rest<Row[]>(`directory_profiles?email=eq.${encodeURIComponent(email)}&select=${columns}`),
+  );
   return found ?? null;
 }
 
@@ -227,11 +256,13 @@ const claim = (p: Row | null) => ({ status: 'claimed', claimed_at: p?.claimed_at
 
 const patch = async (id: string, values: Row) =>
   (
-    await rest<Row[]>(`directory_profiles?id=eq.${id}&select=${OWNER_COLUMNS}`, {
-      method: 'PATCH',
-      headers: { Prefer: 'return=representation' },
-      body: JSON.stringify(values),
-    })
+    await withOwnerColumns((columns) =>
+      rest<Row[]>(`directory_profiles?id=eq.${id}&select=${columns}`, {
+        method: 'PATCH',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify(values),
+      }),
+    )
   )[0];
 
 /** A row for this email, created (claimed, unpublished) when the email was never imported. */
@@ -239,11 +270,13 @@ async function ensureRow(email: string, name: string): Promise<Row> {
   const existing = await row(email);
   if (existing) return existing;
   try {
-    const [created] = await rest<Row[]>(`directory_profiles?select=${OWNER_COLUMNS}`, {
-      method: 'POST',
-      headers: { Prefer: 'return=representation' },
-      body: JSON.stringify({ email, name, ...claim(null) }),
-    });
+    const [created] = await withOwnerColumns((columns) =>
+      rest<Row[]>(`directory_profiles?select=${columns}`, {
+        method: 'POST',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({ email, name, ...claim(null) }),
+      }),
+    );
     return created;
   } catch (err) {
     // Two tabs saving at once: the other one created it.

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Globe, Linkedin, MessageCircle, Send, UserCheck } from 'lucide-react';
 import ProfileAvatar from '@/components/directory/ProfileAvatar';
-import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, EDIT_PATH, KIND_LABELS } from '@/lib/directory/config';
+import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, EDIT_PATH, KIND_LABELS, placeLine } from '@/lib/directory/config';
 import { getPublished } from '@/lib/server/public';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!profile) return { title: 'Perfil no encontrado', robots: { index: false } };
   return {
     title: profile.name,
-    description: profile.headline ?? [profile.job_title, profile.company, profile.city].filter(Boolean).join(' · '),
+    description: profile.headline ?? [profile.job_title, profile.company, placeLine(profile)].filter(Boolean).join(' · '),
     alternates: { canonical: `${DIRECTORY_PATH}/${profile.slug}` },
   };
 }
@@ -62,7 +62,7 @@ export default async function ProfilePage({ params }: Props) {
             )}
             {profile.headline && <p className="mt-3 text-navy">{profile.headline}</p>}
             <p className="mt-3 text-sm text-muted-foreground">
-              {[KIND_LABELS[profile.kind], profile.city, ...profile.categories.map((c) => CATEGORY_LABELS[c])].filter(Boolean).join(' · ')}
+              {[KIND_LABELS[profile.kind], placeLine(profile), ...profile.categories.map((c) => CATEGORY_LABELS[c])].filter(Boolean).join(' · ')}
             </p>
           </div>
         </div>

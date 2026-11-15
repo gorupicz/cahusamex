@@ -173,6 +173,7 @@ All routes except the webhook need the session cookie. They answer `{ ok: false,
 | Table / column | What |
 |---|---|
 | `directory_profiles` | Profiles. Public columns: id, slug, name, kind, company, job_title, headline, description, services, categories, city, website, photo_path, featured, status, updated_at. Private: email, linkedin_url, whatsapp, company_size, source_events, published, plan, show_contact, connect_opt_out. |
+| `directory_profiles.cities` / `cities_other` | Public. Kept by a trigger from the free-text `city` (`20261116120000_directory_cities.sql`, same design as cancuntech.day): canonical names from `directory_cities` (through `directory_city_aliases`), and the parts that map to none. The list's city filter shows the canonical cities by count plus "Otras"; the editor offers `CITY_OPTIONS` (`src/lib/directory/config.ts`, same as the table, up to 5) plus "Otra ciudad". |
 | `directory_profiles.plan` | `starter` / `business` / `business_plus`. Set only from Stripe (`connect_apply_plan`). `featured` is generated from it. |
 | `directory_events` | `slug`, `name` (as the intro says it), `starts_on` |
 | `directory_email_codes` | Sign-in codes (HMAC), attempts, expiry |
@@ -348,6 +349,13 @@ select last_sync_at, last_result from directory_sync_state where source = 'ctd';
 select ctd_status, count(*), count(*) filter (where published) as published,
        count(*) filter (where source_events = '{cancuntechday}') as only_from_ctd
   from directory_profiles where ctd_status is not null group by 1;
+
+-- Directory cities: parts of city that map to no canonical city ("Otras"), to add aliases
+select t as unmapped, count(*) from directory_profiles, unnest(cities_other) t group by 1 order by 2 desc, 1;
+-- Add an alias (folded: lowercase, no accents) or a city, then recompute every profile:
+--   insert into directory_city_aliases (alias, city) values ('cancun qroo', 'Cancún');
+--   insert into directory_cities (name, sort) values ('Miami', 40);   -- also add it to CITY_OPTIONS
+--   select directory_recompute_cities();
 ```
 
 Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`, `resend failed`, `connect webhook` and `connect api failed`.
