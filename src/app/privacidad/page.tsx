@@ -85,6 +85,13 @@ export default function PrivacyPage() {
             tu WhatsApp tampoco, salvo que tengas un plan de pago de Connect y elijas mostrarlos. Quien quiera contactarte pide una
             intro.
           </p>
+          <p className="mt-3">
+            Los perfiles publicados en este directorio también aparecen en el directorio de Cancún Tech Day (cancuntech.day/directorio),
+            que organiza Latinx Tech Group: le enviamos lo que muestra tu perfil (nombre, tipo, empresa, cargo, frase, descripción,
+            servicios, categorías, ciudad, sitio web y foto), tu correo, para que puedas reclamar allá tu perfil y recibir intros (no
+            se muestra), y tu LinkedIn (tampoco se muestra). Si reclamas, editas o despublicas tu perfil aquí, o nos pides salir, la
+            copia de cancuntech.day se actualiza en minutos. Los borradores que nunca se publicaron no se envían.
+          </p>
         </section>
 
         <section>
@@ -133,6 +140,7 @@ export default function PrivacyPage() {
             <li>Resend, que envía los códigos de acceso y las intros.</li>
             <li>Anthropic (Claude), para las sugerencias de Connect, en los términos de arriba.</li>
             <li>Stripe, para los pagos.</li>
+            <li>Cancún Tech Day (Latinx Tech Group), que muestra los perfiles publicados en su directorio, como se explica arriba.</li>
           </ul>
           <p className="mt-3">No vendemos tus datos ni los usamos para publicidad.</p>
         </section>
