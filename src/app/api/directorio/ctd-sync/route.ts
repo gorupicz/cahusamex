@@ -10,7 +10,8 @@
 // 2. Pull: cancuntech.day's own profiles come here, through its token-gated
 //    directory_cahusamex_export (cancuntech.day 20261115120000_directory_cahusamex_export.sql), and
 //    are applied by directory_ctd_sync / directory_ctd_finish (our 20261115120000_directory_ctd_sync.sql).
-//    Skipped while CTD_EXPORT_TOKEN is not set.
+//    Skipped while CTD_EXPORT_TOKEN is not set, and always a dry run (counts in the log, nothing
+//    written) until CTD_PULL=apply, so the first real pull is a deliberate switch.
 //
 // No loops: an unclaimed copy of one of their profiles (source_events exactly {cancuntechday}) is
 // never pushed back, and they never export an unclaimed copy of ours. A profile unpublished here
@@ -166,7 +167,7 @@ export async function GET(req: Request) {
 
   if (exportToken) {
     try {
-      result.pull = await pull(exportToken, dryRun);
+      result.pull = await pull(exportToken, dryRun || process.env.CTD_PULL !== 'apply');
     } catch (err) {
       console.error('ctd sync pull failed', err);
       result.ok = false;
