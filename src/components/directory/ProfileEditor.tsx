@@ -14,7 +14,9 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   CATEGORY_KEYS,
   CATEGORY_LABELS,
+  CITY_OPTIONS,
   MAX_CATEGORIES,
+  MAX_CITIES,
   MAX_SERVICES,
   PRIVACY_PATH,
   type CategoryKey,
@@ -36,7 +38,10 @@ interface Form {
   description: string;
   services: string;
   categories: CategoryKey[];
-  city: string;
+  /** Picked from CITY_OPTIONS. */
+  cities: string[];
+  /** "Otra ciudad": whatever is not on the list. */
+  city_other: string;
   website: string;
   linkedin_url: string;
   whatsapp: string;
@@ -52,7 +57,8 @@ const EMPTY: Form = {
   description: '',
   services: '',
   categories: [],
-  city: '',
+  cities: [],
+  city_other: '',
   website: '',
   linkedin_url: '',
   whatsapp: '',
@@ -70,7 +76,7 @@ const toForm = (p: OwnerProfile | null): Form =>
         description: p.description ?? '',
         services: (p.services ?? []).join('\n'),
         categories: p.categories ?? [],
-        city: p.city ?? '',
+        ...splitCity(p),
         website: p.website ?? '',
         linkedin_url: p.linkedin_url ?? '',
         whatsapp: p.whatsapp ?? '',
@@ -78,10 +84,37 @@ const toForm = (p: OwnerProfile | null): Form =>
       }
     : EMPTY;
 
+const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
+
+/**
+ * The checkboxes and "Otra ciudad" for a saved profile: the cities the database parsed, or (before
+ * the migration added them) the parts of the free text that name a city on the list.
+ */
+function splitCity(p: OwnerProfile): Pick<Form, 'cities' | 'city_other'> {
+  if (p.cities) {
+    return {
+      cities: p.cities.filter((c) => (CITY_OPTIONS as readonly string[]).includes(c)).slice(0, MAX_CITIES),
+      city_other: (p.cities_other ?? []).join(', '),
+    };
+  }
+  const cities: string[] = [];
+  const other: string[] = [];
+  for (const part of (p.city ?? '').split(/\s*(?:,|;|\/|&+|\s+y\s+|\s+and\s+)\s*/)) {
+    const raw = part.replace(/^[\s.-]+|[\s.-]+$/g, '');
+    if (!raw) continue;
+    const known = CITY_OPTIONS.find((c) => fold(c) === fold(raw));
+    if (known && cities.length < MAX_CITIES) {
+      if (!cities.includes(known)) cities.push(known);
+    } else other.push(raw);
+  }
+  return { cities, city_other: other.join(', ') };
+}
+
 const FIELD_ERRORS: Record<string, string> = {
   name: 'Escribe un nombre.',
   services: `Hasta ${MAX_SERVICES} servicios de máximo 60 caracteres cada uno.`,
   categories: `Elige hasta ${MAX_CATEGORIES} categorías.`,
+  cities: `Elige hasta ${MAX_CITIES} ciudades de la lista.`,
   website: 'Revisa la URL de tu sitio web.',
   linkedin_url: 'Usa la URL de tu perfil o página de LinkedIn.',
   whatsapp: 'Escribe el número con código de país, solo números.',
@@ -152,12 +185,25 @@ export default function ProfileEditor() {
     setSaved(false);
   }
 
+  function toggleCity(city: string, on: boolean) {
+    setForm((f) => {
+      const cities = on ? [...f.cities, city].slice(0, MAX_CITIES) : f.cities.filter((c) => c !== city);
+      return { ...f, cities };
+    });
+    setSaved(false);
+  }
+
   async function save(ev: FormEvent) {
     ev.preventDefault();
     setBusy(true);
     setMsg('');
     setFieldErrors([]);
-    const res = await post('profile', { ...form, services: form.services.split('\n') });
+    const res = await post('profile', {
+      ...form,
+      services: form.services.split('\n'),
+      // The same as one text, for a server older than the city list (it ignores it otherwise).
+      city: [...form.cities, form.city_other.trim()].filter(Boolean).join(', '),
+    });
     setBusy(false);
     if (res.status === 401) return expired();
     if (!res.body.ok) {
@@ -269,11 +315,6 @@ export default function ProfileEditor() {
           <Label htmlFor="p-job">{isCompany ? 'Giro' : 'Cargo'}</Label>
           <Input id="p-job" maxLength={120} value={form.job_title} onChange={(e) => set('job_title', e.target.value)} />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="p-city">Ciudad</Label>
-          <Input id="p-city" maxLength={80} value={form.city} onChange={(e) => set('city', e.target.value)} />
-          <p className="text-sm text-muted-foreground">Por ejemplo: Cancún, Tulum, Playa del Carmen, Miami.</p>
-        </div>
         <div className="space-y-2 md:col-span-2">
           <Label htmlFor="p-headline">Frase corta</Label>
           <Input id="p-headline" maxLength={160} value={form.headline} onChange={(e) => set('headline', e.target.value)} />
@@ -314,6 +355,41 @@ export default function ProfileEditor() {
           })}
         </div>
         {err('categories')}
+      </fieldset>
+
+      <fieldset>
+        <legend className="mb-1 font-medium text-navy">Ciudades</legend>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Dónde trabajas, hasta {MAX_CITIES}. Si la tuya no está, escríbela en «Otra ciudad».
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {CITY_OPTIONS.map((c) => {
+            const checked = form.cities.includes(c);
+            return (
+              <label key={c} className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  disabled={!checked && form.cities.length >= MAX_CITIES}
+                  onChange={(e) => toggleCity(c, e.target.checked)}
+                />
+                {c}
+              </label>
+            );
+          })}
+        </div>
+        <div className="mt-4 max-w-sm space-y-2">
+          <Label htmlFor="p-city-other">Otra ciudad (opcional)</Label>
+          <Input
+            id="p-city-other"
+            maxLength={80}
+            autoComplete="address-level2"
+            placeholder="Por ejemplo: Miami"
+            value={form.city_other}
+            onChange={(e) => set('city_other', e.target.value)}
+          />
+        </div>
+        {err('cities')}
       </fieldset>
 
       <div className="grid gap-6 md:grid-cols-3">

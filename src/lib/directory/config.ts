@@ -36,6 +36,17 @@ export const CATEGORY_LABELS: Record<CategoryKey, string> = {
 export const MAX_CATEGORIES = 3;
 export const MAX_SERVICES = 12;
 
+// Same names and order as public.directory_cities (migration 20261116120000_directory_cities) and
+// as cancuntech.day's list. The database is what validates them (POST profile); change both together.
+export const CITY_OPTIONS = [
+  'Cancún', 'Playa del Carmen', 'Tulum', 'Puerto Morelos', 'Cozumel', 'Isla Mujeres', 'Akumal', 'Puerto Aventuras',
+  'Riviera Maya', 'Holbox', 'Bacalar', 'Chetumal', 'Mahahual', 'Mérida', 'Valladolid', 'Campeche', 'CDMX',
+  'Guadalajara', 'Monterrey', 'Querétaro', 'Puebla', 'Oaxaca',
+] as const;
+export const MAX_CITIES = 5;
+/** The city filter's value for profiles whose city maps to none of the list. */
+export const OTHER_CITIES = 'otras';
+
 export type ProfileKind = 'company' | 'professional';
 export const KIND_LABELS: Record<ProfileKind, string> = { company: 'Empresa', professional: 'Profesional' };
 
@@ -76,6 +87,12 @@ export interface PublicProfile {
   services: string[];
   categories: CategoryKey[];
   city: string | null;
+  /**
+   * Canonical cities parsed from city by the database, and the parts that matched none ("Otras").
+   * Missing before 20261116120000_directory_cities.
+   */
+  cities?: string[];
+  cities_other?: string[];
   website: string | null;
   photo_url: string | null;
   /** Business Plus (Connect): listed first with a badge. */
@@ -102,3 +119,7 @@ export interface OwnerProfile extends Omit<PublicProfile, 'slug' | 'featured'> {
   linkedin_url: string | null;
   whatsapp: string | null;
 }
+
+/** "Cancún · Playa del Carmen · Tulum": the parsed cities, or the free text before the migration. */
+export const placeLine = (p: Pick<PublicProfile, 'city' | 'cities' | 'cities_other'>) =>
+  [...(p.cities ?? []), ...(p.cities_other ?? [])].join(' · ') || p.city?.trim() || '';
