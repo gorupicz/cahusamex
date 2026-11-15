@@ -44,8 +44,9 @@ export default function PrivacyPage() {
             <li>
               <strong>Eventos y calendario en Luma.</strong> Si te registraste a un evento de CAHUSA MX en Luma, tomamos tu nombre,
               correo, empresa, cargo, ciudad, LinkedIn y, si el evento lo preguntó, el tamaño de tu empresa, y armamos un borrador privado
-              de tu perfil. Si te suscribiste al calendario México Hospitalidad de CAHUSA MX en Luma, tomamos tu nombre, correo y foto de
-              perfil de Luma (si subiste una) y publicamos un perfil básico en el directorio con tu nombre y tu foto. Si cancelaste tu suscripción, no te incluimos.
+              de tu perfil. Si te suscribiste al calendario México Hospitalidad de CAHUSA MX en Luma, tomamos tu nombre, correo, foto de
+              perfil, bio corta y LinkedIn de Luma (si los pusiste) y publicamos un perfil básico en el directorio con tu nombre, tu foto
+              y tu bio. Tu LinkedIn queda guardado pero no se muestra en tu perfil público, salvo que tú lo actives. Si cancelaste tu suscripción, no te incluimos.
             </li>
             <li>
               <strong>Usuarios de La Bolsa MX.</strong> Si tienes una cuenta en La Bolsa MX (labolsa.mx), plataforma de rentas
