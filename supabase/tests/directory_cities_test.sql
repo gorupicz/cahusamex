@@ -1,5 +1,5 @@
--- Canonical cities (20261116120000_directory_cities.sql). Runs on the same database as the other
--- tests (it cleans up after itself).
+-- Canonical cities (20261116120000_directory_cities.sql, 20261116200000_directory_city_huamantla.sql).
+-- Runs on the same database as the other tests (it cleans up after itself).
 
 create function pg_temp.check(ok boolean, what text) returns void language plpgsql as $$
 begin
@@ -34,7 +34,8 @@ begin
   perform pg_temp.check(pg_temp.parts('Merida Yucatan') = 'Mérida / ', 'trailing state');
   perform pg_temp.check(pg_temp.parts('Ciudad de México') = 'CDMX / ', 'CDMX alias');
   perform pg_temp.check(pg_temp.parts('Quintana Roo') = ' / ', 'a state alone says nothing');
-  perform pg_temp.check(pg_temp.parts('Huamantla, Tlaxcala') = ' / Huamantla', 'unknown city goes to other');
+  perform pg_temp.check(pg_temp.parts('Huamantla, Tlaxcala') = 'Huamantla / ', 'state dropped after a city added later');
+  perform pg_temp.check(pg_temp.parts('Comitán') = ' / Comitán', 'unknown city goes to other');
   perform pg_temp.check(pg_temp.parts('Cancún, Cancun') = 'Cancún / ', 'duplicates collapse');
   perform pg_temp.check(pg_temp.parts(null) = ' / ' and pg_temp.parts('') = ' / ', 'empty');
 
@@ -66,7 +67,7 @@ end $$;
 
 -- What anon may read.
 set role anon;
-select pg_temp.check((select count(*) from directory_cities) = 22, 'anon reads the cities');
+select pg_temp.check((select count(*) from directory_cities) = 23, 'anon reads the cities');
 select pg_temp.check((select count(*) >= 0 from (select cities, cities_other from directory_profiles) x), 'anon reads cities columns');
 reset role;
 
