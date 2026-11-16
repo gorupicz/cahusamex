@@ -41,7 +41,7 @@ export const MAX_SERVICES = 12;
 export const CITY_OPTIONS = [
   'Cancún', 'Playa del Carmen', 'Tulum', 'Puerto Morelos', 'Cozumel', 'Isla Mujeres', 'Akumal', 'Puerto Aventuras',
   'Riviera Maya', 'Holbox', 'Bacalar', 'Chetumal', 'Mahahual', 'Mérida', 'Valladolid', 'Campeche', 'CDMX',
-  'Guadalajara', 'Monterrey', 'Querétaro', 'Puebla', 'Oaxaca',
+  'Guadalajara', 'Monterrey', 'Querétaro', 'Puebla', 'Oaxaca', 'Huamantla',
 ] as const;
 export const MAX_CITIES = 5;
 /** The city filter's value for profiles whose city maps to none of the list. */
