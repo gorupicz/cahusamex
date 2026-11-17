@@ -43,6 +43,7 @@ export const ERRORS: Record<string, string> = {
   billing_unavailable: 'Las suscripciones todavía no están disponibles. Escríbenos a goru@cahusa.mx.',
   no_subscription: 'No encontramos tu suscripción. Escríbenos a goru@cahusa.mx.',
   no_profile: 'Necesitas un perfil en el directorio para usar Connect.',
+  no_listing: 'No encontramos un perfil con este correo.',
   unauthorized: 'Tu sesión venció. Vuelve a entrar con tu correo.',
   forbidden: 'No pudimos verificar la solicitud. Recarga la página.',
   unavailable: 'Algo falló de nuestro lado. Intenta de nuevo en un momento.',

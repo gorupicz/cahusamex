@@ -8,6 +8,7 @@
 //   POST   profile                -> validates and saves it; the first save claims or creates it
 //   POST   photo (multipart "photo") -> replaces the photo in the public directory-photos bucket
 //   DELETE photo                  -> removes it
+//   POST   remove                 -> takes the profile out of the directory and Connect (self-service opt-out)
 import { randomInt, randomUUID } from 'node:crypto';
 import { CATEGORY_KEYS, CITY_OPTIONS, EMAIL_RE, MAX_CATEGORIES, MAX_CITIES, MAX_SERVICES } from '@/lib/directory/config';
 import {
@@ -44,7 +45,7 @@ const MAX_CODES_PER_HOUR = 300;
 
 // Public columns, plus what only the owner sees in their own editor.
 const PUBLIC_COLUMNS = 'id,slug,name,kind,company,job_title,headline,description,services,categories,city,website,photo_path,updated_at';
-const OWNER_BASE = `${PUBLIC_COLUMNS},linkedin_url,whatsapp,email,status,published,source_events,claimed_at`;
+const OWNER_BASE = `${PUBLIC_COLUMNS},linkedin_url,whatsapp,email,status,published,source_events,claimed_at,connect_opt_out,plan`;
 // The canonical cities the database parsed from city. Before 20261116120000_directory_cities the
 // columns don't exist (42703): the first read that fails drops them for this instance.
 let ownerColumns = `${OWNER_BASE},cities,cities_other`;
@@ -291,7 +292,10 @@ async function saveProfile(email: string, input: Row) {
     // The public URL is fixed the first time the profile is published; renaming keeps it.
     const slug = current.slug ?? (input.published ? await rpc<string>('directory_free_slug', { p_name: input.name, p_id: current.id }) : null);
     try {
-      return view(await patch(current.id, { ...input, slug, ...claim(current) }));
+      // Publishing an unpublished profile undoes "Quitar mi perfil": the person chose to come back.
+      // Saving one that stays published keeps an opt-out set by hand ("no intros, please").
+      const back = input.published && !current.published ? { connect_opt_out: false } : {};
+      return view(await patch(current.id, { ...input, slug, ...back, ...claim(current) }));
     } catch (err) {
       // Someone took the same slug between directory_free_slug and the PATCH: pick again.
       if (err instanceof SupabaseError && err.code === '23505' && !current.slug && attempt < 2) continue;
@@ -347,6 +351,24 @@ async function photo(req: Request, email: string) {
   return json({ ok: true, email, profile: view(saved) });
 }
 
+// ---------- remove ----------
+
+/**
+ * "Quitar mi perfil": out of the public directory and out of Connect (no suggestions, no intros), and
+ * the photo deleted from the public bucket. It also claims the profile, so neither a Luma or La Bolsa
+ * MX re-import nor the cancuntech.day sync publishes it again; the next sync hides the cancuntech.day
+ * copy (unless the person claimed that one there). Publishing again from the editor undoes it.
+ */
+async function remove(req: Request, email: string) {
+  if (req.method !== 'POST') throw new HttpError(405, 'method_not_allowed');
+  const current = await row(email);
+  if (!current) throw new HttpError(404, 'no_listing');
+  const saved = await patch(current.id, { published: false, connect_opt_out: true, photo_path: null, ...claim(current) });
+  if (current.photo_path) await removePhoto(current.photo_path);
+  console.log('directory profile removed by its owner', current.id);
+  return json({ ok: true, email, profile: view(saved) });
+}
+
 // ---------- routing ----------
 
 export async function handleDirectory(action: string, req: Request, email: string | null): Promise<Response> {
@@ -355,8 +377,9 @@ export async function handleDirectory(action: string, req: Request, email: strin
     if (action === 'logout') return json({ ok: true }, 200, { 'Set-Cookie': clearedCookie });
     return action === 'request-code' ? requestCode(req) : verifyCode(req);
   }
-  if (action === 'profile' || action === 'photo') {
+  if (action === 'profile' || action === 'photo' || action === 'remove') {
     if (!email) throw new HttpError(401, 'unauthorized');
+    if (action === 'remove') return remove(req, email);
     return action === 'profile' ? profile(req, email) : photo(req, email);
   }
   throw new HttpError(404, 'not_found');

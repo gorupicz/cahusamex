@@ -1,4 +1,4 @@
-// /api/directorio/{request-code,verify-code,logout,profile,photo}: sign-in and the profile editor.
+// /api/directorio/{request-code,verify-code,logout,profile,photo,remove}: sign-in and the profile editor.
 import { HttpError, backendReady, json, sameOrigin, sessionEmail } from '@/lib/server/core';
 import { handleDirectory } from '@/lib/server/directory';
 

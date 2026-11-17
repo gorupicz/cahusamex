@@ -40,8 +40,8 @@ Until the intro goes out, a match shows no company, email, phone, LinkedIn or pr
 | Path | What |
 |---|---|
 | `/directorio` | Published profiles with a search box and filters (category, type, city). Buttons to the editor and to Connect. |
-| `/directorio/<slug>` | A public profile. **Pedir intro** opens `/connect?intro=<slug>`; website always; LinkedIn and WhatsApp only for paid members who opted in. Unclaimed profiles show **Reclamar este perfil** (to `/directorio/editar`). |
-| `/directorio/editar` | Sign-in (email + code), the profile form, photo/logo upload, **Publicar en el directorio**, **Salir**. With `?next=/connect…` it shows **Continuar a Connect** after saving. |
+| `/directorio/<slug>` | A public profile. **Pedir intro** opens `/connect?intro=<slug>`; website always; LinkedIn and WhatsApp only for paid members who opted in. Unclaimed profiles show **Reclamar este perfil** (to `/directorio/editar`). Every profile has **Quitar mi perfil** at the bottom (to `/directorio/editar?quitar=1`). |
+| `/directorio/editar` | Sign-in (email + code), the profile form, photo/logo upload, **Publicar en el directorio**, **Salir**. With `?next=/connect…` it shows **Continuar a Connect** after saving. With `?quitar=1` (and from **Quitar mi perfil** under the form) it opens on [removing the profile](#quitar-mi-perfil) after sign-in. |
 | `/connect` | Sign-in, or "Primero crea tu perfil", or the tool: usage line, ICP box with the ICPs used, matches (25 per page, select all, sticky **Pedir intro**), the intro dialog with plans, the contact opt-in for paid plans, **Administrar suscripción**. |
 | `/privacidad` | Privacy notice for the directory and Connect (linked from the footer, the editor and Connect). |
 
@@ -107,7 +107,7 @@ Esteban Gorupicz
 browser ── /directorio, /directorio/[slug]   (server components, anon key: RLS + column grants decide what shows)
    │
    ├─ /directorio/editar, /connect           (client components)
-   │     └─ /api/directorio/{request-code, verify-code, logout, profile, photo}
+   │     └─ /api/directorio/{request-code, verify-code, logout, profile, photo, remove}
    │     └─ /api/directorio/connect/{status, search, preview, intros, direct, direct-intro, contact, checkout, portal}
    │            Next.js route handlers on Vercel (Node), service role
    │              ├─ Supabase Postgres (PostgREST) and Storage (bucket directory-photos)
@@ -124,7 +124,7 @@ Differences from Cancún Tech Day:
 - **The session cookie** (`cahusa_directory`, `Path=/api/directorio`, 2 hours, HttpOnly) is signed with `DIRECTORY_SESSION_SECRET`, not with the service role key. The same secret signs the codes, the IP hashes and the match tokens.
 - **Writes are same-origin only** (checked on every non-GET route except the webhook).
 - **Company size** is a column on `directory_profiles` set by the import, not a view over Luma registrations. Ranges: 1-10, 11-50, 51-200, 201-1000, 1000+.
-- **`connect_opt_out`:** a column to stop suggesting and introducing someone. It is excluded from matches and intros.
+- **`connect_opt_out`:** a column to stop suggesting and introducing someone. It is excluded from matches and intros. Set by **Quitar mi perfil** or by hand.
 - **Categories** are hospitality-specific (renta vacacional, hotelería, administración de propiedades…). The keys live in the migration's check constraint and in `src/lib/directory/config.ts`.
 
 ### Files
@@ -238,6 +238,17 @@ Nothing below has been done yet. Each production step needs the owner's OK.
 7. **Import the pool:** see [Importing the pool](#importing-the-pool) (dry run first, then `--apply`).
 8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal.
 
+## Quitar mi perfil
+
+Self-service removal (owner's request, 2026-11-17, before announcing the directory). Every public profile links to `/directorio/editar?quitar=1`; after the email code, the person confirms and `POST /api/directorio/remove`:
+
+- sets `published = false` and `connect_opt_out = true`: out of `/directorio`, its page answers 404, and Connect neither suggests nor introduces them;
+- deletes the photo from the public bucket (`photo_path = null`; a cancuntech.day photo URL is only dropped, not deleted);
+- **claims** the profile (`status = 'claimed'`): the Luma / La Bolsa MX import never publishes a claimed profile, and the cancuntech.day pull no longer overwrites or republishes it;
+- the next sync (≤ 10 min) sends their email's sha-256 as *left*, and cancuntech.day unpublishes its copy, unless the person claimed that profile there (then they remove it there).
+
+The rest of the row stays, unpublished, so a later import doesn't bring it back. **Publishing again from the editor undoes it** (`connect_opt_out` goes back to false when an unpublished profile is published; saving a profile that stays published keeps an opt-out set by hand). Deleting the data too is still a request to `goru@cahusa.mx`. It does **not** cancel a paid Connect subscription: the screen tells Business and Business Plus members to cancel it in **Administrar suscripción**. A signed-in email with no profile gets "No encontramos un perfil con este correo" and the contact address. Logs: `directory profile removed by its owner` with the profile id.
+
 ## Sync with cancuntech.day
 
 The published profiles of this directory appear in **cancuntech.day/directorio**, and theirs appear here (owner's requests, 2026-11-14). Both directions run from **one place**: `src/app/api/directorio/ctd-sync/route.ts`, a Vercel cron every 10 minutes (`vercel.json`), authenticated with `CRON_SECRET`. cancuntech.day runs nothing on a schedule and never writes to this database: it only answers two token-gated calls made with its publishable key.
@@ -279,7 +290,7 @@ node scripts/import-luma-directory.mjs \
   [--apply]
 ```
 
-Re-running is safe: emails are the key, claimed profiles only gain `source_events`, the import never unpublishes anyone and never publishes a claimed profile. Someone who asks to be removed: unpublish them (`published = false`) and set `connect_opt_out = true`; **a later re-run with `--publish` would publish an unclaimed profile again**, so add them to `--exclude` too (or delete the row, with Esteban's OK).
+Re-running is safe: emails are the key, claimed profiles only gain `source_events`, the import never unpublishes anyone and never publishes a claimed profile. Someone who asks to be removed: point them to **Quitar mi perfil** on their public page (it claims the profile, so no re-run publishes it again). Doing it by hand instead: unpublish them (`published = false`) and set `connect_opt_out = true`; **a later re-run with `--publish` would publish an unclaimed profile again**, so add them to `--exclude` too, or also set `status = 'claimed'` (or delete the row, with Esteban's OK).
 
 **Photos** (`scripts/import-directory-photos.mjs`, after the people are imported; dry run unless `--apply`, needs the service role key for both). It takes CSVs of `email,photo_url`, the first file winning for an email, and only touches **unclaimed profiles without a photo**. Each image is checked for placeholders (Google's white initial on a flat colour, its grey "no photo" and blue silhouette icons, blank squares: two colours covering 90% of a 48×48 thumbnail, or white marks on a flat background; a few two-colour logos are lost with them), cropped to 400×400 WebP without metadata and uploaded to `directory-photos/<profile id>/<uuid>.webp`. Sources used on 2026-11-14:
 
@@ -316,6 +327,7 @@ Reply in Spanish (es-MX, "tú").
 - **"Ya pagué y sigo en Starter."** Normalmente se activa en segundos. Revisa `connect_subscriptions` y los logs de Vercel (`connect webhook`); si no hay fila, escala a Esteban.
 - **"Quiero cancelar."** Connect → "Administrar suscripción".
 - **"No quiero recibir intros / que no me sugieran."** Set `connect_opt_out = true` on their profile (`update directory_profiles set connect_opt_out = true where email = '…'`), with Esteban's OK.
+- **"Quiero salir del directorio."** En tu perfil público, abajo, "Quitar mi perfil": entras con tu correo y un código y lo confirmas. Si no sabe con qué correo está, búscalo por el slug (`select email from directory_profiles where slug = '…'`) y quítalo a mano como dice [Importing the pool](#importing-the-pool), with Esteban's OK. Never tell them the email over email: they may not be the person.
 
 ## Useful queries
 
@@ -373,6 +385,6 @@ Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`
 - **Not tested end to end:** no Supabase project, Resend domain, Anthropic key or Stripe account exists for Cahusamex yet. The SQL (limits, grants, import) is tested on a local Postgres; the pages build and render; the API was checked only for its unconfigured answers.
 - **Newsletter logo** for Business Plus is manual, and it is not confirmed that Cahusamex sends a monthly newsletter.
 - **Privacy notice** was adapted from Cancún Tech Day's without a lawyer's review; requests go to `goru@cahusa.mx`.
-- **Opt-out** is a column set by hand; there is no self-service switch.
+- **Opt-out** from Connect alone (staying in the directory) is still set by hand; **Quitar mi perfil** takes someone out of both.
 - **Luma calendar subscribers and La Bolsa MX users are published without their consent** (owner's decision, 2026-11-14). The privacy notice says so, but it was not reviewed by a lawyer, and La Bolsa MX's own notice was not checked for sharing data with CAHUSA MX. Most of those profiles show only a name (and, for La Bolsa MX, an activity line) until claimed.
 - **The directory page** sends every listed profile to the browser (~3,000 short rows, no descriptions). Past ~10,000 it should move to server-side search and paging.
