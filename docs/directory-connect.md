@@ -229,14 +229,14 @@ Without the Supabase variables or the session secret every API route answers `un
 
 Nothing below has been done yet. Each production step needs the owner's OK.
 
-1. **Supabase:** ~~create the Cahusamex project~~ done 2026-11-14 (`xfkicfgxznzvuffnufts`, us-east-1, org CAHUSAMEX on the **Free plan**: Supabase pauses Free projects after a week without activity, so upgrade the organization to Pro before launch). ~~Apply the migration~~ applied 2026-11-14 through the dashboard SQL Editor (the file at commit `2c4d1c0`, SHA-256 checked), then verified: 7 tables with RLS, 16 functions, the `directory-photos` bucket, anon limited to the public columns and `directory_public_contact`, service role with full access. Because it went through the SQL Editor, it is not in `supabase_migrations.schema_migrations`: if the Supabase CLI is ever linked to this project, mark it applied with `supabase migration repair --status applied 20261113120000` before `db push`.
+1. **Supabase:** ~~create the Cahusamex project~~ done 2026-11-14 (`xfkicfgxznzvuffnufts`, us-east-1, org CAHUSAMEX on the **Free plan**: Supabase pauses Free projects after a week without activity. On 2026-11-17 the owner decided to launch on Free and upgrade to Pro once adoption justifies it; the weekly [backup](#backups) covers Free's lack of downloadable backups). ~~Apply the migration~~ applied 2026-11-14 through the dashboard SQL Editor (the file at commit `2c4d1c0`, SHA-256 checked), then verified: 7 tables with RLS, 16 functions, the `directory-photos` bucket, anon limited to the public columns and `directory_public_contact`, service role with full access. Because it went through the SQL Editor, it is not in `supabase_migrations.schema_migrations`: if the Supabase CLI is ever linked to this project, mark it applied with `supabase migration repair --status applied 20261113120000` before `db push`.
 2. **Resend:** ~~add `cahusa.mx`~~ done 2026-11-14 in the Resend team **cahusa** (domain `0be35ca7-a069-4fc4-8b49-940a70dd8d8a`, us-east-1, return-path `send`), with its records added in Cloudflare (DNS only): TXT `resend._domainkey` (DKIM), CNAME `send` → `send.forge.rmta.net`, CNAME `rsend` → `rsend.forge.rmta.net`. The receiving MX (`@` → `receive.forge.rmta.net`) was deliberately **not** added: it would replace Cloudflare Email Routing, which forwards `goru@cahusa.mx`. The domain was **verified** the same day. A sending-only API key restricted to `cahusa.mx` (`cahusamex-vercel-directorio-connect`) is in `RESEND_API_KEY` for Production and Preview.
 3. **Anthropic:** ~~create an API key~~ done 2026-11-14: `cahusamex-connect` (no expiry, Default workspace), loaded as `ANTHROPIC_API_KEY`. Its cost shows apart from `cancuntech-connect` in the Console.
 4. **Stripe (LA BOLSA MX - Club):** ~~create the two products and monthly MXN prices~~ (done 2026-11-13, ids above). ~~Billing portal configuration~~ done 2026-11-14: `bpc_1Ubl2FACwbCfcqfcBOoC8HgI` (switch between the two Connect prices with proration, cancel at period end with a reason, invoice history, payment method, email/name/tax id/address), set in `STRIPE_PORTAL_CONFIGURATION`. Being the account's first portal configuration, Stripe made it the **default** for LA BOLSA MX - Club: any other portal session in that account without its own configuration would show these options. ~~Webhook~~ done 2026-11-14 after the deploy: `we_1UbmN3ACwbCfcqfcGgBmXE9J` → `https://www.cahusa.mx/api/directorio/connect/stripe-webhook` (the `www` host: `cahusa.mx` answers 307 to `www`, and Stripe doesn't follow redirects), events `checkout.session.completed` and `customer.subscription.{created,updated,deleted}`, signing secret in `STRIPE_WEBHOOK_SECRET`. A replayed payment-mode checkout event got 200 (signature checked, ignored). The endpoint receives these events for the whole Club account (other products' checkouts too); the handler ignores anything that is not a Connect subscription. The account's other endpoint (`labolsa.mx`) is untouched.
 5. **Vercel:** set the env vars above for Production (and Preview if wanted) on `labolsamx/cahusamex`. Also check the project's framework preset says Next.js (it still says Vite; `vercel.json` overrides it).
 6. **Merge the PR** and let Vercel deploy.
 7. **Import the pool:** see [Importing the pool](#importing-the-pool) (dry run first, then `--apply`).
-8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal.
+8. **Smoke test in production:** sign in at `/directorio/editar`, publish a profile, search in `/connect`, send one intro to a test profile you own, run a Checkout with a 100% coupon and check the plan changes, open the portal. The paid path was done 2026-11-14: coupon `1XTrH3qm` (100%, once, 1 use), subscription `sub_1Ubn7nACwbCfcqfc9fZpvMNG` on Esteban's profile, a $0 invoice, the plan changed to `business` through the webhook, then cancelled in the portal at period end. It ends on 2026-12-14, when the profile should drop to Starter: check it that day.
 
 ## Quitar mi perfil
 
@@ -372,6 +372,34 @@ select t as unmapped, count(*) from directory_profiles, unnest(cities_other) t g
 
 Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`, `resend failed`, `connect webhook` and `connect api failed`.
 
+## Backups
+
+The Supabase project is on the Free plan, which has no backups you can download. `.github/workflows/db-backup.yml` runs `scripts/db-backup.sh` every Monday at 09:17 UTC (and on demand: Actions → Database backup → Run workflow):
+
+- `pg_dump` of the **public** schema (tables, data, functions, grants) through the session pooler, plus every photo in the `directory-photos` bucket (downloaded from its public URLs).
+- A **restore check**: the dump goes into an empty Postgres 17 and the row counts are compared with the live database (a small difference from rows written meanwhile only warns).
+- One archive, encrypted with AES-256 (`openssl enc -aes-256-cbc -pbkdf2 -iter 600000`), decrypted once to check it, and kept as a workflow artifact for **90 days** (about 12 weekly copies).
+
+The repository is public, so its logs and artifacts are public too: the logs print only totals, and the archive is useless without the passphrase.
+
+| Repository secret | What |
+|---|---|
+| `SUPABASE_DB_URL` | Supabase → Connect → **Session pooler** URI, with the database password. The app doesn't use that password (it talks to Supabase with API keys), so resetting it only means updating this secret. |
+| `BACKUP_PASSPHRASE` | Encrypts the archives. **Its only copy outside GitHub is Esteban's password manager**: GitHub never shows a secret again, and without it the backups can't be opened. |
+
+GitHub emails whoever last edited the schedule when a run fails, and it **disables scheduled workflows in public repositories after 60 days without commits**: if that happens, re-enable it from the Actions tab.
+
+**Restore** (needs the Postgres 17 client: `brew install postgresql@17`):
+
+1. Download the artifact from the run (Actions → Database backup → the run → Artifacts) and unzip it.
+2. Decrypt it; `openssl` asks for the passphrase:
+   ```bash
+   openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in cahusamex-db-<date>.tar.gz.enc | tar -xz
+   ```
+   The folder has `public.dump`, `row-counts.tsv`, `photos.txt` (and `photos-missing.txt` if any photo failed to download) and `photos/`.
+3. **One table or a few rows** back into the live project: restore the dump into a local Postgres (`createdb restore && pg_restore --no-owner -d restore public.dump`; create the roles `anon`, `authenticated`, `service_role` first, or add `--no-privileges`) and copy what's needed with SQL.
+4. **The whole project** into a new Supabase project: `pg_restore --no-owner -d "<new session pooler URI>" public.dump` (it may complain that schema `public` already exists; that's fine), then create the public `directory-photos` bucket with the `insert into storage.buckets` from the first migration and upload the `photos/` folder keeping its paths. Point the Vercel env vars at the new project.
+
 ## Guardrails
 
 - **Never send intros on a member's behalf.** Only the member, through the page, sends them.
@@ -382,7 +410,7 @@ Logs: Vercel → project `cahusamex` → Logs. Search for `connect search usage`
 
 ## Known gaps
 
-- **Not tested end to end:** no Supabase project, Resend domain, Anthropic key or Stripe account exists for Cahusamex yet. The SQL (limits, grants, import) is tested on a local Postgres; the pages build and render; the API was checked only for its unconfigured answers.
+- **End of a subscription not seen yet:** Checkout, the webhook and the portal were tested in production on 2026-11-14 (deploy step 8), and Quitar mi perfil on a preview on 2026-11-17. A cancelled subscription ending (the profile dropping to Starter) is first expected on 2026-12-14.
 - **Newsletter logo** for Business Plus is manual, and it is not confirmed that Cahusamex sends a monthly newsletter.
 - **Privacy notice** was adapted from Cancún Tech Day's without a lawyer's review; requests go to `goru@cahusa.mx`.
 - **Opt-out** from Connect alone (staying in the directory) is still set by hand; **Quitar mi perfil** takes someone out of both.

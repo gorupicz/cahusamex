@@ -1,0 +1,61 @@
+# Weekly encrypted backup of the cahusa.mx Supabase database and directory photos.
+# The project is on Supabase's Free plan, which has no downloadable backups.
+# What it does and how to restore: docs/directory-connect.md, "Backups".
+name: Database backup
+
+on:
+  schedule:
+    - cron: '17 9 * * 1' # Mondays 09:17 UTC (03:17 in Cancún)
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/db-backup.yml
+      - scripts/db-backup.sh
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    # Pull requests from forks get no secrets.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      verify:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: verify
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the Postgres 17 client
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y --no-install-recommends postgresql-client-17
+          echo /usr/lib/postgresql/17/bin >> "$GITHUB_PATH"
+
+      - name: Back up
+        id: backup
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          VERIFY_DB_URL: postgresql://postgres:verify@localhost:5432/postgres
+          OUT_DIR: ${{ runner.temp }}/backup
+        run: scripts/db-backup.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.backup.outputs.name }}
+          path: ${{ runner.temp }}/backup/*.enc
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: ${{ github.event_name == 'pull_request' && 7 || 90 }}
