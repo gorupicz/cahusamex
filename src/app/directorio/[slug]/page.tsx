@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Globe, Linkedin, MessageCircle, Send, UserCheck } from 'lucide-react';
 import ProfileAvatar from '@/components/directory/ProfileAvatar';
-import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, EDIT_PATH, KIND_LABELS, placeLine } from '@/lib/directory/config';
+import { CATEGORY_LABELS, CONNECT_PATH, DIRECTORY_PATH, EDIT_PATH, KIND_LABELS, REMOVE_PATH, placeLine } from '@/lib/directory/config';
 import { getPublished } from '@/lib/server/public';
 
 export const dynamic = 'force-dynamic';
@@ -126,18 +126,32 @@ export default async function ProfilePage({ params }: Props) {
             <p className="mt-1 text-sm text-navy/80">
               Este perfil se creó con los datos de la comunidad de CAHUSA MX o de tu perfil en el directorio de Cancún Tech Day
               (cancuntech.day) y nadie lo ha reclamado aquí todavía. Reclámalo con tu correo para completarlo: agrega tu empresa,
-              servicios, foto y descripción, o despublícalo si prefieres no aparecer en este directorio.
+              servicios, foto y descripción, o quítalo si prefieres no aparecer en este directorio.
             </p>
-            <Link href={EDIT_PATH} className="btn-primary mt-4 inline-flex items-center gap-2">
-              <UserCheck className="h-4 w-4" aria-hidden="true" />
-              Reclamar este perfil
-            </Link>
+            <div className="mt-4 flex flex-wrap items-center gap-4">
+              <Link href={EDIT_PATH} className="btn-primary inline-flex items-center gap-2">
+                <UserCheck className="h-4 w-4" aria-hidden="true" />
+                Reclamar este perfil
+              </Link>
+              <Link href={REMOVE_PATH} className="text-sm text-teal underline-offset-4 hover:underline">
+                Quitar este perfil
+              </Link>
+            </div>
           </div>
         )}
 
-        <p className="mt-8 text-xs text-muted-foreground">
-          Actualizado el {new Date(profile.updated_at).toLocaleDateString('es-MX', { dateStyle: 'long', timeZone: 'America/Cancun' })}
-        </p>
+        <div className="mt-8 flex flex-wrap justify-between gap-2 text-xs text-muted-foreground">
+          <p>
+            Actualizado el {new Date(profile.updated_at).toLocaleDateString('es-MX', { dateStyle: 'long', timeZone: 'America/Cancun' })}
+          </p>
+          {/* Anyone can follow it; the editor asks for the profile's email and a code before removing anything. */}
+          <p>
+            ¿Es tu perfil y prefieres no aparecer?{' '}
+            <Link href={REMOVE_PATH} className="text-teal underline-offset-4 hover:underline">
+              Quitar mi perfil
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );

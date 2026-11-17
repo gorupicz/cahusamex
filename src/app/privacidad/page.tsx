@@ -92,7 +92,8 @@ export default function PrivacyPage() {
             <Link href={EDIT_PATH} className="text-teal underline">
               tu perfil
             </Link>{' '}
-            (entras con tu correo) o pedirnos que lo borremos. Tu correo nunca se muestra. Tu LinkedIn y
+            (entras con tu correo), quitarlo con el enlace «Quitar mi perfil» de tu página en el directorio (deja de mostrarse, Connect
+            ya no te sugiere ni te presenta y borramos tu foto) o pedirnos que lo borremos. Tu correo nunca se muestra. Tu LinkedIn y
             tu WhatsApp tampoco, salvo que tengas un plan de pago de Connect y elijas mostrarlos. Quien quiera contactarte pide una
             intro.
           </p>

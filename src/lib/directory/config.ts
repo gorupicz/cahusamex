@@ -64,6 +64,8 @@ export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export const DIRECTORY_PATH = '/directorio';
 export const EDIT_PATH = '/directorio/editar';
+/** The editor opened on "Quitar mi perfil" (after sign-in). */
+export const REMOVE_PATH = `${EDIT_PATH}?quitar=1`;
 export const CONNECT_PATH = '/connect';
 export const PRIVACY_PATH = '/privacidad';
 export const profilePath = (slug: string) => `${DIRECTORY_PATH}/${slug}`;
@@ -116,6 +118,10 @@ export interface OwnerProfile extends Omit<PublicProfile, 'slug' | 'featured'> {
   published: boolean;
   source_events: string[];
   claimed_at: string | null;
+  /** Set by "Quitar mi perfil" (or by hand): out of Connect's suggestions and intros. */
+  connect_opt_out?: boolean;
+  /** Connect plan (from Stripe). */
+  plan?: 'starter' | 'business' | 'business_plus';
   linkedin_url: string | null;
   whatsapp: string | null;
 }

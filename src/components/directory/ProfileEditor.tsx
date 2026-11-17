@@ -2,6 +2,7 @@
 
 // /directorio/editar: sign in with email + code, then claim, fill and publish a profile.
 // ?next=/connect (or /connect?intro=<slug>) sends the person back to Connect after saving.
+// ?quitar=1 (the "Quitar mi perfil" link of a public profile) opens on removing it instead.
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -27,6 +28,7 @@ import {
 } from '@/lib/directory/config';
 import { api, errorText, post } from './api';
 import ProfileAvatar from './ProfileAvatar';
+import RemoveProfile from './RemoveProfile';
 import SignIn from './SignIn';
 
 interface Form {
@@ -140,6 +142,8 @@ export default function ProfileEditor() {
   const toConnect = !!next?.startsWith('/connect');
 
   const [state, setState] = useState<'loading' | 'signin' | 'form'>('loading');
+  /** The form, or the "Quitar mi perfil" screen. */
+  const [removing, setRemoving] = useState(params.get('quitar') === '1');
   const [signInMsg, setSignInMsg] = useState('');
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<OwnerProfile | null>(null);
@@ -238,6 +242,7 @@ export default function ProfileEditor() {
 
   async function logout() {
     await post('logout');
+    setRemoving(false);
     setProfile(null);
     setForm(EMPTY);
     setSignInMsg('');
@@ -255,17 +260,41 @@ export default function ProfileEditor() {
   if (state === 'signin') {
     return (
       <SignIn
-        hint="Usa el correo con el que te registraste a un evento de CAHUSA MX en Luma. Si no te registraste, también puedes crear un perfil nuevo con cualquier correo."
+        hint={
+          removing
+            ? 'Para quitar tu perfil, confirma que eres tú: entra con el correo con el que te registraste a un evento de CAHUSA MX, al calendario de Luma, a La Bolsa MX o a Cancún Tech Day. Te mandamos un código.'
+            : 'Usa el correo con el que te registraste a un evento de CAHUSA MX en Luma. Si no te registraste, también puedes crear un perfil nuevo con cualquier correo.'
+        }
         message={signInMsg}
         onSignedIn={show}
       />
     );
   }
 
+  if (removing) {
+    return (
+      <RemoveProfile
+        email={email}
+        profile={profile}
+        onRemoved={(p) => {
+          setProfile(p);
+          setForm(toForm(p));
+          setSaved(false);
+        }}
+        onExpired={expired}
+        onCancel={() => setRemoving(false)}
+        onLogout={logout}
+      />
+    );
+  }
+
+  const removed = !!profile && !profile.published && !!profile.connect_opt_out;
   const notice =
     profile === null
       ? 'No encontramos un registro con este correo. Llena tu perfil desde cero.'
-      : profile.status === 'unclaimed'
+      : removed
+        ? 'Quitaste tu perfil del directorio y de Connect. Si quieres volver, activa «Publicar en el directorio» y guarda.'
+        : profile.status === 'unclaimed'
         ? 'Encontramos tu registro. Revisa lo que precargamos, complétalo y publícalo cuando quieras.'
         : 'Este es tu perfil. Los cambios se guardan cuando presionas Guardar.';
   const err = (field: string) => (fieldErrors.includes(field) ? <p className="text-sm text-danger">{FIELD_ERRORS[field]}</p> : null);
@@ -491,13 +520,27 @@ export default function ProfileEditor() {
         )}
       </div>
 
-      <div className="flex items-center justify-between border-t pt-6 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-6 text-sm">
         <button type="button" onClick={logout} className="text-muted-foreground underline-offset-4 hover:underline">
           Salir
         </button>
-        <Link href={PRIVACY_PATH} className="text-teal underline-offset-4 hover:underline">
-          Cómo tratamos tus datos
-        </Link>
+        <span className="flex flex-wrap gap-4">
+          {profile && !removed && (
+            <button
+              type="button"
+              onClick={() => {
+                setRemoving(true);
+                window.scrollTo({ top: 0 });
+              }}
+              className="text-danger underline-offset-4 hover:underline"
+            >
+              Quitar mi perfil
+            </button>
+          )}
+          <Link href={PRIVACY_PATH} className="text-teal underline-offset-4 hover:underline">
+            Cómo tratamos tus datos
+          </Link>
+        </span>
       </div>
     </form>
   );
