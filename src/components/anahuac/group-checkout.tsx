@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, BadgeCheck, Loader2, Minus, Plus, Users } from 'lucide-react';
 import {
   anahuacProgram,
   formatMXN,
   groupOffer,
+  formatDay,
   installmentCents,
+  installmentDates,
+  listEs,
+  todayInCancun,
   type GroupPlanId,
 } from '@/data/anahuac';
 
@@ -20,6 +24,14 @@ const money = (cents: number) =>
 const { minSeats, maxSeats, seatPrice, plans } = groupOffer;
 const regularSeat = anahuacProgram.pricing.total;
 
+/** "Hoy" plus the monthly dates; relative until the client knows today's date. */
+const chargeDates = (installments: number, today: Date | null) =>
+  today
+    ? installmentDates(installments, today).map((d, i) => (i === 0 ? 'Hoy' : formatDay(d)))
+    : Array.from({ length: installments }, (_, i) =>
+        i === 0 ? 'Hoy' : `En ${i} ${i === 1 ? 'mes' : 'meses'}`,
+      );
+
 /**
  * Seats + plan picker for /grupos-anahuac. No lead form: the API creates a
  * Stripe Checkout for the chosen seats and the buyer goes straight there.
@@ -28,11 +40,15 @@ const GroupCheckout = () => {
   const [seats, setSeats] = useState<number>(minSeats);
   const [plan, setPlan] = useState<GroupPlanId>('1');
   const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'closed'>('idle');
+  // The page is prerendered, so today's date is only known in the browser.
+  const [today, setToday] = useState<Date | null>(null);
+  useEffect(() => setToday(todayInCancun()), []);
 
   const clamp = (n: number) => Math.min(maxSeats, Math.max(minSeats, Math.round(n) || minSeats));
   const total = seatPrice * seats;
   const chosen = plans.find((p) => p.id === plan)!;
   const perPayment = installmentCents(chosen.installments) * seats;
+  const chosenDates = chargeDates(chosen.installments, today);
 
   const pay = async () => {
     setStatus('sending');
@@ -148,7 +164,7 @@ const GroupCheckout = () => {
                       {money(each)}
                     </span>
                     <ul className="mb-0 mt-2 space-y-0.5 pl-0 text-xs text-muted-foreground">
-                      {p.dates.map((d) => (
+                      {chargeDates(p.installments, today).map((d) => (
                         <li key={d} className="list-none">
                           {d}
                         </li>
@@ -181,8 +197,9 @@ const GroupCheckout = () => {
             {chosen.installments > 1 && (
               <p className="my-0 text-right text-sm text-muted-foreground">
                 y {chosen.installments - 1} pago{chosen.installments > 2 ? 's' : ''} más de{' '}
-                {money(perPayment)} el {chosen.dates.slice(1).join(' y el ')}, con la
-                misma tarjeta. Total {formatMXN(total)}, sin intereses.
+                {money(perPayment)}{' '}
+                {today ? `el ${listEs(chosenDates.slice(1))}` : 'cada mes'}, con la misma
+                tarjeta. Total {formatMXN(total)}, sin intereses.
               </p>
             )}
           </dl>

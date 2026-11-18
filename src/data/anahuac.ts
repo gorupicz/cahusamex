@@ -337,29 +337,14 @@ export const groupOffer = {
   closesAt: "2026-12-01T05:00:00Z",
   /** "Certificación IA … Generación enero 2027" in LA BOLSA MX - Club. */
   stripeProduct: "prod_VcPlClV9rPkyDd",
+  /**
+   * Installments are monthly from the purchase day: paying on Nov 18, 3 pagos
+   * are charged Nov 18, Dec 18 and Jan 18.
+   */
   plans: [
-    { id: "1", installments: 1, label: "1 pago", dates: ["Hoy"] },
-    {
-      id: "2",
-      installments: 2,
-      label: "2 pagos sin intereses",
-      dates: ["Hoy", "30 de diciembre de 2026"],
-      /** Checkout line names: Stripe shows the recurring line as "por mes", so say what it really is. */
-      firstLine: "Pago 1 de 2 · hoy",
-      restLine: "Pago 2 de 2 · 30 de diciembre de 2026",
-      restNote:
-        "Último pago, sin intereses. Se carga solo a la misma tarjeta el 30 de diciembre de 2026; después no hay más cargos.",
-    },
-    {
-      id: "3",
-      installments: 3,
-      label: "3 pagos sin intereses",
-      dates: ["Hoy", "30 de diciembre de 2026", "30 de enero de 2027"],
-      firstLine: "Pago 1 de 3 · hoy",
-      restLine: "Pagos 2 y 3 de 3 · 30 dic 2026 y 30 ene 2027",
-      restNote:
-        "Sin intereses. Se cargan solos a la misma tarjeta el 30 de diciembre de 2026 y el 30 de enero de 2027; después no hay más cargos.",
-    },
+    { id: "1", installments: 1, label: "1 pago" },
+    { id: "2", installments: 2, label: "2 pagos sin intereses" },
+    { id: "3", installments: 3, label: "3 pagos sin intereses" },
   ],
 } as const;
 
@@ -368,3 +353,33 @@ export type GroupPlanId = (typeof groupOffer.plans)[number]["id"];
 /** Per-seat amount of each installment, in centavos (8325 / 2 = 4162.50). */
 export const installmentCents = (installments: number) =>
   Math.round((groupOffer.seatPrice * 100) / installments);
+
+/** Today's date in Cancún, at 12:00 UTC so no timezone shifts the day. */
+export const todayInCancun = () => {
+  const [y, m, d] = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Cancun" })
+    .format(new Date())
+    .split("-")
+    .map(Number);
+  return new Date(Date.UTC(y, m - 1, d, 12));
+};
+
+/** Same day and time `n` months later, clamped to the month's last day — how Stripe bills monthly. */
+export const addMonthsUTC = (date: Date, n: number) => {
+  const y = date.getUTCFullYear();
+  const m = date.getUTCMonth() + n;
+  const lastDay = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  return new Date(
+    Date.UTC(y, m, Math.min(date.getUTCDate(), lastDay), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()),
+  );
+};
+
+/** Charge dates of a plan bought on `from`: the purchase day, then monthly. */
+export const installmentDates = (installments: number, from: Date) =>
+  Array.from({ length: installments }, (_, i) => addMonthsUTC(from, i));
+
+export const formatDay = (date: Date) =>
+  date.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+/** "a", "a y b", "a, b y c". */
+export const listEs = (items: string[]) =>
+  items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`;
