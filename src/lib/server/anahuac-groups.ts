@@ -3,9 +3,11 @@
 //
 // 1 pago → a one-time Checkout payment for every seat.
 // 2–3 pagos → a subscription: the first installment is a one-time line item
-// charged at checkout, the recurring item is anchored to Dec 30 with no
-// proration, so Stripe charges Dec 30 and (for 3 pagos) Jan 30. Checkout can't
-// set an end date, so the webhook sets cancel_at right after the last charge.
+// charged at checkout; the recurring item sits in a "trial" until Dec 30, so
+// Stripe charges Dec 30 and (for 3 pagos) Jan 30, with no proration. (Checkout
+// rejects billing_cycle_anchor + proration_behavior=none next to a one-time
+// price.) Checkout can't set an end date, so the webhook sets cancel_at right
+// after the last charge.
 import { HttpError, type Row, env, json } from '@/lib/server/core';
 import { groupOffer, installmentCents, type GroupPlanId } from '@/data/anahuac';
 
@@ -72,8 +74,9 @@ export async function createGroupCheckout(req: Request) {
     params['line_items[1][price_data][currency]'] = 'mxn';
     params['line_items[1][price_data][product]'] = groupOffer.stripeProduct;
     params['line_items[1][price_data][unit_amount]'] = amount;
-    params['subscription_data[billing_cycle_anchor]'] = String(ANCHOR);
-    params['subscription_data[proration_behavior]'] = 'none';
+    params['subscription_data[trial_end]'] = String(ANCHOR);
+    params['custom_text[submit][message]'] =
+      `Hoy se cobra el primer pago. Los siguientes se cargan a la misma tarjeta el ${plan.dates.slice(1).join(' y el ')}, sin intereses.`;
     params['subscription_data[description]'] =
       `Certificación IA Anáhuac · ${seats} asientos · ${plan.label}: ${plan.dates.join(', ')}`;
     for (const [k, v] of Object.entries(meta)) params[`subscription_data[metadata][${k}]`] = v;
