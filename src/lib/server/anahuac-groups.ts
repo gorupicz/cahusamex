@@ -24,10 +24,20 @@ const PRODUCT_NAME = 'Certificación IA Anáhuac (grupos)';
 /** Half a month past the last installment: clear of month-length clamping, well before the next renewal. */
 const CANCEL_MARGIN_MS = 15 * 24 * 3600 * 1000;
 
-async function stripe<T = Row>(path: string, params: Record<string, string> = {}, method = 'POST'): Promise<T> {
+/** Stripe REST call with the site key. Pass an idempotency key for anything a webhook retry could repeat. */
+export async function stripe<T = Row>(
+  path: string,
+  params: Record<string, string> = {},
+  method = 'POST',
+  idempotencyKey?: string,
+): Promise<T> {
   const res = await fetch(`https://api.stripe.com/v1/${path}`, {
     method,
-    headers: { Authorization: `Bearer ${env.stripeKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      Authorization: `Bearer ${env.stripeKey}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+    },
     body: method === 'GET' ? undefined : new URLSearchParams(params),
   });
   const body = await res.json();

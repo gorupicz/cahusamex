@@ -57,6 +57,8 @@ export const anahuacProgram = {
     tuition: 10000,
     total: 11500,
     scholarship: {
+      id: "35",
+      path: "/anahuac",
       label: "Beca La Bolsa MX / CAHUSAMEX",
       discount: 35,
       deadline: "30 de noviembre de 2026",
@@ -144,6 +146,10 @@ export const anahuacProgram = {
 
 /** A discount offer the landing can be rendered with. */
 export type Scholarship = {
+  /** Sent to the checkout API, which looks the offer up server-side (never trusts amounts). */
+  id: "35" | "20";
+  /** Landing that sells it, for Stripe's cancel_url. */
+  path: string;
   label: string;
   discount: number;
   deadline: string;
@@ -154,11 +160,10 @@ export type Scholarship = {
   savings: number;
 };
 
-/**
- * 20% offer served at /cursoanahuac. Same enrollment fee as the 35% beca, so it
- * reuses the same Stripe payment link; only the program price changes.
- */
+/** 20% offer served at /cursoanahuac. Same enrollment fee as the 35% beca; only the program price changes. */
 export const cursoAnahuacScholarship: Scholarship = {
+  id: "20",
+  path: "/cursoanahuac",
   label: "Beca La Bolsa MX / CAHUSAMEX",
   discount: 20,
   deadline: "30 de noviembre de 2026",
@@ -385,3 +390,28 @@ export const formatDay = (date: Date) =>
 /** "a", "a y b", "a, b y c". */
 export const listEs = (items: string[]) =>
   items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`;
+
+/** Every individual offer, by id — the checkout API's source of truth for amounts. */
+export const scholarships: Record<Scholarship["id"], Scholarship> = {
+  "35": anahuacProgram.pricing.scholarship,
+  "20": cursoAnahuacScholarship,
+};
+
+/**
+ * Individual offers are paid in 3: the $1,500 enrollment at checkout, then the
+ * program price in 2 equal monthly payments (6,825 / 2 = 3,412.50).
+ */
+export const PROGRAM_INSTALLMENTS = 2;
+export const programInstallmentCents = (beca: Scholarship) =>
+  Math.round((beca.tuition * 100) / PROGRAM_INSTALLMENTS);
+
+/** Pesos with centavos only when there are any ($3,412.50 MXN, $4,000 MXN). */
+export const formatCents = (cents: number) =>
+  `$${(cents / 100).toLocaleString("es-MX", {
+    minimumFractionDigits: cents % 100 ? 2 : 0,
+    maximumFractionDigits: 2,
+  })} MXN`;
+
+/** Offers close at the end of their deadline day in Cancún (UTC-5). */
+export const offerClosed = (beca: Scholarship, now = Date.now()) =>
+  now >= Date.parse(`${beca.deadlineISO}T23:59:59-05:00`);

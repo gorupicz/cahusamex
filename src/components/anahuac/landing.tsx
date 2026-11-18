@@ -9,7 +9,13 @@ import {
 import ReservarButton from '@/components/anahuac/reservar-button';
 import InstagramEmbed from '@/components/anahuac/instagram-embed';
 import InscriptionForm from '@/components/anahuac/inscription-form';
-import { anahuacProgram, formatMXN, type Scholarship } from '@/data/anahuac';
+import {
+  anahuacProgram,
+  formatCents,
+  formatMXN,
+  programInstallmentCents,
+  type Scholarship,
+} from '@/data/anahuac';
 import { siteConfig } from '@/data/site-config';
 import type { ReactNode } from 'react';
 
@@ -317,6 +323,12 @@ export default function AnahuacLanding({ beca, checkout, ctaLabel }: AnahuacLand
 
               <p className="mt-4 text-sm font-medium text-success">
                 Ahorras {formatMXN(beca.savings)}
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Hoy pagas la inscripción de {formatMXN(beca.enrollment)}; el
+                programa se cobra en 2 pagos de{' '}
+                {formatCents(programInstallmentCents(beca))}, a 1 y 2 meses, sin
+                intereses.
               </p>
 
               {/* CTA 2 */}

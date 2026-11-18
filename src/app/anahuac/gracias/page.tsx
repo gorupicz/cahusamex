@@ -65,9 +65,10 @@ export default function GraciasPage() {
                   2
                 </span>
                 <span>
-                  Nos ponemos en contacto contigo para coordinar el pago del
-                  programa (con tu beca aplicada) y
-                  completar tu registro con la universidad.
+                  El programa, con tu beca aplicada, se cobra en 2 pagos a la
+                  misma tarjeta, a 1 y 2 meses de tu inscripción, sin intereses.
+                  Nos ponemos en contacto contigo para completar tu registro con
+                  la universidad.
                 </span>
               </li>
               <li className="flex gap-3">

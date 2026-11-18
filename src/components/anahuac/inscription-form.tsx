@@ -4,7 +4,9 @@ import { useCallback, useRef, useState, type FormEvent } from 'react';
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import {
   anahuacProgram,
+  formatCents,
   formatMXN,
+  programInstallmentCents,
   inscriptionFields,
   type InscriptionField,
   type Scholarship,
@@ -23,6 +25,8 @@ import {
  */
 
 const SINK = 'anahuac-gform-sink';
+/** The form's email question, prefilled into Stripe Checkout. */
+const EMAIL_ENTRY = inscriptionFields.find((f) => f.kind === 'email')?.entry ?? '';
 
 /** `entry.123` is a valid name but an awkward id — dots break CSS selectors. */
 const fieldId = (entry: string) => entry.replace(/\./g, '-');
@@ -43,6 +47,7 @@ const InscriptionForm = ({ beca }: { beca: Scholarship }) => {
   const submitted = useRef(false);
   const settled = useRef(false);
   const fallback = useRef<number | undefined>(undefined);
+  const email = useRef('');
 
   /**
    * Runs once the POST has landed — either because the sink iframe loaded
@@ -55,12 +60,30 @@ const InscriptionForm = ({ beca }: { beca: Scholarship }) => {
     window.clearTimeout(fallback.current);
 
     setStatus('sent');
-    if (anahuacProgram.checkoutUrl) {
-      window.location.href = anahuacProgram.checkoutUrl;
-    }
-  }, []);
+    void (async () => {
+      // A checkout for this landing's offer: enrollment today, program in 2 payments.
+      try {
+        const res = await fetch('/api/anahuac/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ offer: beca.id, email: email.current }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok && body.url) {
+          window.location.href = body.url;
+          return;
+        }
+      } catch {
+        // fall through to the plain enrollment link
+      }
+      // Enrollment only; the program payment is then coordinated by hand.
+      if (anahuacProgram.checkoutUrl) window.location.href = anahuacProgram.checkoutUrl;
+    })();
+  }, [beca.id]);
 
-  const handleSubmit = (_event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const value = new FormData(event.currentTarget).get(EMAIL_ENTRY);
+    email.current = typeof value === 'string' ? value : '';
     // The browser performs the POST into the hidden iframe; we only drive the UI.
     setStatus('sending');
     submitted.current = true;
@@ -159,10 +182,12 @@ const InscriptionForm = ({ beca }: { beca: Scholarship }) => {
             total. Quoting the total here reads as the amount due.
           */}
           <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground">
-            Pagas la inscripción de{' '}
+            Hoy pagas la inscripción de{' '}
             <strong className="text-navy">{formatMXN(beca.enrollment)}</strong>{' '}
             para apartar tu lugar. El programa ({formatMXN(beca.tuition)} con
-            beca) se paga por separado.
+            beca) se cobra en 2 pagos de{' '}
+            {formatCents(programInstallmentCents(beca))} a la misma tarjeta, a 1
+            y 2 meses de tu inscripción, sin intereses.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             Beca vigente hasta el {beca.deadline}
