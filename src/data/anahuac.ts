@@ -47,7 +47,9 @@ export const anahuacProgram = {
   facts: {
     modality: "Semipresencial",
     duration: "10 semanas",
-    start: "Enero 2027",
+    start: "22 de enero de 2027",
+    schedule:
+      "Martes y jueves en línea a las 19:00 h. Seis viernes presenciales a las 18:00 h en la Universidad Anáhuac Cancún.",
   },
 
   pricing: {
