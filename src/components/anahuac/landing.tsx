@@ -11,6 +11,7 @@ import InstagramEmbed from '@/components/anahuac/instagram-embed';
 import InscriptionForm from '@/components/anahuac/inscription-form';
 import { anahuacProgram, formatMXN, type Scholarship } from '@/data/anahuac';
 import { siteConfig } from '@/data/site-config';
+import type { ReactNode } from 'react';
 
 const { facts, pricing, tools, audience, modules, benefits } = anahuacProgram;
 
@@ -18,7 +19,18 @@ const { facts, pricing, tools, audience, modules, benefits } = anahuacProgram;
  * Full Anáhuac certification landing. Rendered by /anahuac (35% beca) and
  * /cursoanahuac (20% beca); the only thing that differs is the offer.
  */
-export default function AnahuacLanding({ beca }: { beca: Scholarship }) {
+interface AnahuacLandingProps {
+  beca: Scholarship;
+  /**
+   * Replaces the Inversión + Inscripción sections (the group page sells seats
+   * straight to Stripe). Must render an element with id="inscripcion", which
+   * every CTA on the page scrolls to.
+   */
+  checkout?: ReactNode;
+  ctaLabel?: string;
+}
+
+export default function AnahuacLanding({ beca, checkout, ctaLabel }: AnahuacLandingProps) {
   return (
     <>
       {/* ---------------------------------------------------------------- Hero */}
@@ -95,7 +107,7 @@ export default function AnahuacLanding({ beca }: { beca: Scholarship }) {
 
               {/* CTA 1 */}
               <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <ReservarButton />
+                <ReservarButton label={ctaLabel} />
                 <a
                   href="#temario"
                   className="inline-flex items-center justify-center rounded-lg border-2 border-white/30 px-8 py-4 font-heading text-base font-semibold tracking-wide transition-colors hover:border-white hover:bg-white/10"
@@ -224,6 +236,8 @@ export default function AnahuacLanding({ beca }: { beca: Scholarship }) {
         </div>
       </section>
 
+      {checkout ?? (
+        <>
       {/* ------------------------------------------------------------ Inversión */}
       <section id="inversion" className="bg-navy py-16 text-white md:py-24">
         <div className="container mx-auto px-4">
@@ -328,6 +342,8 @@ export default function AnahuacLanding({ beca }: { beca: Scholarship }) {
           <InscriptionForm beca={beca} />
         </div>
       </section>
+        </>
+      )}
     </>
   );
 }
