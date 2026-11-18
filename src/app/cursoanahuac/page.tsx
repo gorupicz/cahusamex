@@ -15,7 +15,10 @@ export const metadata: Metadata = {
     description: anahuacProgram.description,
     type: 'website',
     url: `${siteConfig.url}/cursoanahuac`,
+    images: [{ url: `${siteConfig.url}${anahuacProgram.logo}`, width: 447, height: 447, alt: anahuacProgram.institution }],
   },
+  // The badge is square: a large-image card would crop it.
+  twitter: { card: 'summary', images: [`${siteConfig.url}${anahuacProgram.logo}`] },
 };
 
 export default function CursoAnahuacPage() {

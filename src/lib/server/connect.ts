@@ -18,7 +18,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createHmac } from 'node:crypto';
 import { EMAIL_RE, SLUG_RE } from '@/lib/directory/config';
 import { DAILY_INTROS, FREE_INTROS, ICP_LIMITS, type PaidPlan, type PlanKey, isPaid } from '@/lib/connect/plans';
-import { GROUP_KIND, handleGroupCheckoutCompleted } from '@/lib/server/anahuac-groups';
+import { handleGroupCheckoutCompleted } from '@/lib/server/anahuac-groups';
+import { handleEnrollCheckoutCompleted, isAnahuacObject } from '@/lib/server/anahuac-enroll';
 import {
   HttpError,
   type Row,
@@ -829,7 +830,8 @@ async function stripeWebhook(req: Request) {
   const obj = event.data?.object ?? {};
   // Anáhuac group purchases share this account and endpoint; they aren't Connect plans.
   if (event.type === 'checkout.session.completed' && (await handleGroupCheckoutCompleted(obj))) return json({ ok: true });
-  if (obj.object === 'subscription' && obj.metadata?.kind === GROUP_KIND) return json({ ok: true });
+  if (event.type === 'checkout.session.completed' && (await handleEnrollCheckoutCompleted(obj))) return json({ ok: true });
+  if (obj.object === 'subscription' && isAnahuacObject(obj)) return json({ ok: true });
   if (event.type === 'checkout.session.completed' && obj.mode === 'subscription' && obj.subscription) {
     await syncSubscription(await stripe(`subscriptions/${obj.subscription}`, {}, 'GET'), obj.client_reference_id);
   } else if (typeof event.type === 'string' && event.type.startsWith('customer.subscription.')) {
