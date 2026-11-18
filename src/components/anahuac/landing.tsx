@@ -105,6 +105,8 @@ export default function AnahuacLanding({ beca, checkout, ctaLabel }: AnahuacLand
                 ))}
               </div>
 
+              <p className="mt-4 text-sm text-white/70">{facts.schedule}</p>
+
               {/* CTA 1 */}
               <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <ReservarButton label={ctaLabel} />
