@@ -344,12 +344,21 @@ export const groupOffer = {
       installments: 2,
       label: "2 pagos sin intereses",
       dates: ["Hoy", "30 de diciembre de 2026"],
+      /** Checkout line names: Stripe shows the recurring line as "por mes", so say what it really is. */
+      firstLine: "Pago 1 de 2 · hoy",
+      restLine: "Pago 2 de 2 · 30 de diciembre de 2026",
+      restNote:
+        "Último pago, sin intereses. Se carga solo a la misma tarjeta el 30 de diciembre de 2026; después no hay más cargos.",
     },
     {
       id: "3",
       installments: 3,
       label: "3 pagos sin intereses",
       dates: ["Hoy", "30 de diciembre de 2026", "30 de enero de 2027"],
+      firstLine: "Pago 1 de 3 · hoy",
+      restLine: "Pagos 2 y 3 de 3 · 30 dic 2026 y 30 ene 2027",
+      restNote:
+        "Sin intereses. Se cargan solos a la misma tarjeta el 30 de diciembre de 2026 y el 30 de enero de 2027; después no hay más cargos.",
     },
   ],
 } as const;

@@ -32,6 +32,8 @@ async function stripe<T = Row>(path: string, params: Record<string, string> = {}
   return body as T;
 }
 
+const PRODUCT_NAME = 'Certificación IA Anáhuac (grupos)';
+
 const pageUrl = (path = '') => `${env.siteUrl}/grupos-anahuac${path}`;
 
 export async function createGroupCheckout(req: Request) {
@@ -67,12 +69,19 @@ export async function createGroupCheckout(req: Request) {
     params.customer_creation = 'always';
     for (const [k, v] of Object.entries(meta)) params[`payment_intent_data[metadata][${k}]`] = v;
   } else {
+    if (!('restLine' in plan)) throw new HttpError(422, 'invalid');
     params.mode = 'subscription';
     // Line 0 is the recurring installment (Dec 30, Jan 30); line 1 the one charged now.
+    // Both get their own names: Checkout labels the recurring line "por mes" and
+    // "N días gratis", so the line itself has to say which payments it is.
+    delete params['line_items[0][price_data][product]'];
+    params['line_items[0][price_data][product_data][name]'] = `${PRODUCT_NAME} · ${plan.restLine}`;
+    params['line_items[0][price_data][product_data][description]'] = plan.restNote;
     params['line_items[0][price_data][recurring][interval]'] = 'month';
     params['line_items[1][quantity]'] = String(seats);
     params['line_items[1][price_data][currency]'] = 'mxn';
-    params['line_items[1][price_data][product]'] = groupOffer.stripeProduct;
+    params['line_items[1][price_data][product_data][name]'] = `${PRODUCT_NAME} · ${plan.firstLine}`;
+    params['line_items[1][price_data][product_data][description]'] = `Primer pago de ${plan.installments}, sin intereses.`;
     params['line_items[1][price_data][unit_amount]'] = amount;
     params['subscription_data[trial_end]'] = String(ANCHOR);
     params['custom_text[submit][message]'] =
