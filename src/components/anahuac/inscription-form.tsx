@@ -7,6 +7,7 @@ import {
   formatMXN,
   inscriptionFields,
   type InscriptionField,
+  type Scholarship,
 } from '@/data/anahuac';
 
 /**
@@ -29,9 +30,7 @@ const fieldId = (entry: string) => entry.replace(/\./g, '-');
 const inputClasses =
   'w-full rounded-lg border border-border bg-white px-4 py-3 text-navy transition-colors placeholder:text-muted-foreground focus:border-anahuac focus:outline-none focus:ring-2 focus:ring-anahuac/30';
 
-const beca = anahuacProgram.pricing.scholarship;
-
-const InscriptionForm = () => {
+const InscriptionForm = ({ beca }: { beca: Scholarship }) => {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [birthDate, setBirthDate] = useState('');
   const [otherChoice, setOtherChoice] = useState<Record<string, boolean>>({});
