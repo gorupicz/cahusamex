@@ -8,11 +8,12 @@ import {
   MapPin,
   MessageCircle,
 } from 'lucide-react';
-import { anahuacProgram, formatMXN } from '@/data/anahuac';
+import { anahuacProgram } from '@/data/anahuac';
 import { siteConfig } from '@/data/site-config';
 
-const { facts, pricing } = anahuacProgram;
-const beca = pricing.scholarship;
+// Shared by /anahuac and /cursoanahuac (same Stripe link), so it must not
+// quote a program price — each landing offers a different beca.
+const { facts } = anahuacProgram;
 
 export const metadata: Metadata = {
   title: 'Inscripción confirmada | Certificación en IA Aplicada',
@@ -65,7 +66,7 @@ export default function GraciasPage() {
                 </span>
                 <span>
                   Nos ponemos en contacto contigo para coordinar el pago del
-                  programa ({formatMXN(beca.tuition)} con la beca aplicada) y
+                  programa (con tu beca aplicada) y
                   completar tu registro con la universidad.
                 </span>
               </li>

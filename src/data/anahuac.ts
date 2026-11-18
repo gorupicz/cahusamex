@@ -47,7 +47,7 @@ export const anahuacProgram = {
   facts: {
     modality: "Semipresencial",
     duration: "10 semanas",
-    start: "Octubre 2026",
+    start: "Enero 2027",
   },
 
   pricing: {
@@ -57,8 +57,8 @@ export const anahuacProgram = {
     scholarship: {
       label: "Beca La Bolsa MX / CAHUSAMEX",
       discount: 35,
-      deadline: "31 de agosto de 2026",
-      deadlineISO: "2026-08-31",
+      deadline: "30 de noviembre de 2026",
+      deadlineISO: "2026-11-30",
       tuition: 6825,
       enrollment: 1500,
       total: 8325,
@@ -139,6 +139,33 @@ export const anahuacProgram = {
     "Certificación avalada por la Universidad Anáhuac Cancún.",
   ],
 } as const;
+
+/** A discount offer the landing can be rendered with. */
+export type Scholarship = {
+  label: string;
+  discount: number;
+  deadline: string;
+  deadlineISO: string;
+  tuition: number;
+  enrollment: number;
+  total: number;
+  savings: number;
+};
+
+/**
+ * 20% offer served at /cursoanahuac. Same enrollment fee as the 35% beca, so it
+ * reuses the same Stripe payment link; only the program price changes.
+ */
+export const cursoAnahuacScholarship: Scholarship = {
+  label: "Beca La Bolsa MX / CAHUSAMEX",
+  discount: 20,
+  deadline: "30 de noviembre de 2026",
+  deadlineISO: "2026-11-30",
+  tuition: 8000,
+  enrollment: 1500,
+  total: 9500,
+  savings: 2000,
+};
 
 export const formatMXN = (amount: number) =>
   `$${amount.toLocaleString("es-MX")} MXN`;
